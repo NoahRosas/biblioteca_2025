@@ -132,13 +132,13 @@ export default function UsersIndex() {
                                       id: 'name',
                                       label: t('ui.users.filters.name') || 'Nombre',
                                       type: 'text',
-                                      placeholder: t('ui.users.placeholders.name') || 'Nombre...',
+                                      placeholder: t('ui.users.filters.name') || 'Nombre...',
                                   },
                                   {
                                       id: 'email',
                                       label: t('ui.users.filters.email') || 'Email',
                                       type: 'text',
-                                      placeholder: t('ui.users.placeholders.email') || 'Email...',
+                                      placeholder: t('ui.users.filters.email') || 'Email...',
                                   },
                               ] as FilterConfig[]
                           }

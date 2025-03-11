@@ -54,6 +54,7 @@ return [
             'confirm_password_placeholder' => 'Confirmar contraseña',
             'save_button' => 'Guardar contraseña',
             'saved_message' => 'Guardado',
+            'secure_message' => 'La contraseña debe tener al menos 8 caracteres, incluyendo letras y números',
         ],
         'appearance' => [
             'title' => 'Configuración de apariencia',
@@ -128,9 +129,9 @@ return [
             'email' => 'Email del usuario',
         ],
         'placeholders' => [
-            'name' => 'Nombre del usuario',
-            'email' => 'Email del usuario',
-            'password' => 'Contraseña del usuario',
+            'name' => 'Nombre completo del usuario',
+            'email' => 'correo@ejemplo.com',
+            'password' => 'Contraseña segura',
             'search' => 'Buscar usuarios...',
         ],
         'buttons' => [

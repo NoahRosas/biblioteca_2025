@@ -53,6 +53,7 @@ return [
             'confirm_password_placeholder' => 'Confirm password',
             'save_button' => 'Save password',
             'saved_message' => 'Saved',
+            'secure_message' => 'Password must have at least 8 characters, including letters and numbers',
         ],
         'appearance' => [
             'title' => 'Appearance settings',
@@ -127,9 +128,9 @@ return [
             'email' => 'User email',
         ],
         'placeholders' => [
-            'name' => 'User name',
-            'email' => 'User email',
-            'password' => 'User password',
+            'name' => 'User full name',
+            'email' => 'mail@example.com',
+            'password' => 'Strong password',
             'search' => 'Search users...',
         ],
         'buttons' => [

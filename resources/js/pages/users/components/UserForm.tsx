@@ -5,8 +5,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import { router } from "@inertiajs/react";
 import { toast } from "sonner";
 import { useTranslations } from "@/hooks/use-translations";
+import { Lock, Mail, Save, User, X } from 'lucide-react';
 import { useForm } from "@tanstack/react-form";
 import type { AnyFieldApi } from "@tanstack/react-form";
+
 
 interface UserFormProps {
     initialData?: {
@@ -76,6 +78,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
             if (initialData) {
                 router.put(`/users/${initialData.id}`, value, options);
             } else {
+                
                 router.post("/users", value, options);
             }
         },
@@ -88,6 +91,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
         form.handleSubmit();
     };
 
+    
     return (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             {/* Name field */}
@@ -107,7 +111,12 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                 >
                     {(field) => (
                         <>
-                            <Label htmlFor={field.name}>{t("ui.users.fields.name")}</Label>
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                                <User 
+                                    size={"17px"}/>
+                                <Label htmlFor="name" style={{ marginLeft: "8px" }}>{t("ui.users.fields.name")}
+                                </Label>
+                            </div>
                             <Input
                                 id={field.name}
                                 name={field.name}
@@ -142,7 +151,12 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                 >
                     {(field) => (
                         <>
-                            <Label htmlFor={field.name}>{t("ui.users.fields.email")}</Label>
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                                <Mail 
+                                    size={"17px"}/>
+                                <Label htmlFor={field.name} style={{ marginLeft: "8px" }}>{t("ui.users.fields.email")}
+                                </Label>
+                            </div>
                             <Input
                                 id={field.name}
                                 name={field.name}
@@ -180,11 +194,16 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                 >
                     {(field) => (
                         <>
-                            <Label htmlFor={field.name}>
-                                {initialData
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                                < Lock
+                                size={"17px"}/>
+                                <Label htmlFor={field.name} style={{ marginLeft: "8px" }}>
+                                    {initialData
                                     ? t("ui.users.fields.password_optional")
                                     : t("ui.users.fields.password")}
-                            </Label>
+                                </Label>
+                            </div>
+
                             <Input
                                 id={field.name}
                                 name={field.name}
@@ -201,41 +220,51 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                         </>
                     )}
                 </form.Field>
+                {!initialData && 
+                    <p style={{fontSize: "small" , marginTop: "1em", color: "#8D959C"}}>{t("ui.settings.password.secure_message")}</p>
+                }
             </div>
 
             {/* Form buttons */}
-            <div className="flex justify-end gap-4">
-                <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => {
-                        let url = "/users";
-                        if (page) {
-                            url += `?page=${page}`;
-                            if (perPage) {
-                                url += `&per_page=${perPage}`;
+            <div className="mt-6 flex items-center justify-between gap-x-6">
+                <div style={{ display: "flex", alignItems: "center" }}>
+                    
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                            let url = "/users";
+                            if (page) {
+                                url += `?page=${page}`;
+                                if (perPage) {
+                                    url += `&per_page=${perPage}`;
+                                }
                             }
+                            router.visit(url);
                         }
-                        router.visit(url);
-                    }}
-                    disabled={form.state.isSubmitting}
-                >
-                    {t("ui.users.buttons.cancel")}
-                </Button>
-
-                <form.Subscribe
-                    selector={(state) => [state.canSubmit, state.isSubmitting]}
-                >
-                    {([canSubmit, isSubmitting]) => (
-                        <Button type="submit" disabled={!canSubmit}>
+                        
+                        }
+                        disabled={form.state.isSubmitting}
+                        
+                    >
+                        <X size={"20px"} />
+                        {t("ui.users.buttons.cancel")}
+                    </Button>
+                </div>
+                    <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
+                        {([canSubmit, isSubmitting]) => (
+                            <Button type="submit" disabled={!canSubmit}>
+                            <Save size={"20px"}/>
                             {isSubmitting
                                 ? t("ui.users.buttons.saving")
                                 : initialData
                                     ? t("ui.users.buttons.update")
                                     : t("ui.users.buttons.save")}
-                        </Button>
-                    )}
-                </form.Subscribe>
+                            </Button>
+                        )}
+                    </form.Subscribe>
+
+                
             </div>
         </form>
     );

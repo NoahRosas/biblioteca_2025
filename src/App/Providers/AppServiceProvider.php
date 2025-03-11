@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Console\Commands\MigratePulseCommand;
 use Domain\Users\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
@@ -22,6 +23,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
+        $this->commands([
+            MigratePulseCommand::class
+        ]);
+
+        //Para estar siempre logueado
 //        if (app()->environment('local')) {
 //            // Verificar si no hay usuario autenticado
 //            if (!Auth::check()) {
