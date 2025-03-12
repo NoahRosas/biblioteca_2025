@@ -1,4 +1,3 @@
-import { UserForm } from "@/pages/users/components/UserForm";
 import { UserLayout } from "@/layouts/users/UserLayout";
 import { useTranslations } from "@/hooks/use-translations";
 import { User } from "lucide-react";

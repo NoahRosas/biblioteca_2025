@@ -171,29 +171,29 @@ export function RoleForm({ roleInitialData, page, perPage}: RoleFormProps) {
                             <div className="grid grid-cols-2 gap-4 mt-4">
                                     <div className="bg-white p-4 rounded-lg shadow">
                                         <p style={{display:'flex'}}><Users size={'19px'} style={{marginRight:'5px', color:'blue'}}/>{t("ui.users.title")}</p>
-                                        <Checkbox id="users.show"  /><Label htmlFor="show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.users.show')}<br/></Label>
-                                        <Checkbox id="users.create" /><Label htmlFor="show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.users.create')}<br/></Label>
-                                        <Checkbox id="users.edit" /><Label htmlFor="show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.users.edit')}<br/></Label>
-                                        <Checkbox id="users.delete" /><Label htmlFor="show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.users.delete')}</Label>
+                                        <Checkbox id="users.show"  /><Label htmlFor="users.show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.users.show')}<br/></Label>
+                                        <Checkbox id="users.create" /><Label htmlFor="users.create" style={{marginLeft:'5px'}}>{t('ui.users.permissions.users.create')}<br/></Label>
+                                        <Checkbox id="users.edit" /><Label htmlFor="users.edit" style={{marginLeft:'5px'}}>{t('ui.users.permissions.users.edit')}<br/></Label>
+                                        <Checkbox id="users.delete" /><Label htmlFor="users.delete" style={{marginLeft:'5px'}}>{t('ui.users.permissions.users.delete')}</Label>
                                     </div>
                                     <div className="bg-white p-4 rounded-lg shadow">
                                     <p style={{display:'flex'}}><PackageOpen size={'19px'} style={{marginRight:'5px', color:'blue'}}/> {t("ui.users.permissions.products.title")}</p>
-                                        <Checkbox id="products.show"  /><Label htmlFor="show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.products.show')}<br/></Label>
-                                        <Checkbox id="products.create" /><Label htmlFor="show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.products.create')}<br/></Label>
-                                        <Checkbox id="products.edit" /><Label htmlFor="show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.products.edit')}<br/></Label>
-                                        <Checkbox id="products.delete" /><Label htmlFor="show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.products.delete')}</Label>
+                                        <Checkbox id="products.show"  /><Label htmlFor="products.show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.products.show')}<br/></Label>
+                                        <Checkbox id="products.create" /><Label htmlFor="products.create" style={{marginLeft:'5px'}}>{t('ui.users.permissions.products.create')}<br/></Label>
+                                        <Checkbox id="products.edit" /><Label htmlFor="products.edit" style={{marginLeft:'5px'}}>{t('ui.users.permissions.products.edit')}<br/></Label>
+                                        <Checkbox id="products.delete" /><Label htmlFor="products.delete" style={{marginLeft:'5px'}}>{t('ui.users.permissions.products.delete')}</Label>
                                     </div>
                                     <div className="bg-white p-4 rounded-lg shadow">
                                     <p style={{display:'flex'}}><FileText size={'19px'} style={{marginRight:'5px', color:'blue'}}/>{t("ui.users.permissions.reports.title")}</p>
-                                        <Checkbox id="reports.show"  /><Label htmlFor="show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.reports.show')}<br/></Label>
-                                        <Checkbox id="reports.create" /><Label htmlFor="show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.reports.export')}<br/></Label>
-                                        <Checkbox id="reports.edit" /><Label htmlFor="show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.reports.print')}<br/></Label>
+                                        <Checkbox id="reports.show"  /><Label htmlFor="reports.show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.reports.show')}<br/></Label>
+                                        <Checkbox id="reports.create" /><Label htmlFor="reports.create" style={{marginLeft:'5px'}}>{t('ui.users.permissions.reports.export')}<br/></Label>
+                                        <Checkbox id="reports.edit" /><Label htmlFor="reports.edit" style={{marginLeft:'5px'}}>{t('ui.users.permissions.reports.print')}<br/></Label>
                                         
                                     </div>
                                     <div className="bg-white p-4 rounded-lg shadow">
                                     <p style={{display:'flex'}}><Settings size={'19px'} style={{marginRight:'5px', color:'blue'}}/>{t("ui.users.permissions.settings.title")}</p>
-                                        <Checkbox id="settings.show"  /><Label htmlFor="show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.settings.access')}<br/></Label>
-                                        <Checkbox id="settings.create" /><Label htmlFor="show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.settings.modify')}<br/></Label>
+                                        <Checkbox id="settings.show"  /><Label htmlFor="settings.show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.settings.access')}<br/></Label>
+                                        <Checkbox id="settings.create" /><Label htmlFor="settings.show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.settings.modify')}<br/></Label>
                                     </div>
                                 </div>
                             <FieldInfo field={field} />
