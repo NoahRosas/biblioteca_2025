@@ -10,7 +10,7 @@ import { useForm } from "@tanstack/react-form";
 import type { AnyFieldApi } from "@tanstack/react-form";
 
 
-interface UserFormProps {
+export interface UserFormProps {
     initialData?: {
         id: string;
         name: string;
@@ -195,8 +195,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                     {(field) => (
                         <>
                             <div style={{ display: "flex", alignItems: "center" }}>
-                                < Lock
-                                size={"17px"}/>
+                                < Lock size={"17px"}/>
                                 <Label htmlFor={field.name} style={{ marginLeft: "8px" }}>
                                     {initialData
                                     ? t("ui.users.fields.password_optional")

@@ -116,6 +116,48 @@ return [
             'password_optional' => 'Contraseña (opcional)',
             'created_at' => 'Fecha de creación',
             'actions' => 'Acciones',
+            'rol' => 'Selecciona un rol',
+            'role' => 'Rol principal',
+            'sp_permissions' => 'Permisos Específicos',
+        ],
+        'tabs' => [
+            'basic_information' => 'Información básica',
+            'roles' => 'Roles y permisos',
+        ],
+        'extra_info' => [
+            'create_user' => 'Ingresa la información para crear un nuevo usuario en el sistema',
+            'role' => 'El rol determina el nivel del acceso del usuario',
+        ],
+        'roles' => [
+            'admin' => 'Administrador',
+            'employee' => 'Empleado',
+            'view' => 'Solo vista'
+        ],
+        'permissions'=>[
+            'users' => [
+                'show' => 'Ver usuarios',
+                'create' => 'Crear usuarios',
+                'edit' => 'Editar usuarios',
+                'delete' => 'Eliminar usuarios',
+            ],
+            'products' => [
+                'title' => 'Productos',
+                'show' => 'Ver productos',
+                'create' => 'Crear productos',
+                'edit' => 'Editar productos',
+                'delete' => 'Eliminar productos',
+            ],
+            'reports' => [
+                'title' => 'Reportes',
+                'show' => 'Ver reportes',
+                'export' => 'Exportar reportes',
+                'print' => 'Imprimir reportes'
+            ],
+            'settings' => [
+                'title' => 'Configuración',
+                'access' => 'Acceso a configuración',
+                'modify' => 'Modificar configuración'
+            ]
         ],
         'columns' => [
             'name' => 'Nombre',
