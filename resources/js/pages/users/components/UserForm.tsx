@@ -114,7 +114,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                             <div style={{ display: "flex", alignItems: "center" }}>
                                 <User 
                                     size={"17px"}/>
-                                <Label htmlFor="name" style={{ marginLeft: "8px" }}>{t("ui.users.fields.name")}
+                                <Label htmlFor="name" className="ml-2">{t("ui.users.fields.name")}
                                 </Label>
                             </div>
                             <Input
@@ -154,7 +154,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                             <div style={{ display: "flex", alignItems: "center" }}>
                                 <Mail 
                                     size={"17px"}/>
-                                <Label htmlFor={field.name} style={{ marginLeft: "8px" }}>{t("ui.users.fields.email")}
+                                <Label htmlFor={field.name} className="ml-2">{t("ui.users.fields.email")}
                                 </Label>
                             </div>
                             <Input
@@ -196,7 +196,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                         <>
                             <div style={{ display: "flex", alignItems: "center" }}>
                                 < Lock size={"17px"}/>
-                                <Label htmlFor={field.name} style={{ marginLeft: "8px" }}>
+                                <Label htmlFor={field.name} className="ml-2">
                                     {initialData
                                     ? t("ui.users.fields.password_optional")
                                     : t("ui.users.fields.password")}
@@ -220,7 +220,7 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                     )}
                 </form.Field>
                 {!initialData && 
-                    <p style={{fontSize: "small" , marginTop: "1em", color: "#8D959C"}}>{t("ui.settings.password.secure_message")}</p>
+                    <p className="mt-2 text-muted-foreground text-xs">{t("ui.settings.password.secure_message")}</p>
                 }
             </div>
 

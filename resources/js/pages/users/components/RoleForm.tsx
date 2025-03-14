@@ -16,6 +16,7 @@ import {
     SelectValue,
   } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox";
+import React, { useState } from "react";
   
 
 
@@ -25,25 +26,25 @@ interface RoleFormProps {
         role: string;
         permits:{
             users:{
-                read: boolean;
-                create: boolean;
-                edit: boolean;
-                delete: boolean;
+                read: boolean|string;
+                create: boolean |string;
+                edit: boolean |string;
+                delete: boolean |string;
             },
             products:{
-                read: boolean;
-                create:boolean;
-                edit:boolean;
-                delete:boolean;
+                read: boolean |string;
+                create:boolean |string;
+                edit:boolean |string;
+                delete:boolean |string;
             },
             reports:{
-                read:boolean;
-                export:boolean;
-                print:boolean;
+                read:boolean |string;
+                export:boolean |string;
+                print:boolean |string;
             },
             settings:{
-                access: boolean;
-                modify: boolean;
+                access: boolean |string;
+                modify: boolean |string;
             }
         }
        
@@ -123,7 +124,13 @@ export function RoleForm({ roleInitialData, page, perPage}: RoleFormProps) {
         form.handleSubmit();
     };
 
+    const [selectRole, setSelectRole] = useState<string>("");
     
+    const changeRole = (e: React.ChangeEvent<HTMLSelectElement>) =>{
+        return setSelectRole(e.target.value);
+    }
+
+
     return (
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
            {/* Main role field */}
@@ -133,18 +140,19 @@ export function RoleForm({ roleInitialData, page, perPage}: RoleFormProps) {
                 >
                     {(field) => (
                         <>
-                            <div style={{ display: "flex", alignItems: "center" }}>
-                                <Shield />
-                                <Label htmlFor="name" style={{ marginLeft: "8px" }}>{t("ui.users.fields.role")}
+                            <div className="flex">
+                                <Shield className="mb-2"/>
+                                <Label htmlFor="name" className="ml-3 mt-1">{t("ui.users.fields.role")}
                                 </Label>
                                 
                             </div>
-                            <Select>
+                            <Select value={selectRole}>
                                 <SelectTrigger>
                                     <SelectValue placeholder={t('ui.users.fields.rol')} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="view">{t('ui.users.roles.view')}</SelectItem>
+                                    <SelectItem value="student">{t('ui.users.roles.student')}</SelectItem>
                                     <SelectItem value="employee">{t('ui.users.roles.employee')}</SelectItem>
                                     <SelectItem value="admin">{t('ui.users.roles.admin')}</SelectItem>
                                 </SelectContent>
@@ -155,58 +163,170 @@ export function RoleForm({ roleInitialData, page, perPage}: RoleFormProps) {
                     )}
                 </form.Field>
             </div>
-
-            {/* Role fields */}
-            <div>
-                <form.Field
-                    name="permits">
-                    {(field) => (
-                        <>
-                            <div style={{ display: "flex", alignItems: "center" }}>
-                                <Shield color="blue"/>
-                                <Label htmlFor={field.name} style={{ marginLeft: "8px" }}>{t("ui.users.fields.sp_permissions")}
-                                </Label>
-                                
-                            </div>
-                            <div className="grid grid-cols-2 gap-4 mt-4">
-                                    <div className="bg-white p-4 rounded-lg shadow">
-                                        <p style={{display:'flex'}}><Users size={'19px'} style={{marginRight:'5px', color:'blue'}}/>{t("ui.users.title")}</p>
-                                        <Checkbox id="users.show"  /><Label htmlFor="users.show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.users.show')}<br/></Label>
-                                        <Checkbox id="users.create" /><Label htmlFor="users.create" style={{marginLeft:'5px'}}>{t('ui.users.permissions.users.create')}<br/></Label>
-                                        <Checkbox id="users.edit" /><Label htmlFor="users.edit" style={{marginLeft:'5px'}}>{t('ui.users.permissions.users.edit')}<br/></Label>
-                                        <Checkbox id="users.delete" /><Label htmlFor="users.delete" style={{marginLeft:'5px'}}>{t('ui.users.permissions.users.delete')}</Label>
-                                    </div>
-                                    <div className="bg-white p-4 rounded-lg shadow">
-                                    <p style={{display:'flex'}}><PackageOpen size={'19px'} style={{marginRight:'5px', color:'blue'}}/> {t("ui.users.permissions.products.title")}</p>
-                                        <Checkbox id="products.show"  /><Label htmlFor="products.show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.products.show')}<br/></Label>
-                                        <Checkbox id="products.create" /><Label htmlFor="products.create" style={{marginLeft:'5px'}}>{t('ui.users.permissions.products.create')}<br/></Label>
-                                        <Checkbox id="products.edit" /><Label htmlFor="products.edit" style={{marginLeft:'5px'}}>{t('ui.users.permissions.products.edit')}<br/></Label>
-                                        <Checkbox id="products.delete" /><Label htmlFor="products.delete" style={{marginLeft:'5px'}}>{t('ui.users.permissions.products.delete')}</Label>
-                                    </div>
-                                    <div className="bg-white p-4 rounded-lg shadow">
-                                    <p style={{display:'flex'}}><FileText size={'19px'} style={{marginRight:'5px', color:'blue'}}/>{t("ui.users.permissions.reports.title")}</p>
-                                        <Checkbox id="reports.show"  /><Label htmlFor="reports.show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.reports.show')}<br/></Label>
-                                        <Checkbox id="reports.create" /><Label htmlFor="reports.create" style={{marginLeft:'5px'}}>{t('ui.users.permissions.reports.export')}<br/></Label>
-                                        <Checkbox id="reports.edit" /><Label htmlFor="reports.edit" style={{marginLeft:'5px'}}>{t('ui.users.permissions.reports.print')}<br/></Label>
-                                        
-                                    </div>
-                                    <div className="bg-white p-4 rounded-lg shadow">
-                                    <p style={{display:'flex'}}><Settings size={'19px'} style={{marginRight:'5px', color:'blue'}}/>{t("ui.users.permissions.settings.title")}</p>
-                                        <Checkbox id="settings.show"  /><Label htmlFor="settings.show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.settings.access')}<br/></Label>
-                                        <Checkbox id="settings.create" /><Label htmlFor="settings.show" style={{marginLeft:'5px'}}>{t('ui.users.permissions.settings.modify')}<br/></Label>
-                                    </div>
-                                </div>
-                            <FieldInfo field={field} />
-
-                        </>
-                    )}
-                </form.Field>
+            <div style={{ display: "flex", alignItems: "center" }}>
+            <Shield className="text-chart-1"/><p style={{marginLeft:'8px'}}>{t('ui.users.fields.sp_permissions')}</p>
+                
             </div>
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                
+                {/* Role fields */}
+                    <div className="p-4 rounded-lg shadow">
+                        <div className="flex mb-4">
+                            <User size={'15px'} className="text-chart-1 mr-2"/><Label>{t('ui.users.permissions.users.title')}</Label>
+                        </div>
+                        
+                        <form.Field
+                            name="permits.users.read">
+                            {(field) => (
+                                <>
+                                    <Checkbox id={field.name} className="border-chart-1" /><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
+                                        {t('ui.users.permissions.users.show')}<br/></Label>
+                                    <FieldInfo field={field} />
+                                </>
+                            )}
+                        </form.Field>
+                        <form.Field
+                            name="permits.users.create">
+                            {(field) => (
+                                <>
+                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
+                                        {t('ui.users.permissions.users.create')}<br/></Label>
+                                    <FieldInfo field={field} />
+                                </>
+                            )}
+                        </form.Field>
+                        <form.Field
+                            name="permits.users.edit">
+                            {(field) => (
+                                <>
+                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
+                                        {t('ui.users.permissions.users.edit')}<br/></Label>
+                                    <FieldInfo field={field} />
+                                </>
+                            )}
+                        </form.Field>
+                        <form.Field
+                            name="permits.users.delete">
+                            {(field) => (
+                                <>
+                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
+                                        {t('ui.users.permissions.users.delete')}<br/></Label>
+                                    <FieldInfo field={field} />
+                                </>
+                            )}
+                        </form.Field>
+                    </div>
+                    <div className="p-4 rounded-lg shadow">
+                    <div className="flex mb-4">
+                            <PackageOpen size={'15px'} className="text-chart-1 mr-2"/><Label>{t('ui.users.permissions.products.title')}</Label>
+                        </div>
+                        <form.Field
+                            name="permits.products.read">
+                            {(field) => (
+                                <>
+                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
+                                        {t('ui.users.permissions.products.show')}<br/></Label>
+                                    <FieldInfo field={field} />
+                                </>
+                            )}
+                        </form.Field>
+                        <form.Field
+                            name="permits.products.create">
+                            {(field) => (
+                                <>
+                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
+                                        {t('ui.users.permissions.products.create')}<br/></Label>
+                                    <FieldInfo field={field} />
+                                </>
+                            )}
+                        </form.Field>
+                        <form.Field
+                            name="permits.products.edit">
+                            {(field) => (
+                                <>
+                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
+                                        {t('ui.users.permissions.products.edit')}<br/></Label>
+                                    <FieldInfo field={field} />
+                                </>
+                            )}
+                        </form.Field>
+                        <form.Field
+                            name="permits.products.delete">
+                            {(field) => (
+                                <>
+                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
+                                        {t('ui.users.permissions.products.delete')}<br/></Label>
+                                    <FieldInfo field={field} />
+                                </>
+                            )}
+                        </form.Field>
+                    </div>
+                    <div className="p-4 rounded-lg shadow">
+                    <div className="flex mb-4">
+                            <FileText size={'15px'} className="text-chart-1 mr-2"/><Label>{t('ui.users.permissions.reports.title')}</Label>
+                        </div>
+                        <form.Field
+                            name="permits.reports.read">
+                            {(field) => (
+                                <>
+                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
+                                        {t('ui.users.permissions.reports.show')}<br/></Label>
+                                    <FieldInfo field={field} />
+                                </>
+                            )}
+                        </form.Field>
+                        <form.Field
+                            name="permits.reports.export">
+                            {(field) => (
+                                <>
+                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
+                                        {t('ui.users.permissions.reports.export')}<br/></Label>
+                                    <FieldInfo field={field} />
+                                </>
+                            )}
+                        </form.Field>
+                        <form.Field
+                            name="permits.reports.print">
+                            {(field) => (
+                                <>
+                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>{
+                                    t('ui.users.permissions.reports.print')}<br/></Label>
+                                    <FieldInfo field={field} />
+                                </>
+                            )}
+                        </form.Field>
+                        
+                    </div>
+                    <div className="p-4 rounded-lg shadow">
+                        <div className="flex mb-4">
+                            <Settings size={'15px'} className="text-chart-1 mr-2"/><Label>{t('ui.users.permissions.settings.title')}</Label>
+                        </div>
+                        <form.Field
+                            name="permits.settings.access">
+                            {(field) => (
+                                <>
+                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
+                                        {t('ui.users.permissions.settings.access')}<br/></Label>
+                                    <FieldInfo field={field} />
+                                </>
+                            )}
+                        </form.Field>
+                        <form.Field
+                            name="permits.settings.modify">
+                            {(field) => (
+                                <>
+                                    <Checkbox id={field.name}className="border-chart-1" /><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
+                                        {t('ui.users.permissions.settings.modify')}<br/></Label>
+                                    <FieldInfo field={field} />
+                                </>
+                            )}
+                        </form.Field>
+                    </div>
 
-           
+             </div>
 
            {/* Form buttons */}
-           {/*
+           
             <div className="mt-6 flex items-center justify-between gap-x-6">
                 <div style={{ display: "flex", alignItems: "center" }}>
                     
@@ -238,7 +358,7 @@ export function RoleForm({ roleInitialData, page, perPage}: RoleFormProps) {
                             <Save size={"20px"}/>
                             {isSubmitting
                                 ? t("ui.users.buttons.saving")
-                                : initialData
+                                : roleInitialData
                                     ? t("ui.users.buttons.update")
                                     : t("ui.users.buttons.save")}
                             </Button>
@@ -246,7 +366,7 @@ export function RoleForm({ roleInitialData, page, perPage}: RoleFormProps) {
                     </form.Subscribe>
 
                 
-            </div>*/}
+            </div>
         </form>
     );
 }

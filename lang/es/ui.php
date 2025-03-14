@@ -131,10 +131,12 @@ return [
         'roles' => [
             'admin' => 'Administrador',
             'employee' => 'Empleado',
+            'student' => 'Estudiante',
             'view' => 'Solo vista'
         ],
         'permissions'=>[
             'users' => [
+                'title' => 'Usuarios',
                 'show' => 'Ver usuarios',
                 'create' => 'Crear usuarios',
                 'edit' => 'Editar usuarios',

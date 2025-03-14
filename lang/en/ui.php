@@ -130,10 +130,12 @@ return [
         'roles' =>[ 
             'admin' => 'Administrator',
             'employee' => 'Employee',
+            'student' => 'Student',
             'view' => 'Only View'
         ],
         'permissions'=>[
             'users' => [
+                'title' => 'Users',
                 'show' => 'Show users',
                 'create' => 'Create users',
                 'edit' => 'Edit users',
