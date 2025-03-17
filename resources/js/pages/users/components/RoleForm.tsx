@@ -21,6 +21,7 @@ interface RoleFormProps {
     page?: string;
     perPage?: string;
 }
+
 function getCategoryIcon(category: string): ReactNode {
     switch (category) {
         case 'users':
@@ -46,7 +47,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
             {field.state.meta.isTouched && field.state.meta.errors.length ? (
                 <p className="text-destructive mt-1 text-sm">{field.state.meta.errors.join(', ')}</p>
             ) : null}
-            {field.state.meta.isValidating ? <p className="text-muted-foreground mt-1 text-sm">Validating...</p> : null}
+            
         </>
     );
 }
@@ -55,6 +56,7 @@ export const RoleForm = forwardRef(({ roleInitialData, page, perPage, roles, per
     const { t } = useTranslations();
     const queryClient = useQueryClient();
     const [selectRole, setSelectRole] = useState<string>(roleInitialData?.role ?? '');
+    const [permitsUserList, updatePermits] = useState(['']);
 
     const permisosPorCategoria = permisos?.reduce((acc, [categoria, accion]) => {
         if (!acc[categoria]) {
@@ -112,9 +114,9 @@ export const RoleForm = forwardRef(({ roleInitialData, page, perPage, roles, per
                                 onValueChange={(value) => {
                                     setSelectRole(value);
 
-                                    // Verificamos si el rol seleccionado existe en el array de roles
+                                    
                                     if (roles?.includes(value)) {
-                                        form.setFieldValue('permisos', {}); // Aquí asigna los permisos correctos si los tienes
+                                        form.setFieldValue('permisos', {}); 
                                     }
 
                                     field.setValue(value);
@@ -151,7 +153,7 @@ export const RoleForm = forwardRef(({ roleInitialData, page, perPage, roles, per
                                             <Checkbox
                                                 id={field.name}
                                                 checked={Boolean(field.state.value)}
-                                                onCheckedChange={(checked) => field.setValue(checked === true)}
+                                                onChange={()=>updatePermits([...permitsUserList, String(field.state.value)])}
                                             />
                                             <br />
                                             <Label htmlFor={field.name} className="ml-2">
