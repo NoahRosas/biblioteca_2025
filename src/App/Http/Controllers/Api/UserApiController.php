@@ -11,6 +11,7 @@ use Domain\Users\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Permission;
 
 class UserApiController extends Controller
 {
@@ -26,6 +27,7 @@ class UserApiController extends Controller
 
     public function store(Request $request, UserStoreAction $action)
     {
+        
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -37,7 +39,7 @@ class UserApiController extends Controller
         }
 
         $user = $action($validator->validated());
-
+        
         return response()->json([
             'message' => __('messages.users.created'),
             'user' => $user

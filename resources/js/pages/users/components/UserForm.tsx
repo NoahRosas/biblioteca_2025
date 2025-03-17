@@ -1,21 +1,21 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { forwardRef, useImperativeHandle } from "react";
+import { AnyFieldApi, useForm } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { router } from "@inertiajs/react";
-import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Mail, User, Lock } from "lucide-react";
 import { useTranslations } from "@/hooks/use-translations";
-import { Lock, Mail, Save, User, X } from 'lucide-react';
-import { useForm } from "@tanstack/react-form";
-import type { AnyFieldApi } from "@tanstack/react-form";
 
-
+// Tipado de las props
 export interface UserFormProps {
     initialData?: {
         id: string;
         name: string;
         email: string;
     };
+    roles?: string[];
+    permisos?: [string, string][];
     page?: string;
     perPage?: string;
 }
@@ -36,11 +36,10 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function UserForm({ initialData, page, perPage }: UserFormProps) {
+export const UserForm = forwardRef(({ initialData, page, perPage }: UserFormProps, ref) => {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
 
-    // TanStack Form setup
     const form = useForm({
         defaultValues: {
             name: initialData?.name ?? "",
@@ -51,49 +50,30 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
             const options = {
                 onSuccess: () => {
                     queryClient.invalidateQueries({ queryKey: ["users"] });
-
-                    // Construct URL with page parameters
                     let url = "/users";
                     if (page) {
-                        url += `?page=${page}`;
-                        if (perPage) {
-                            url += `&per_page=${perPage}`;
-                        }
+                        url += `?page=${page}${perPage ? `&per_page=${perPage}` : ""}`;
                     }
-
                     router.visit(url);
-                },
-                onError: (errors: Record<string, string>) => {
-                    if (Object.keys(errors).length === 0) {
-                        toast.error(
-                            initialData
-                                ? t("messages.users.error.update")
-                                : t("messages.users.error.create")
-                        );
-                    }
                 },
             };
 
-            // Submit with Inertia
             if (initialData) {
                 router.put(`/users/${initialData.id}`, value, options);
             } else {
-                
                 router.post("/users", value, options);
             }
         },
     });
 
-    // Form submission handler
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-        form.handleSubmit();
-    };
+    useImperativeHandle(ref, () => ({
+        submitForm: () => {
+            form.handleSubmit();
+        },
+    })); 
 
-    
     return (
-        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+        <form onSubmit={form.handleSubmit} className="space-y-4" noValidate>
             {/* Name field */}
             <div>
                 <form.Field
@@ -224,47 +204,6 @@ export function UserForm({ initialData, page, perPage }: UserFormProps) {
                 }
             </div>
 
-            {/* Form buttons */}
-            <div className="mt-6 flex items-center justify-between gap-x-6">
-                <div style={{ display: "flex", alignItems: "center" }}>
-                    
-                    <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => {
-                            let url = "/users";
-                            if (page) {
-                                url += `?page=${page}`;
-                                if (perPage) {
-                                    url += `&per_page=${perPage}`;
-                                }
-                            }
-                            router.visit(url);
-                        }
-                        
-                        }
-                        disabled={form.state.isSubmitting}
-                        
-                    >
-                        <X size={"20px"} />
-                        {t("ui.users.buttons.cancel")}
-                    </Button>
-                </div>
-                    <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
-                        {([canSubmit, isSubmitting]) => (
-                            <Button type="submit" disabled={!canSubmit}>
-                            <Save size={"20px"}/>
-                            {isSubmitting
-                                ? t("ui.users.buttons.saving")
-                                : initialData
-                                    ? t("ui.users.buttons.update")
-                                    : t("ui.users.buttons.save")}
-                            </Button>
-                        )}
-                    </form.Subscribe>
-
-                
-            </div>
         </form>
     );
-}
+})

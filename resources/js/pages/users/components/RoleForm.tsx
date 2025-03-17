@@ -1,372 +1,171 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useQueryClient } from "@tanstack/react-query";
-import { router } from "@inertiajs/react";
-import { toast } from "sonner";
-import { useTranslations } from "@/hooks/use-translations";
-import { FileText, Lock, Mail, PackageOpen, Save, Settings, Shield, User, Users, X} from 'lucide-react';
-import { useForm } from "@tanstack/react-form";
-import type { AnyFieldApi } from "@tanstack/react-form";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox";
-import React, { useState } from "react";
-  
-
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useTranslations } from '@/hooks/use-translations';
+import { router } from '@inertiajs/react';
+import type { AnyFieldApi } from '@tanstack/react-form';
+import { useForm } from '@tanstack/react-form';
+import { useQueryClient } from '@tanstack/react-query';
+import { FileText, PackageOpen, Settings, Shield, User } from 'lucide-react';
+import { forwardRef, ReactNode, useEffect, useImperativeHandle, useState } from 'react';
+import { toast } from 'sonner';
 
 interface RoleFormProps {
     roleInitialData?: {
         id: string;
         role: string;
-        permits:{
-            users:{
-                read: boolean|string;
-                create: boolean |string;
-                edit: boolean |string;
-                delete: boolean |string;
-            },
-            products:{
-                read: boolean |string;
-                create:boolean |string;
-                edit:boolean |string;
-                delete:boolean |string;
-            },
-            reports:{
-                read:boolean |string;
-                export:boolean |string;
-                print:boolean |string;
-            },
-            settings:{
-                access: boolean |string;
-                modify: boolean |string;
-            }
-        }
-       
-        
-    }
+        permisos: Record<string, Record<string, boolean | string>>;
+    };
+    roles?: string[];
+    permisos?: [string, string][];
     page?: string;
     perPage?: string;
 }
+function getCategoryIcon(category: string): ReactNode {
+    switch (category) {
+        case 'users':
+            return <User size="19px" className="text-chart-1 mr-2" />;
 
-// Field error display component
+        case 'products':
+            return <PackageOpen size="19px" className="text-chart-1 mr-2" />;
+
+        case 'reports':
+            return <FileText size="19px" className="text-chart-1 mr-2" />;
+
+        case 'settings':
+            return <Settings size="19px" className="text-chart-1 mr-2" />;
+
+        default:
+            return 0;
+    }
+}
+
 function FieldInfo({ field }: { field: AnyFieldApi }) {
     return (
         <>
             {field.state.meta.isTouched && field.state.meta.errors.length ? (
-                <p className="mt-1 text-sm text-destructive">
-                    {field.state.meta.errors.join(", ")}
-                </p>
+                <p className="text-destructive mt-1 text-sm">{field.state.meta.errors.join(', ')}</p>
             ) : null}
-            {field.state.meta.isValidating ? (
-                <p className="mt-1 text-sm text-muted-foreground">Validating...</p>
-            ) : null}
+            {field.state.meta.isValidating ? <p className="text-muted-foreground mt-1 text-sm">Validating...</p> : null}
         </>
     );
 }
 
-export function RoleForm({ roleInitialData, page, perPage}: RoleFormProps) {
+export const RoleForm = forwardRef(({ roleInitialData, page, perPage, roles, permisos }: RoleFormProps, ref) => {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
+    const [selectRole, setSelectRole] = useState<string>(roleInitialData?.role ?? '');
 
-    // TanStack Form setup
+    const permisosPorCategoria = permisos?.reduce((acc, [categoria, accion]) => {
+        if (!acc[categoria]) {
+          acc[categoria] = {}; // Si no existe la categoría, la creamos
+        }
+        acc[categoria][accion] = false; // Inicializamos cada acción como `false`
+        return acc;
+      }, {} as Record<string, Record<string, boolean>>);
+      
     const form = useForm({
         defaultValues: {
-            role: roleInitialData?.role ?? "",
-            permits: roleInitialData?.permits ?? "",
-            
+            role: roleInitialData?.role ?? '',
+            permisos: roleInitialData?.permisos ?? '',
         },
         onSubmit: async ({ value }) => {
             const options = {
                 onSuccess: () => {
-                    queryClient.invalidateQueries({ queryKey: ["users"] });
-
-                    // Construct URL with page parameters
-                    let url = "/users";
-                    if (page) {
-                        url += `?page=${page}`;
-                        if (perPage) {
-                            url += `&per_page=${perPage}`;
-                        }
-                    }
-
+                    queryClient.invalidateQueries({ queryKey: ['roles'] });
+                    let url = '/roles';
+                    if (page) url += `?page=${page}${perPage ? `&per_page=${perPage}` : ''}`;
                     router.visit(url);
                 },
-                onError: (errors: Record<string, string>) => {
-                    if (Object.keys(errors).length === 0) {
-                        toast.error(
-                            roleInitialData
-                                ? t("messages.users.error.update")
-                                : t("messages.users.error.create")
-                        );
-                    }
+                onError: () => {
+                    toast.error(roleInitialData ? t('messages.roles.error.update') : t('messages.roles.error.create'));
                 },
             };
-            // Submit with Inertia
-            if (roleInitialData) {
-                router.put(`/users/${roleInitialData.id}`, value, options);
-            } else {
-                
-                router.post("/users", value, options);
-            }           
-                    },
-                });
+            roleInitialData ? router.put(`/roles/${roleInitialData.id}`, value, options) : router.post('/roles', value, options);
+        },
+    });
 
-    // Form submission handler
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-        form.handleSubmit();
-    };
+    useImperativeHandle(ref, () => ({
+        submitForm: () => {
+            form.handleSubmit();
+        },
+    }));
 
-    const [selectRole, setSelectRole] = useState<string>("");
-    
-    const changeRole = (e: React.ChangeEvent<HTMLSelectElement>) =>{
-        return setSelectRole(e.target.value);
-    }
-
+    useEffect(() => {
+        if (roleInitialData?.role) setSelectRole(roleInitialData.role);
+    }, [roleInitialData]);
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-           {/* Main role field */}
+        <form onSubmit={form.handleSubmit} className="space-y-4" noValidate>
             <div>
-                <form.Field
-                    name="role"
-                >
+                <form.Field name="role">
                     {(field) => (
                         <>
                             <div className="flex">
-                                <Shield className="mb-2"/>
-                                <Label htmlFor="name" className="ml-3 mt-1">{t("ui.users.fields.role")}
+                                <Shield className="text-chart-1 mb-2" />
+                                <Label htmlFor="role" className="mt-1 ml-2">
+                                    {t('ui.users.fields.role')}
                                 </Label>
-                                
                             </div>
-                            <Select value={selectRole}>
+                            <Select
+                                value={selectRole}
+                                onValueChange={(value) => {
+                                    setSelectRole(value);
+
+                                    // Verificamos si el rol seleccionado existe en el array de roles
+                                    if (roles?.includes(value)) {
+                                        form.setFieldValue('permisos', {}); // Aquí asigna los permisos correctos si los tienes
+                                    }
+
+                                    field.setValue(value);
+                                }}
+                            >
                                 <SelectTrigger>
-                                    <SelectValue placeholder={t('ui.users.fields.rol')} />
+                                    <SelectValue placeholder={t('ui.users.fields.role')} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="view">{t('ui.users.roles.view')}</SelectItem>
-                                    <SelectItem value="student">{t('ui.users.roles.student')}</SelectItem>
-                                    <SelectItem value="employee">{t('ui.users.roles.employee')}</SelectItem>
-                                    <SelectItem value="admin">{t('ui.users.roles.admin')}</SelectItem>
+                                    {roles?.map((role) => (
+                                        <SelectItem key={role} value={role}>
+                                            {t(`ui.users.roles.${role}`)}
+                                        </SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
-                            <p style={{fontSize: "small" , marginTop: "1em" , color: "#8D959C"}}>{t('ui.users.extra_info.role')}</p>
                             <FieldInfo field={field} />
                         </>
                     )}
                 </form.Field>
             </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
-            <Shield className="text-chart-1"/><p style={{marginLeft:'8px'}}>{t('ui.users.fields.sp_permissions')}</p>
-                
-            </div>
-                <div className="grid grid-cols-2 gap-4 mt-4">
-                
-                {/* Role fields */}
-                    <div className="p-4 rounded-lg shadow">
-                        <div className="flex mb-4">
-                            <User size={'15px'} className="text-chart-1 mr-2"/><Label>{t('ui.users.permissions.users.title')}</Label>
-                        </div>
-                        
-                        <form.Field
-                            name="permits.users.read">
-                            {(field) => (
-                                <>
-                                    <Checkbox id={field.name} className="border-chart-1" /><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
-                                        {t('ui.users.permissions.users.show')}<br/></Label>
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                        <form.Field
-                            name="permits.users.create">
-                            {(field) => (
-                                <>
-                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
-                                        {t('ui.users.permissions.users.create')}<br/></Label>
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                        <form.Field
-                            name="permits.users.edit">
-                            {(field) => (
-                                <>
-                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
-                                        {t('ui.users.permissions.users.edit')}<br/></Label>
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                        <form.Field
-                            name="permits.users.delete">
-                            {(field) => (
-                                <>
-                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
-                                        {t('ui.users.permissions.users.delete')}<br/></Label>
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                    </div>
-                    <div className="p-4 rounded-lg shadow">
-                    <div className="flex mb-4">
-                            <PackageOpen size={'15px'} className="text-chart-1 mr-2"/><Label>{t('ui.users.permissions.products.title')}</Label>
-                        </div>
-                        <form.Field
-                            name="permits.products.read">
-                            {(field) => (
-                                <>
-                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
-                                        {t('ui.users.permissions.products.show')}<br/></Label>
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                        <form.Field
-                            name="permits.products.create">
-                            {(field) => (
-                                <>
-                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
-                                        {t('ui.users.permissions.products.create')}<br/></Label>
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                        <form.Field
-                            name="permits.products.edit">
-                            {(field) => (
-                                <>
-                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
-                                        {t('ui.users.permissions.products.edit')}<br/></Label>
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                        <form.Field
-                            name="permits.products.delete">
-                            {(field) => (
-                                <>
-                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
-                                        {t('ui.users.permissions.products.delete')}<br/></Label>
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                    </div>
-                    <div className="p-4 rounded-lg shadow">
-                    <div className="flex mb-4">
-                            <FileText size={'15px'} className="text-chart-1 mr-2"/><Label>{t('ui.users.permissions.reports.title')}</Label>
-                        </div>
-                        <form.Field
-                            name="permits.reports.read">
-                            {(field) => (
-                                <>
-                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
-                                        {t('ui.users.permissions.reports.show')}<br/></Label>
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                        <form.Field
-                            name="permits.reports.export">
-                            {(field) => (
-                                <>
-                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
-                                        {t('ui.users.permissions.reports.export')}<br/></Label>
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                        <form.Field
-                            name="permits.reports.print">
-                            {(field) => (
-                                <>
-                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>{
-                                    t('ui.users.permissions.reports.print')}<br/></Label>
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                        
-                    </div>
-                    <div className="p-4 rounded-lg shadow">
-                        <div className="flex mb-4">
-                            <Settings size={'15px'} className="text-chart-1 mr-2"/><Label>{t('ui.users.permissions.settings.title')}</Label>
-                        </div>
-                        <form.Field
-                            name="permits.settings.access">
-                            {(field) => (
-                                <>
-                                    <Checkbox id={field.name} className="border-chart-1"/><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
-                                        {t('ui.users.permissions.settings.access')}<br/></Label>
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                        <form.Field
-                            name="permits.settings.modify">
-                            {(field) => (
-                                <>
-                                    <Checkbox id={field.name}className="border-chart-1" /><Label htmlFor={field.name} style={{marginLeft:'5px'}}>
-                                        {t('ui.users.permissions.settings.modify')}<br/></Label>
-                                    <FieldInfo field={field} />
-                                </>
-                            )}
-                        </form.Field>
-                    </div>
+            <div className="mt-4 grid grid-cols-2 gap-4">
+                {Object.entries(permisosPorCategoria??{}).map(([category, actions]) => (
+                    <div key={category} className="rounded-lg p-4 shadow">
+                        {getCategoryIcon(category)}
 
-             </div>
-
-           {/* Form buttons */}
-           
-            <div className="mt-6 flex items-center justify-between gap-x-6">
-                <div style={{ display: "flex", alignItems: "center" }}>
-                    
-                    <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => {
-                            let url = "/users";
-                            if (page) {
-                                url += `?page=${page}`;
-                                if (perPage) {
-                                    url += `&per_page=${perPage}`;
-                                }
-                            }
-                            router.visit(url);
-                        }
-                        
-                        }
-                        disabled={form.state.isSubmitting}
-                        
-                    >
-                        <X size={"20px"} />
-                        {t("ui.users.buttons.cancel")}
-                    </Button>
-                </div>
-                    <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
-                        {([canSubmit, isSubmitting]) => (
-                            <Button type="submit" disabled={!canSubmit}>
-                            <Save size={"20px"}/>
-                            {isSubmitting
-                                ? t("ui.users.buttons.saving")
-                                : roleInitialData
-                                    ? t("ui.users.buttons.update")
-                                    : t("ui.users.buttons.save")}
-                            </Button>
-                        )}
-                    </form.Subscribe>
-
-                
+                        <Label className="mt-1">{t(`ui.users.permissions.${category}.title`)}</Label>
+                        <br />
+                        {Object.keys(actions).map((action) => (
+                            <form.Field key={action} name={`permisos.${category}.${action}`}>
+                                {(field) => (
+                                    <>
+                                        <div className="mt-2 flex items-center">
+                                            <Checkbox
+                                                id={field.name}
+                                                checked={Boolean(field.state.value)}
+                                                onCheckedChange={(checked) => field.setValue(checked === true)}
+                                            />
+                                            <br />
+                                            <Label htmlFor={field.name} className="ml-2">
+                                                {t(`ui.users.permissions.${category}.${action}`)}
+                                            </Label>
+                                            <FieldInfo field={field} />
+                                        </div>
+                                    </>
+                                )}
+                            </form.Field>
+                        ))}
+                    </div>
+                ))}
             </div>
         </form>
     );
-}
+});

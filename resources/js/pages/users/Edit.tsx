@@ -10,11 +10,13 @@ interface EditUserProps extends PageProps {
     name: string;
     email: string;
   };
+  roles?: string[];
+  permisos?: [string, string][];
   page?: string;
   perPage?: string;
 }
 
-export default function EditUser({ user, page, perPage }: EditUserProps) {
+export default function EditUser({ user, page, perPage, permisos, roles}: EditUserProps) {
   const { t } = useTranslations();
 
  
@@ -24,7 +26,7 @@ export default function EditUser({ user, page, perPage }: EditUserProps) {
         <div className="p-6 w-full max-w-2xl">
           <h3 className="flex mb-2"><User className="mr-2"/>{t("ui.users.edit")}</h3>
           <div className="max-w-xl">
-            <TabsForm initialData={user} page={page} perPage={perPage}/>
+            <TabsForm permisos={permisos} roles={roles} initialData={user} page={page} perPage={perPage}/>
           </div>
         </div>
       </div>

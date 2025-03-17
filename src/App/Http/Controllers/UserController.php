@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -22,7 +24,23 @@ class UserController extends Controller
 
     public function create()
     {
-        return Inertia::render('users/Create');
+        $permisos = [];
+        $roles = [];
+
+        foreach (Permission::all() as $value) {
+            $category = explode('.', $value->name)[0];
+            $action = explode('.', $value->name)[1];
+            array_push($permisos, [$category, $action]);
+        }
+
+        foreach (Role::all() as $value) {
+            array_push($roles, $value->name);
+        }
+
+        return Inertia::render('users/Create', [
+            'permisos' => $permisos,
+            'roles' => $roles
+        ]);
     }
 
     public function store(Request $request, UserStoreAction $action)
@@ -45,10 +63,36 @@ class UserController extends Controller
 
     public function edit(Request $request, User $user)
     {
+        $permisos = [];
+        $roles = [];
+
+        foreach (Permission::all() as $value) {
+            $category = explode('.', $value->name)[0];
+            $action = explode('.', $value->name)[1];
+            array_push($permisos, [$category, $action]);
+        }
+
+        foreach (Role::all() as $value) {
+            array_push($permisos, $value->name);
+        }
+
+        $userPermits = [];
+
+        foreach($user->permissions as $permit){
+            $category = explode('.', $permit->name)[0];
+            $action = explode('.', $permit->name)[1];
+            if (!isset($userPermits[$category])) {
+                $userPermits[$category] = [];
+            }
+            $userPermits[$category][$action] = true;
+        }
         return Inertia::render('users/Edit', [
             'user' => $user,
             'page' => $request->query('page'),
             'perPage' => $request->query('perPage'),
+            'permisos' => $permisos,
+            'roles' => $roles,
+            'userPermits' => $userPermits
         ]);
     }
 

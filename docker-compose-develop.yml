@@ -170,39 +170,39 @@ services:
         - 'http://biblioteca.test:8108/health'
       retries: 5
       timeout: 7s
-  selenium:
-    image: 'seleniarm/standalone-chromium'
-    container_name: biblioteca-selenium
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
-      - 'biblioteca.test:host-gateway'
-    volumes:
-      - '/dev/shm:/dev/shm'
-    networks:
-      - nginx-proxy
-      - biblioteca-back
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: biblioteca-pgadmin
-    restart: unless-stopped
-    expose:
-      - 80
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-      VIRTUAL_HOST: pgadmin.biblioteca.test
-      VIRTUAL_PORT: 80
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
-      PGADMIN_SERVER_JSON_FILE: /pgadmin4/servers.json
-    volumes:
-      - './docker/develop/pgadmin:/var/lib/pgadmin'
-      - ./docker/develop/pgadmin/servers/servers.json:/pgadmin4/servers.json
-    depends_on:
-      - pgsql
-    networks:
-      - nginx-proxy
-      - biblioteca-back
+  #selenium:
+   # image: 'seleniarm/standalone-chromium'
+   # container_name: biblioteca-selenium
+    #extra_hosts:
+     # - 'host.docker.internal:host-gateway'
+      #- 'biblioteca.test:host-gateway'
+    #volumes:
+    #  - '/dev/shm:/dev/shm'
+    #networks:
+    #  - nginx-proxy
+     # - biblioteca-back
+  #pgadmin:
+   # image: dpage/pgadmin4:latest
+   # container_name: biblioteca-pgadmin
+   # restart: unless-stopped
+   # expose:
+    #  - 80
+    #environment:
+     # PGADMIN_DEFAULT_EMAIL: admin@example.com
+      #PGADMIN_DEFAULT_PASSWORD: admin
+     # VIRTUAL_HOST: pgadmin.biblioteca.test
+      #VIRTUAL_PORT: 80
+     # PGADMIN_CONFIG_SERVER_MODE: 'False'
+     # PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+     # PGADMIN_SERVER_JSON_FILE: /pgadmin4/servers.json
+    #volumes:
+     # - './docker/develop/pgadmin:/var/lib/pgadmin'
+     # - ./docker/develop/pgadmin/servers/servers.json:/pgadmin4/servers.json
+    #depends_on:
+     # - pgsql
+    #networks:
+     # - nginx-proxy
+     # - biblioteca-back
 
 networks:
   nginx-proxy:

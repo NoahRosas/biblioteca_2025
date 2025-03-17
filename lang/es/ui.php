@@ -137,21 +137,21 @@ return [
         'permissions'=>[
             'users' => [
                 'title' => 'Usuarios',
-                'show' => 'Ver usuarios',
+                'view' => 'Ver usuarios',
                 'create' => 'Crear usuarios',
                 'edit' => 'Editar usuarios',
                 'delete' => 'Eliminar usuarios',
             ],
             'products' => [
                 'title' => 'Productos',
-                'show' => 'Ver productos',
+                'view' => 'Ver productos',
                 'create' => 'Crear productos',
                 'edit' => 'Editar productos',
                 'delete' => 'Eliminar productos',
             ],
             'reports' => [
                 'title' => 'Reportes',
-                'show' => 'Ver reportes',
+                'view' => 'Ver reportes',
                 'export' => 'Exportar reportes',
                 'print' => 'Imprimir reportes'
             ],

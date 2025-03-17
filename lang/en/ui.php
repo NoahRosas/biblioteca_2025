@@ -136,21 +136,21 @@ return [
         'permissions'=>[
             'users' => [
                 'title' => 'Users',
-                'show' => 'Show users',
+                'view' => 'View users',
                 'create' => 'Create users',
                 'edit' => 'Edit users',
                 'delete' => 'Delete users',
             ],
             'products' => [
                 'title' => 'Products',
-                'show' => 'Show products',
+                'view' => 'View products',
                 'create' => 'Create products',
                 'edit' => 'Edit products',
                 'delete' => 'Delete products',
             ],
             'reports' => [
                 'title' => 'Reports',
-                'show' => 'Show reports',
+                'view' => 'View reports',
                 'export' => 'Export reports',
                 'print' => 'Print reports'
             ],

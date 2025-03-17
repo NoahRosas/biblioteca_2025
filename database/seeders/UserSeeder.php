@@ -5,6 +5,7 @@ namespace Database\Seeders;
 
 use Domain\Users\Models\User;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
 
 class UserSeeder extends Seeder
 {
