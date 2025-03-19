@@ -13,7 +13,7 @@ interface EditUserProps extends PageProps {
     permisos:string[];
   };
   roles?: string[];
-  permisos?: [string, string][];
+  permisos?: string[];
   page?: string;
   perPage?: string;
 }

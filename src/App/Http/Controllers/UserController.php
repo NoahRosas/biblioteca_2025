@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Domain\Roles\Models\Role as ModelsRole;
 use Domain\Users\Actions\UserDestroyAction;
 use Domain\Users\Actions\UserIndexAction;
 use Domain\Users\Actions\UserStoreAction;
@@ -26,17 +27,23 @@ class UserController extends Controller
     {
         $permisos = [];
         $roles = [];
+        
 
-        foreach (Permission::all() as $value) {
-            $category = explode('.', $value->name)[0];
-            $action = explode('.', $value->name)[1];
-            array_push($permisos, [$category, $action]);
+        // foreach (Permission::all() as $value) {
+        //     $category = explode('.', $value->name)[0];
+        //     $action = explode('.', $value->name)[1];
+        //     array_push($permisos, [$category, $action]);
+        // }
+        
+        foreach (ModelsRole::all() as $rol) {
+            foreach ($rol -> permissions as $value ) {
+                array_push($roles, [$rol->name, $value->name]);
+                // array_push($roles,  $value);
+            }
+            // array_push($roles, $rol->name);
+
         }
-
-        foreach (Role::all() as $value) {
-            array_push($roles, $value->name);
-        }
-
+        
         return Inertia::render('users/Create', [
             'permisos' => $permisos,
             'roles' => $roles
@@ -56,6 +63,7 @@ class UserController extends Controller
         }
 
         $action($validator->validated());
+
 
         return redirect()->route('users.index')
             ->with('success', __('messages.users.created'));

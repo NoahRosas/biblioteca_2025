@@ -9,25 +9,27 @@ import { router } from '@inertiajs/react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
-import { valuesIn } from 'lodash';
 import { FileText, Lock, Mail, PackageOpen, Save, Settings, Shield, User, X } from 'lucide-react';
-import { JSX, ReactNode, useState } from 'react';
-;
-
+import { ReactNode, useState } from 'react';
 // Tipado de las props
 export interface UserFormProps {
     initialData?: {
         id: string;
         name: string;
         email: string;
-        role:string;
-        permisos:string[];
+        role: string;
+        permisos: string[];
     };
     roles?: string[];
     permisos?: string[];
     page?: string;
     perPage?: string;
 }
+
+let permisosUsuario: string[];
+    permisosUsuario = [];
+let selectRole: string;
+    selectRole="";
 // Field error display component
 function FieldInfo({ field }: { field: AnyFieldApi }) {
     return (
@@ -35,7 +37,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
             {field.state.meta.isTouched && field.state.meta.errors.length ? (
                 <p className="text-destructive mt-1 text-sm">{field.state.meta.errors.join(', ')}</p>
             ) : null}
-            {field.state.meta.isValidating ? <p className="text-muted-foreground mt-1 text-sm">Validating...</p> : null}
+            
         </>
     );
 }
@@ -58,32 +60,63 @@ function getCategoryIcon(category: string): ReactNode {
     }
 }
 
-export function UserForm({ initialData, page, perPage, permisos, roles}: UserFormProps) {
+
+export function UserForm({ initialData, page, perPage, permisos, roles }: UserFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
-    const [selectRole, setSelectRole] = useState<string>(initialData?.role ?? '');
-    let permisosUsuario : string[];
-    permisosUsuario = [];
-    function handleTogglePermits(permit: string) {
-        
-        if (!permisosUsuario.includes(permit)) {
-            permisosUsuario.push(permit);
-        }else{
-            permisosUsuario = (permisosUsuario.filter((a) => a !== permit));
+    const [selectedRole, setSelectRole] = useState<string>(initialData?.role ?? '');
+    const [listaPermisosUsuario, setLista] = useState(permisosUsuario);
+
+    let arrayRoles: string[];
+    arrayRoles = [];
+
+    roles?.forEach(rol =>{
+        if (!arrayRoles.includes(rol[0])) {
+            arrayRoles.push(rol[0]);
         }
+        
+    })
+    // console.log(arrayRoles);
 
-        console.log(permisosUsuario);
+    function handleOnClickPermits(permit: string) {
+
+        if (!listaPermisosUsuario.includes(permit)) {
+            setLista([...listaPermisosUsuario, permit]);
+        } else {
+            setLista(listaPermisosUsuario.filter((a) => a !== permit));
+        }
         console.log(permit);
-
+        console.log(listaPermisosUsuario);
     }
 
-    const permisosPorCategoria = permisos?.reduce((acc, [categoria, accion]) => {
-        if (!acc[categoria]) {
-          acc[categoria] = {}; 
-        }
-        acc[categoria][accion] = false; 
-        return acc;
-      }, {} as Record<string, Record<string, boolean>>);
+    function fSelectRole(valor:string){
+        selectRole=valor;
+        setSelectRole(selectedRole);
+        setLista([]);
+        roles?.forEach(rolName=>{
+            console.log(rolName);
+            if(rolName[0].includes(valor)){
+                console.log(rolName[0]);
+                setLista([...listaPermisosUsuario, rolName[1]]);
+                
+            }
+        })
+        console.log(listaPermisosUsuario);
+    }
+
+    const permisosPorCategoria = permisos?.reduce(
+        (acc, [categoria, accion]) => {
+            if (!acc[categoria]) {
+                acc[categoria] = {};
+            }
+            acc[categoria][accion] = false;
+            return acc;
+        },
+        {} as Record<string, Record<string, boolean>>,
+    );
+
+
+    
 
     const form = useForm({
         defaultValues: {
@@ -122,11 +155,13 @@ export function UserForm({ initialData, page, perPage, permisos, roles}: UserFor
     return (
         <div className="inset-0 flex items-center justify-center border">
             <Tabs defaultValue="create_account" className="w-[800px]">
-                <TabsList className="grid w-full grid-cols-2 light:bg-gray-200 dark:bg-gray-900">
-                    <TabsTrigger className="hover:text-chart-1"  value="create_user" autoFocus={true}>
+                <TabsList  className="light:bg-gray-200 grid h-[50px] w-full grid-cols-2 dark:bg-gray-900">
+                    <TabsTrigger className="hover:text-chart-1 border" value="create_user" autoFocus={true}>
                         {t('ui.users.tabs.basic_information')}
                     </TabsTrigger>
-                    <TabsTrigger className="hover:text-chart-1" value="create_role">{t('ui.users.tabs.roles')}</TabsTrigger>
+                    <TabsTrigger className="hover:text-chart-1" value="create_role">
+                        {t('ui.users.tabs.roles')}
+                    </TabsTrigger>
                 </TabsList>
                 <TabsContent value="create_user">
                     <Card>
@@ -264,36 +299,36 @@ export function UserForm({ initialData, page, perPage, permisos, roles}: UserFor
                                     {!initialData && <p className="text-muted-foreground mt-2 text-xs">{t('ui.settings.password.secure_message')}</p>}
                                 </div>
                             </form>
-                            <CardFooter>
-                    {/* Form buttons */}
-                    <div className="mt-6 flex items-center justify-between gap-x-6">
-                        <div className='flex align-middle'>
-                            <Button
-                                type="button"
-                                onClick={() => {
-                                    let url = '/users';
-                                    if (page) {
-                                        url += `?page=${page}`;
-                                        if (perPage) {
-                                            url += `&per_page=${perPage}`;
-                                        }
-                                    }
-                                    router.visit(url);
-                                }}
-                            >
-                                <X size={'20px'} />
-                                {t('ui.users.buttons.cancel')}
-                            </Button>
-                        </div>
-                        <div>
-                            <Button type="submit" onClick={handleSubmit}>
-                                <Save size={'20px'} />
-                                {initialData ? t('ui.users.buttons.update') : t('ui.users.buttons.save')}
-                            </Button>
-                        </div>
-                    </div>
-                </CardFooter>
                         </CardContent>
+                        <CardFooter>
+                            {/* Form buttons */}
+                            <div className="mt-6 flex items-center justify-between gap-x-6">
+                                <div className="flex align-middle">
+                                    <Button
+                                        type="button"
+                                        onClick={() => {
+                                            let url = '/users';
+                                            if (page) {
+                                                url += `?page=${page}`;
+                                                if (perPage) {
+                                                    url += `&per_page=${perPage}`;
+                                                }
+                                            }
+                                            router.visit(url);
+                                        }}
+                                    >
+                                        <X size={'20px'} />
+                                        {t('ui.users.buttons.cancel')}
+                                    </Button>
+                                </div>
+                                <div>
+                                    <Button type="submit" onClick={handleSubmit}>
+                                        <Save size={'20px'} />
+                                        {initialData ? t('ui.users.buttons.update') : t('ui.users.buttons.save')}
+                                    </Button>
+                                </div>
+                            </div>
+                        </CardFooter>
                     </Card>
                 </TabsContent>
                 <TabsContent value="create_role">
@@ -301,7 +336,7 @@ export function UserForm({ initialData, page, perPage, permisos, roles}: UserFor
                         <CardContent className="space-y-2">
                             <form onSubmit={form.handleSubmit} className="space-y-4" noValidate>
                                 <div>
-                                    <form.Field name='role'>
+                                    <form.Field name="role">
                                         {(field) => (
                                             <>
                                                 <div className="flex">
@@ -310,23 +345,17 @@ export function UserForm({ initialData, page, perPage, permisos, roles}: UserFor
                                                         {t('ui.users.fields.role')}
                                                     </Label>
                                                 </div>
+                                                
                                                 <Select
                                                     value={selectRole}
-                                                    onValueChange={(value:String) => {
-                                                        setSelectRole(String(value));
-
-                                                        if (roles?.includes(String(value))) {
-                                                            form.setFieldValue('permisos', []);
-                                                        }
-                                                        field.setValue(String(value));
-                                                    }}
+                                                    onValueChange={(value) => fSelectRole(value)}
                                                 >
-                                                    <SelectTrigger>
+                                                    <SelectTrigger >
                                                         <SelectValue placeholder={t('ui.users.fields.role')} />
                                                     </SelectTrigger>
-                                                    <SelectContent>
-                                                        {roles?.map((role) => (
-                                                            <SelectItem key={role} value={role}>
+                                                    <SelectContent >
+                                                        {arrayRoles?.map((role ) => (
+                                                            <SelectItem value={role} >
                                                                 {t(`ui.users.roles.${role}`)}
                                                             </SelectItem>
                                                         ))}
@@ -345,16 +374,16 @@ export function UserForm({ initialData, page, perPage, permisos, roles}: UserFor
                                             <Label className="mt-1">{t(`ui.users.permissions.${category}.title`)}</Label>
                                             <br />
                                             {Object.keys(actions).map((action) => (
-                                                <form.Field key={action} name='permisos'>
+                                                <form.Field key={action} name="permisos">
                                                     {(field) => (
                                                         <>
                                                             <div className="mt-2 flex items-center">
                                                                 <Checkbox
-                                                                    id={field.name}
-                                                                    key={`${category}.${action}`}
+                                                                    id={`${category}.${action}`}
+                                                                    name={`${field.name}.${category}.${action}`}
+                                                                    checked={listaPermisosUsuario.includes(`${category}.${action}`)}
                                                                     value={`${category}.${action}`}
-                                                                    onClick={e => handleTogglePermits(e.currentTarget.value)}
-                                                                    
+                                                                    onClick={(e) => handleOnClickPermits(e.currentTarget.value)}
                                                                 />
                                                                 <br />
                                                                 <Label htmlFor={field.name} className="ml-2">
@@ -370,40 +399,39 @@ export function UserForm({ initialData, page, perPage, permisos, roles}: UserFor
                                     ))}
                                 </div>
                             </form>
-                            <CardFooter>
-                    {/* Form buttons */}
-                    <div className="mt-6 flex items-center justify-between gap-x-6">
-                        <div className='flex align-middle'>
-                            <Button
-                                type="button"
-                                onClick={() => {
-                                    let url = '/users';
-                                    if (page) {
-                                        url += `?page=${page}`;
-                                        if (perPage) {
-                                            url += `&per_page=${perPage}`;
-                                        }
-                                    }
-                                    router.visit(url);
-                                }}
-                            >
-                                <X size={'20px'} />
-                                {t('ui.users.buttons.cancel')}
-                            </Button>
-                        </div>
-                        <div>
-                            <Button type="submit" onClick={handleSubmit}>
-                                <Save size={'20px'} />
-                                {initialData ? t('ui.users.buttons.update') : t('ui.users.buttons.save')}
-                            </Button>
-                        </div>
-                    </div>
-                </CardFooter>
                         </CardContent>
+                        <CardFooter>
+                            {/* Form buttons */}
+                            <div className="mt-6 flex items-center justify-between gap-x-6 max-w-max">
+                                <div className="flex align-middle">
+                                    <Button
+                                        type="button"
+                                        className={'flex'}
+                                        onClick={() => {
+                                            let url = '/users';
+                                            if (page) {
+                                                url += `?page=${page}`;
+                                                if (perPage) {
+                                                    url += `&per_page=${perPage}`;
+                                                }
+                                            }
+                                            router.visit(url);
+                                        }}
+                                    >
+                                        <X size={'20px'} />
+                                        {t('ui.users.buttons.cancel')}
+                                    </Button>
+                                </div>
+                                <div>
+                                    <Button type="submit" className={'flex'} onClick={handleSubmit}>
+                                        <Save size={'20px'} />
+                                        {initialData ? t('ui.users.buttons.update') : t('ui.users.buttons.save')}
+                                    </Button>
+                                </div>
+                            </div>
+                        </CardFooter>
                     </Card>
-                    
                 </TabsContent>
-                
             </Tabs>
         </div>
     );

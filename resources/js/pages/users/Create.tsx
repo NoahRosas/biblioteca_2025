@@ -7,7 +7,7 @@ import { UserForm } from "./components/UserForm";
 
 interface CreateUserProps extends PageProps {
   roles?: string[];
-  permisos?: [string, string][];
+  permisos?: string[];
 
 }
 
