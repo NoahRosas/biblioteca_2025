@@ -18,18 +18,17 @@ export interface UserFormProps {
         name: string;
         email: string;
         role: string;
-        permisos: string[];
     };
     roles?: string[];
     permisos?: string[];
+    userPermits?:string[];
     page?: string;
     perPage?: string;
 }
 
-let permisosUsuario: string[];
-    permisosUsuario = [];
+
 let selectRole: string;
-    selectRole="";
+selectRole = '';
 // Field error display component
 function FieldInfo({ field }: { field: AnyFieldApi }) {
     return (
@@ -37,7 +36,6 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
             {field.state.meta.isTouched && field.state.meta.errors.length ? (
                 <p className="text-destructive mt-1 text-sm">{field.state.meta.errors.join(', ')}</p>
             ) : null}
-            
         </>
     );
 }
@@ -60,26 +58,19 @@ function getCategoryIcon(category: string): ReactNode {
     }
 }
 
-
-export function UserForm({ initialData, page, perPage, permisos, roles }: UserFormProps) {
+export function UserForm({ initialData, page, perPage, permisos, roles, userPermits}: UserFormProps) {
+    let permisosUsuario: string[];
+    permisosUsuario = userPermits ? userPermits : [];
     const { t } = useTranslations();
     const queryClient = useQueryClient();
     const [selectedRole, setSelectRole] = useState<string>(initialData?.role ?? '');
     const [listaPermisosUsuario, setLista] = useState(permisosUsuario);
+    
 
-    let arrayRoles: string[];
-    arrayRoles = [];
-
-    roles?.forEach(rol =>{
-        if (!arrayRoles.includes(rol[0])) {
-            arrayRoles.push(rol[0]);
-        }
-        
-    })
-    // console.log(arrayRoles);
+    
+    // console.log(roles);
 
     function handleOnClickPermits(permit: string) {
-
         if (!listaPermisosUsuario.includes(permit)) {
             setLista([...listaPermisosUsuario, permit]);
         } else {
@@ -89,34 +80,42 @@ export function UserForm({ initialData, page, perPage, permisos, roles }: UserFo
         console.log(listaPermisosUsuario);
     }
 
-    function fSelectRole(valor:string){
-        selectRole=valor;
-        setSelectRole(selectedRole);
-        setLista([]);
-        roles?.forEach(rolName=>{
-            console.log(rolName);
-            if(rolName[0].includes(valor)){
-                console.log(rolName[0]);
-                setLista([...listaPermisosUsuario, rolName[1]]);
-                
-            }
-        })
-        console.log(listaPermisosUsuario);
-    }
 
-    const permisosPorCategoria = permisos?.reduce(
+    function fSelectRole(valor: string) {
+        selectRole = valor;
+        setSelectRole(valor);
+        console.log(valor);
+
+        setLista([]);
+
+        let newPermissions: string[];
+        newPermissions = [];
+
+        roles?.forEach((rolName) => {
+            if (rolName[0].includes(valor)) {
+                console.log(`Rol encontrado: ${rolName[0]}`);
+                newPermissions.push(rolName[1]);
+            }
+        });
+
+        setLista(newPermissions);
+        
+        console.log("Permisos del usuario", listaPermisosUsuario);
+    }
+    // console.log('Estos son los permisos', userPermits);
+    const permissionsByCategory = permisos?.reduce(
         (acc, [categoria, accion]) => {
             if (!acc[categoria]) {
-                acc[categoria] = {};
+                acc[categoria] = [];
             }
-            acc[categoria][accion] = false;
+            if (!acc[categoria].includes(accion)) {
+                acc[categoria].push(accion);
+            }
+            
             return acc;
         },
-        {} as Record<string, Record<string, boolean>>,
+        {} as Record<string, string[]>,
     );
-
-
-    
 
     const form = useForm({
         defaultValues: {
@@ -124,7 +123,7 @@ export function UserForm({ initialData, page, perPage, permisos, roles }: UserFo
             email: initialData?.email ?? '',
             password: '',
             role: initialData?.role ?? '',
-            permisos: initialData?.permisos ?? [''],
+            permits: [""],
         },
         onSubmit: async ({ value }) => {
             const options = {
@@ -149,13 +148,15 @@ export function UserForm({ initialData, page, perPage, permisos, roles }: UserFo
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         event.stopPropagation();
+        
+        form.setFieldValue("permits", listaPermisosUsuario);
         form.handleSubmit();
     };
 
     return (
         <div className="inset-0 flex items-center justify-center border">
             <Tabs defaultValue="create_account" className="w-[800px]">
-                <TabsList  className="light:bg-gray-200 grid h-[50px] w-full grid-cols-2 dark:bg-gray-900">
+                <TabsList className="light:bg-gray-200 grid h-[50px] w-full grid-cols-2 dark:bg-gray-900">
                     <TabsTrigger className="hover:text-chart-1 border" value="create_user" autoFocus={true}>
                         {t('ui.users.tabs.basic_information')}
                     </TabsTrigger>
@@ -345,17 +346,14 @@ export function UserForm({ initialData, page, perPage, permisos, roles }: UserFo
                                                         {t('ui.users.fields.role')}
                                                     </Label>
                                                 </div>
-                                                
-                                                <Select
-                                                    value={selectRole}
-                                                    onValueChange={(value) => fSelectRole(value)}
-                                                >
-                                                    <SelectTrigger >
+
+                                                <Select name="role" value={selectRole} onValueChange={(value) => fSelectRole(value)}>
+                                                    <SelectTrigger>
                                                         <SelectValue placeholder={t('ui.users.fields.role')} />
                                                     </SelectTrigger>
-                                                    <SelectContent >
-                                                        {arrayRoles?.map((role ) => (
-                                                            <SelectItem value={role} >
+                                                    <SelectContent>
+                                                        {roles?.map((role) => (
+                                                            <SelectItem key={role} value={role}>
                                                                 {t(`ui.users.roles.${role}`)}
                                                             </SelectItem>
                                                         ))}
@@ -367,30 +365,32 @@ export function UserForm({ initialData, page, perPage, permisos, roles }: UserFo
                                     </form.Field>
                                 </div>
                                 <div className="mt-4 grid grid-cols-2 gap-4">
-                                    {Object.entries(permisosPorCategoria ?? {}).map(([category, actions]) => (
+                                    {Object.entries(permissionsByCategory ?? {}).map(([category, actions]) => (
+                                        
                                         <div key={category} className="rounded-lg p-4 shadow-inner">
                                             {getCategoryIcon(category)}
-
                                             <Label className="mt-1">{t(`ui.users.permissions.${category}.title`)}</Label>
                                             <br />
                                             {Object.keys(actions).map((action) => (
-                                                <form.Field key={action} name="permisos">
+                                                <form.Field key={action} name="permits">
                                                     {(field) => (
-                                                        <>
+                                                        <>                                                  
                                                             <div className="mt-2 flex items-center">
+                                                                
                                                                 <Checkbox
-                                                                    id={`${category}.${action}`}
-                                                                    name={`${field.name}.${category}.${action}`}
-                                                                    checked={listaPermisosUsuario.includes(`${category}.${action}`)}
-                                                                    value={`${category}.${action}`}
+                                                                    id={`${category}.${actions[action]}`}
+                                                                    name={`${field.name}.${category}.${actions[action]}`}
+                                                                    checked={listaPermisosUsuario.includes(`${category}.${actions[action]}`)}
+                                                                    value={`${category}.${actions[action]}`}
                                                                     onClick={(e) => handleOnClickPermits(e.currentTarget.value)}
                                                                 />
                                                                 <br />
                                                                 <Label htmlFor={field.name} className="ml-2">
-                                                                    {t(`ui.users.permissions.${category}.${action}`)}
+                                                                    {t(`ui.users.permissions.${category}.${actions[action]}`)}
                                                                 </Label>
                                                                 <FieldInfo field={field} />
                                                             </div>
+                                                            
                                                         </>
                                                     )}
                                                 </form.Field>
@@ -402,7 +402,7 @@ export function UserForm({ initialData, page, perPage, permisos, roles }: UserFo
                         </CardContent>
                         <CardFooter>
                             {/* Form buttons */}
-                            <div className="mt-6 flex items-center justify-between gap-x-6 max-w-max">
+                            <div className="mt-6 flex max-w-max items-center justify-between gap-x-6">
                                 <div className="flex align-middle">
                                     <Button
                                         type="button"

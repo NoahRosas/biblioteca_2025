@@ -29,11 +29,11 @@ class UserController extends Controller
         $roles = [];
         
 
-        // foreach (Permission::all() as $value) {
-        //     $category = explode('.', $value->name)[0];
-        //     $action = explode('.', $value->name)[1];
-        //     array_push($permisos, [$category, $action]);
-        // }
+        foreach (Permission::all() as $value) {
+            $category = explode('.', $value->name)[0];
+            $action = explode('.', $value->name)[1];
+            array_push($permisos, [$category, $action]);
+        }
         
         foreach (ModelsRole::all() as $rol) {
             foreach ($rol -> permissions as $value ) {
@@ -52,6 +52,7 @@ class UserController extends Controller
 
     public function store(Request $request, UserStoreAction $action)
     {
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -62,7 +63,7 @@ class UserController extends Controller
             return back()->withErrors($validator);
         }
 
-        $action($validator->validated());
+        $action($validator->validated(), $request->permits);
 
 
         return redirect()->route('users.index')
@@ -73,6 +74,11 @@ class UserController extends Controller
     {
         $permisos = [];
         $roles = [];
+        $userPermits = [];
+        $userPermitsCollection = $user->permissions->pluck('name');
+        foreach ($userPermitsCollection as $key ) {
+            array_push($userPermits, $key);
+        }
 
         foreach (Permission::all() as $value) {
             $category = explode('.', $value->name)[0];
@@ -81,19 +87,17 @@ class UserController extends Controller
         }
 
         foreach (Role::all() as $value) {
-            array_push($permisos, $value->name);
+            array_push($roles, $value->name);
         }
 
-        $userPermits = [];
+        
 
-        foreach($user->permissions as $permit){
-            $category = explode('.', $permit->name)[0];
-            $action = explode('.', $permit->name)[1];
-            if (!isset($userPermits[$category])) {
-                $userPermits[$category] = [];
-            }
-            $userPermits[$category][$action] = true;
+        foreach($userPermits as $permit){
+            $category = explode('.', $permit)[0];
+            $action = explode('.', $permit)[1];
         }
+
+        // dd($permisos);
         return Inertia::render('users/Edit', [
             'user' => $user,
             'page' => $request->query('page'),
@@ -122,7 +126,7 @@ class UserController extends Controller
             return back()->withErrors($validator);
         }
 
-        $action($user, $validator->validated());
+        $action($user, $validator->validated(), $request->permits);
 
         $redirectUrl = route('users.index');
         
