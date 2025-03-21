@@ -18,17 +18,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::get('/prueba', function(){
-    $permisos = Permission::all();
-    $prueba=[];
-
-    foreach ($permisos as $value) {
-        $category = explode('.', $value->name)[0];
-        $action = explode('.', $value->name)[1];
-        array_push($prueba, [$category, $action]);
-    }
-    dd($prueba);
-    
-
+    return Inertia::render('prueba');
 });
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

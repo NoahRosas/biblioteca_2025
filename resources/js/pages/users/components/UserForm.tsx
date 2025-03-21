@@ -161,14 +161,15 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
     };
 
     return (
-        <div className="inset-0 flex items-center justify-center border">
-            <Tabs defaultValue="create_account" className="w-[800px]">
-                <TabsList className="light:bg-gray-200 grid h-[50px] w-full grid-cols-2 dark:bg-gray-900">
-                    <TabsTrigger className="hover:text-chart-1 border" value="create_user" autoFocus={true}>
-                        {t('ui.users.tabs.basic_information')}
+        <div className="inset-0 flex items-center justify-center">
+        
+            <Tabs defaultValue="create_account">
+                <TabsList className="grid h-[50px] grid-cols-2 ">
+                    <TabsTrigger className="hover:text-chart-1 border rounded-md " value="create_user" autoFocus={true}>
+                        <p className='hover:scale-125'>{t('ui.users.tabs.basic_information')}</p>
                     </TabsTrigger>
-                    <TabsTrigger className="hover:text-chart-1" value="create_role">
-                        {t('ui.users.tabs.roles')}
+                    <TabsTrigger className="hover:text-chart-1 border rounded-md " value="create_role">
+                        <p className='hover:scale-125'>{t('ui.users.tabs.roles')}</p>
                     </TabsTrigger>
                 </TabsList>
                 <TabsContent value="create_user">
@@ -310,9 +311,10 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                         </CardContent>
                         <CardFooter>
                             {/* Form buttons */}
-                            <div className="mt-6 flex items-center justify-between gap-x-6">
-                                <div className="flex align-middle">
+                            <div className="mt-6 flex text-center justify-between gap-x-6">
+                                <div className="flex items-center justify-between border w-[100px] h-[30px] rounded-sm hover:bg-muted-foreground">
                                     <Button
+                                    className='flex'
                                         type="button"
                                         onClick={() => {
                                             let url = '/users';
@@ -325,13 +327,13 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                             router.visit(url);
                                         }}
                                     >
-                                        <X size={'20px'} />
+                                        <X size={'20px'} className='mr-1 mt-[2px]'/>
                                         {t('ui.users.buttons.cancel')}
                                     </Button>
                                 </div>
-                                <div>
-                                    <Button type="submit" onClick={handleSubmit}>
-                                        <Save size={'20px'} />
+                                <div className='bg-chart-1 rounded-sm text-center justify-between w-[100px] h-[30px] hover:bg-chart-5'>
+                                    <Button type="submit" className='flex mt-1' onClick={handleSubmit}>
+                                        <Save size={'20px'} className=' mr-1 mt-[2px]'/>
                                         {initialData ? t('ui.users.buttons.update') : t('ui.users.buttons.save')}
                                     </Button>
                                 </div>
@@ -374,9 +376,9 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                 <div className="mt-4 grid grid-cols-2 gap-4">
                                     {Object.entries(permissionsByCategory ?? {}).map(([category, actions]) => (
                                         
-                                        <div key={category} className="rounded-lg p-4 shadow-inner">
+                                        <div key={category} className="rounded-lg p-4 border">
                                             {getCategoryIcon(category)}
-                                            <Label className="mt-1">{t(`ui.users.permissions.${category}.title`)}</Label>
+                                            <Label className="mt-1 ">{t(`ui.users.permissions.${category}.title`)}</Label>
                                             <br />
                                             {Object.keys(actions).map((action) => (
                                                 <form.Field key={action} name="permits">
@@ -409,11 +411,11 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                         </CardContent>
                         <CardFooter>
                             {/* Form buttons */}
-                            <div className="mt-6 flex max-w-max items-center justify-between gap-x-6">
-                                <div className="flex align-middle">
+                            <div className="mt-6 flex text-center justify-between gap-x-6">
+                                <div className="flex items-center justify-between border w-[100px] h-[30px] rounded-sm hover:bg-muted-foreground">
                                     <Button
+                                    className='flex'
                                         type="button"
-                                        className={'flex'}
                                         onClick={() => {
                                             let url = '/users';
                                             if (page) {
@@ -425,13 +427,13 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                             router.visit(url);
                                         }}
                                     >
-                                        <X size={'20px'} />
+                                        <X size={'20px'} className='mr-1 mt-[2px]'/>
                                         {t('ui.users.buttons.cancel')}
                                     </Button>
                                 </div>
-                                <div>
-                                    <Button type="submit" className={'flex'} onClick={handleSubmit}>
-                                        <Save size={'20px'} />
+                                <div className='bg-chart-1 rounded-sm text-center justify-between w-[100px] h-[30px] hover:bg-chart-5'>
+                                    <Button type="submit" className='flex mt-1' onClick={handleSubmit}>
+                                        <Save size={'20px'} className=' mr-1 mt-[2px]'/>
                                         {initialData ? t('ui.users.buttons.update') : t('ui.users.buttons.save')}
                                     </Button>
                                 </div>
@@ -440,6 +442,6 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                     </Card>
                 </TabsContent>
             </Tabs>
-        </div>
+       </div>
     );
 }
