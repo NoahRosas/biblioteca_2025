@@ -38,10 +38,9 @@ class UserController extends Controller
         foreach (ModelsRole::all() as $rol) {
             foreach ($rol -> permissions as $value ) {
                 array_push($roles, [$rol->name, $value->name]);
-                // array_push($roles,  $value);
+                
             }
-            // array_push($roles, $rol->name);
-
+            
         }
         
         return Inertia::render('users/Create', [
@@ -86,8 +85,12 @@ class UserController extends Controller
             array_push($permisos, [$category, $action]);
         }
 
-        foreach (Role::all() as $value) {
-            array_push($roles, $value->name);
+        foreach (ModelsRole::all() as $rol) {
+            foreach ($rol -> permissions as $value ) {
+                array_push($roles, [$rol->name, $value->name]);
+                
+            }
+            
         }
 
         

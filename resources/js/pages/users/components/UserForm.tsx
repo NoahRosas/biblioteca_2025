@@ -66,9 +66,16 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
     const [selectedRole, setSelectRole] = useState<string>(initialData?.role ?? '');
     const [listaPermisosUsuario, setLista] = useState(permisosUsuario);
     
-
+    let arrayRoles : string[];
+    arrayRoles = [];
     
-    // console.log(roles);
+    roles?.forEach(element => {
+        if (!arrayRoles.includes(element[0])) {
+            arrayRoles.push(element[0]);
+        }
+    });
+
+     console.log(arrayRoles);
 
     function handleOnClickPermits(permit: string) {
         if (!listaPermisosUsuario.includes(permit)) {
@@ -352,7 +359,7 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                                         <SelectValue placeholder={t('ui.users.fields.role')} />
                                                     </SelectTrigger>
                                                     <SelectContent>
-                                                        {roles?.map((role) => (
+                                                        {arrayRoles?.map((role) => (
                                                             <SelectItem key={role} value={role}>
                                                                 {t(`ui.users.roles.${role}`)}
                                                             </SelectItem>
