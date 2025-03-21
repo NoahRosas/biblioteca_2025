@@ -163,7 +163,7 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
     return (
         <div className="inset-0 flex items-center justify-center">
         
-            <Tabs defaultValue="create_account">
+            <Tabs defaultValue="create_account" className="max-w-2x1 min-w-1/3">
                 <TabsList className="grid h-[50px] grid-cols-2 ">
                     <TabsTrigger className="hover:text-chart-1 border rounded-md " value="create_user" autoFocus={true}>
                         <p className='hover:scale-125'>{t('ui.users.tabs.basic_information')}</p>
@@ -442,6 +442,6 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                     </Card>
                 </TabsContent>
             </Tabs>
-       </div>
+        </div>
     );
 }
