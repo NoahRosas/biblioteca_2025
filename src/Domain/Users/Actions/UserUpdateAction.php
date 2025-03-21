@@ -21,9 +21,12 @@ class UserUpdateAction
             $updateData['password'] = Hash::make($data['password']);
         }
 
-        $permits = [...$permits];
-        $user->revokePermissionTo(ModelsPermission::all());
-        $user->givePermissionTo($permits);
+        if($permits){
+            $permits = [...$permits];
+            $user->revokePermissionTo(ModelsPermission::all());
+            $user->givePermissionTo($permits);
+        }
+        
         $user->update($updateData);
 
         return UserResource::fromModel($user->fresh());

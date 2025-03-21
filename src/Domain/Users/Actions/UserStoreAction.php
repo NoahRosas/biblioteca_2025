@@ -15,9 +15,11 @@ class UserStoreAction
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-
-        $permits = [...$permits];
-        $user->givePermissionTo($permits);
+        if($permits){
+            $permits = [...$permits];
+            $user->givePermissionTo($permits); 
+        }
+        
 
         return UserResource::fromModel($user);
     }
