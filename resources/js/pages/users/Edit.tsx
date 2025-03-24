@@ -23,15 +23,13 @@ export default function EditUser({ user, page, perPage, permisos, roles, userPer
 
  
   return (
-    <UserLayout title={t("ui.users.edit")}>
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="p-6 w-full max-w-2xl">
-          <h3 className="flex mb-2"><User className="mr-2"/>{t("ui.users.edit")}</h3>
-          <div className="max-w-xl">
-            <UserForm permisos={permisos} userPermits={userPermits} roles={roles} initialData={user} page={page} perPage={perPage}/>
-          </div>
-        </div>
-      </div>
-    </UserLayout>
+    <UserLayout title={t('ui.users.edit')}>
+    <h3 className="mr-auto mb-2 ml-auto flex-col">
+        <User className="mr-2" />
+        {t('ui.users.edit')}
+       
+    </h3>
+    <UserForm permisos={permisos} userPermits={userPermits} roles={roles} initialData={user} page={page} perPage={perPage} />
+</UserLayout>
   );
 }

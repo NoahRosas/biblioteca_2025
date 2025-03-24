@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Users\Controllers;
+namespace App\Users\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Core\Controllers\Controller;
 use Domain\Users\Actions\UserDestroyAction;
 use Domain\Users\Actions\UserIndexAction;
 use Domain\Users\Actions\UserStoreAction;
@@ -11,7 +11,7 @@ use Domain\Users\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Spatie\Permission\Models\Permission;
+
 
 class UserApiController extends Controller
 {
