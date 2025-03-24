@@ -27,7 +27,6 @@ export default function EditUser({ user, page, perPage, permisos, roles, userPer
     <h3 className="mr-auto mb-2 ml-auto flex mt-2">
         <User className="mr-2" />
         {t('ui.users.edit')}
-       
     </h3>
     <UserForm permisos={permisos} userPermits={userPermits} roles={roles} initialData={user} page={page} perPage={perPage} />
 </UserLayout>
