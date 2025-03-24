@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Core\Middleware;
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
