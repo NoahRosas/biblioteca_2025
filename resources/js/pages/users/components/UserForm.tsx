@@ -9,7 +9,7 @@ import { router } from '@inertiajs/react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
-import { FileText, Lock, Mail, PackageOpen, Save, Settings, Shield, User, X } from 'lucide-react';
+import { Eye, EyeClosed, FileText, Lock, Mail, PackageOpen, Save, Settings, Shield, User, X } from 'lucide-react';
 import { ReactNode, useState } from 'react';
 // Tipado de las props
 export interface UserFormProps {
@@ -65,6 +65,7 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
     const queryClient = useQueryClient();
     const [selectedRole, setSelectRole] = useState<string>(initialData?.role ?? '');
     const [listaPermisosUsuario, setLista] = useState(permisosUsuario);
+    const [showPassword, setShowPassword] = useState(false);
     
     let arrayRoles : string[];
     arrayRoles = [];
@@ -75,7 +76,7 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
         }
     });
 
-     console.log(arrayRoles);
+    //  console.log(arrayRoles);
 
     function handleOnClickPermits(permit: string) {
         if (!listaPermisosUsuario.includes(permit)) {
@@ -124,6 +125,7 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
         {} as Record<string, string[]>,
     );
 
+    
     const form = useForm({
         defaultValues: {
             name: initialData?.name ?? '',
@@ -292,7 +294,7 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                                 <Input
                                                     id={field.name}
                                                     name={field.name}
-                                                    type="password"
+                                                    type={showPassword ? 'text' : 'password'}
                                                     value={field.state.value}
                                                     onChange={(e) => field.handleChange(e.target.value)}
                                                     onBlur={field.handleBlur}
@@ -300,7 +302,11 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                                     disabled={form.state.isSubmitting}
                                                     autoComplete="off"
                                                     required={false}
+                                                    
                                                 />
+                                                <button type='button' className='flex' onClick={() => setShowPassword(!showPassword)}>
+                                                    { !showPassword ? <EyeClosed className='flex'/> : <Eye/> }
+                                                </button>
                                                 <FieldInfo field={field} />
                                             </>
                                         )}
