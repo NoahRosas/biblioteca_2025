@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Users\Controllers;
 
-use Domain\Roles\Models\Role as ModelsRole;
 use Domain\Users\Actions\UserDestroyAction;
 use Domain\Users\Actions\UserIndexAction;
 use Domain\Users\Actions\UserStoreAction;

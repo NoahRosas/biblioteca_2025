@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Users\Controllers;
 
 use App\Http\Controllers\Controller;
 use Domain\Users\Actions\UserDestroyAction;
