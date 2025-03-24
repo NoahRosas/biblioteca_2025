@@ -40,6 +40,8 @@ class UserApiController extends Controller
 
         $user = $action($validator->validated());
         
+        
+
         return response()->json([
             'message' => __('messages.users.created'),
             'user' => $user
