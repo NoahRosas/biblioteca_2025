@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,6 +16,11 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             PermissionSeeder::class,
             RoleSeeder::class,
+            GenreSeeder::class,
+            FloorSeeder::class,
+            ZoneSeeder::class,
+            BookshelfSeeder::class,
+            BookSeeder::class
         ]);
 
         //migrar pulse database

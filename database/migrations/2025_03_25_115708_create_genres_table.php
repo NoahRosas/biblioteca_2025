@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bookshelves', function (Blueprint $table) {
-            $table->uuid('id')->primary()->unique();
-            $table->integer('number');
-            $table->foreignUuid('zone_id')->references("id")->on("zones")->onDelete('cascade');
-            $table->integer('max_books');
+        Schema::create('genres', function (Blueprint $table) {
+            $table->uuid('id');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bookshelves');
+        Schema::dropIfExists('genres');
     }
 };

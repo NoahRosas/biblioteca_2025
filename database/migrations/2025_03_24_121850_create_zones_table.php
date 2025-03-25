@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('zones', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary()->unique();
             $table->string('name');
-            $table->foreignId('id_floor')->constrained()->onDelete('cascade');
+            $table->foreignUuid('floor_id')->references("id")->on("floors")->onDelete('cascade');
+            $table->integer('max_bookshelves');
             $table->timestamps();
         });
     }
