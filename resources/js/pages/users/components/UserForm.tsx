@@ -1,16 +1,27 @@
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTranslations } from '@/hooks/use-translations';
-import { Button } from '@headlessui/react';
 import { router } from '@inertiajs/react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
-import { Eye, EyeClosed, FileText, Lock, Mail, PackageOpen, Save, Settings, Shield, User, X } from 'lucide-react';
+import { Eye, EyeClosed, FileText, Lock, Mail, PackageOpen, Save, Settings, Shield, User, Users, X } from 'lucide-react';
 import { ReactNode, useState } from 'react';
+import { Button } from "@/components/ui/button"
+import {
+    Card,
+    CardContent,
+    CardFooter,
+  } from "@/components/ui/card"
+  import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+  } from "@/components/ui/tabs"
+
+
 // Tipado de las props
 export interface UserFormProps {
     initialData?: {
@@ -42,16 +53,16 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 function getCategoryIcon(category: string): ReactNode {
     switch (category) {
         case 'users':
-            return <User size="19px" className="text-chart-1 mr-2" />;
+            return <Users size="19px" className="text-blue-700 mr-2" />;
 
         case 'products':
-            return <PackageOpen size="19px" className="text-chart-1 mr-2" />;
+            return <PackageOpen size="19px" className="text-blue-700 mr-2" />;
 
         case 'reports':
-            return <FileText size="19px" className="text-chart-1 mr-2" />;
+            return <FileText size="19px" className="text-blue-700 mr-2" />;
 
         case 'settings':
-            return <Settings size="19px" className="text-chart-1 mr-2" />;
+            return <Settings size="19px" className="text-blue-700 mr-2" />;
 
         default:
             return 0;
@@ -165,21 +176,21 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
     return (
         <div className="inset-0 flex items-center justify-center">
         
-            <Tabs defaultValue="create_account" className="max-w-2x1 min-w-1/3">
-                <TabsList className="grid h-[50px] grid-cols-2 ">
-                    <TabsTrigger className="hover:text-chart-1 border rounded-md " value="create_user" autoFocus={true}>
-                        <p className='hover:scale-125'>{t('ui.users.tabs.basic_information')}</p>
-                    </TabsTrigger>
-                    <TabsTrigger className="hover:text-chart-1 border rounded-md " value="create_role">
-                        <p className='hover:scale-125'>{t('ui.users.tabs.roles')}</p>
+            <Tabs defaultValue="create_account" className='w-[600px]'>
+                <TabsList className="grid h-[50px] w-full grid-cols-2 ">
+                    <TabsTrigger value="create_user" autoFocus={true}>
+                        {t('ui.users.tabs.basic_information')}
+                        </TabsTrigger>
+                    <TabsTrigger  value="create_role">
+                        {t('ui.users.tabs.roles')}
                     </TabsTrigger>
                 </TabsList>
                 <TabsContent value="create_user">
                     <Card>
-                        <CardContent className="space-y-2">
-                            <form onSubmit={form.handleSubmit} className="space-y-4" noValidate>
+                        <CardContent >
+                            <form onSubmit={form.handleSubmit} noValidate>
                                 {/* Name field */}
-                                <div>
+                                <div className='space-y-1'>
                                     <form.Field
                                         name="name"
                                         validators={{
@@ -198,12 +209,14 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                     >
                                         {(field) => (
                                             <>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                <div className='flex mb-2'>
                                                     <User size={'17px'} />
-                                                    <Label htmlFor="name" className="ml-2">
+                                                    <Label htmlFor="name" className="ml-1 mt-1">
                                                         {t('ui.users.fields.name')}
                                                     </Label>
                                                 </div>
+                                                    
+                                                
                                                 <Input
                                                     id={field.name}
                                                     name={field.name}
@@ -222,7 +235,7 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                 </div>
 
                                 {/* Email field */}
-                                <div>
+                                <div className='space-y-1'>
                                     <form.Field
                                         name="email"
                                         validators={{
@@ -238,12 +251,14 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                     >
                                         {(field) => (
                                             <>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                <div className='flex mb-2 mt-3'>
                                                     <Mail size={'17px'} />
-                                                    <Label htmlFor={field.name} className="ml-2">
+                                                    <Label htmlFor={field.name} className="ml-1 mt-0.5">
                                                         {t('ui.users.fields.email')}
                                                     </Label>
                                                 </div>
+                                                    
+                                                
                                                 <Input
                                                     id={field.name}
                                                     name={field.name}
@@ -263,7 +278,7 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                 </div>
 
                                 {/* Password field */}
-                                <div>
+                                <div className='space-y-1'>
                                     <form.Field
                                         name="password"
                                         validators={{
@@ -284,13 +299,14 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                     >
                                         {(field) => (
                                             <>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                <div className='flex mb-2 mt-3'>
                                                     <Lock size={'17px'} />
-                                                    <Label htmlFor={field.name} className="ml-2">
+                                                    <Label htmlFor={field.name} className="ml-1 mt-1">
                                                         {initialData ? t('ui.users.fields.password_optional') : t('ui.users.fields.password')}
-                                                    </Label>
-                                                </div>
 
+                                                    </Label>
+                                                </div>                                                                                               
+                                            <div className='relative w-full '>
                                                 <Input
                                                     id={field.name}
                                                     name={field.name}
@@ -302,11 +318,13 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                                     disabled={form.state.isSubmitting}
                                                     autoComplete="off"
                                                     required={false}
+                                                    className='flex'
                                                     
                                                 />
-                                                <button type='button' className='flex' onClick={() => setShowPassword(!showPassword)}>
+                                                <button type='button' className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700" onClick={() => setShowPassword(!showPassword)}>
                                                     { !showPassword ? <EyeClosed className='flex'/> : <Eye/> }
                                                 </button>
+                                            </div>
                                                 <FieldInfo field={field} />
                                             </>
                                         )}
@@ -315,12 +333,12 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                 </div>
                             </form>
                         </CardContent>
-                        <CardFooter>
+                        <CardFooter className='flex justify-between'>
                             {/* Form buttons */}
-                            <div className="mt-6 flex text-center justify-between gap-x-6">
-                                <div className="flex items-center justify-between border w-[100px] h-[30px] rounded-sm hover:bg-muted-foreground">
+                            
+                                
                                     <Button
-                                    className='flex'
+                                    // className='flex'
                                         type="button"
                                         onClick={() => {
                                             let url = '/users';
@@ -333,30 +351,30 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                             router.visit(url);
                                         }}
                                     >
-                                        <X size={'20px'} className='mr-1 mt-[2px]'/>
+                                        <X size={'20px'} className='mr-1 '/>
                                         {t('ui.users.buttons.cancel')}
                                     </Button>
-                                </div>
-                                <div className='bg-chart-1 rounded-sm text-center justify-between w-[100px] h-[30px] hover:bg-chart-5'>
-                                    <Button type="submit" className='flex mt-1' onClick={handleSubmit}>
-                                        <Save size={'20px'} className=' mr-1 mt-[2px]'/>
+                                
+                                
+                                    <Button type="submit" className='bg-blue-500 hover:bg-blue-700' onClick={handleSubmit}>
+                                        <Save size={'20px'} className=' mr-1'/>
                                         {initialData ? t('ui.users.buttons.update') : t('ui.users.buttons.save')}
                                     </Button>
-                                </div>
-                            </div>
+                                
+                           
                         </CardFooter>
                     </Card>
                 </TabsContent>
                 <TabsContent value="create_role">
                     <Card>
                         <CardContent className="space-y-2">
-                            <form onSubmit={form.handleSubmit} className="space-y-4" noValidate>
-                                <div>
+                            <form onSubmit={form.handleSubmit} noValidate>
+                                <div className='space-y-1'>
                                     <form.Field name="role">
                                         {(field) => (
                                             <>
                                                 <div className="flex">
-                                                    <Shield className="text-chart-1 mb-2" />
+                                                    <Shield className="text-blue-700 mb-2" />
                                                     <Label htmlFor="role" className="mt-1 ml-2">
                                                         {t('ui.users.fields.role')}
                                                     </Label>
@@ -382,10 +400,12 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                 <div className="mt-4 grid grid-cols-2 gap-4">
                                     {Object.entries(permissionsByCategory ?? {}).map(([category, actions]) => (
                                         
-                                        <div key={category} className="rounded-lg p-4 border">
-                                            {getCategoryIcon(category)}
-                                            <Label className="mt-1 ">{t(`ui.users.permissions.${category}.title`)}</Label>
-                                            <br />
+                                        <div key={category} className="rounded-lg p-4 border bg-gray-100 dark:bg-gray-900">
+                                            <div className='flex mb-4'>
+                                                    {getCategoryIcon(category)}
+                                                <Label className="mt-1 ">{t(`ui.users.permissions.${category}.title`)}</Label>
+                                            </div>
+      
                                             {Object.keys(actions).map((action) => (
                                                 <form.Field key={action} name="permits">
                                                     {(field) => (
@@ -398,6 +418,7 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                                                     checked={listaPermisosUsuario.includes(`${category}.${actions[action]}`)}
                                                                     value={`${category}.${actions[action]}`}
                                                                     onClick={(e) => handleOnClickPermits(e.currentTarget.value)}
+                                                                    className='border-blue-700'
                                                                 />
                                                                 <br />
                                                                 <Label htmlFor={field.name} className="ml-2">
@@ -415,10 +436,9 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                 </div>
                             </form>
                         </CardContent>
-                        <CardFooter>
+                        <CardFooter className='flex justify-between'>
                             {/* Form buttons */}
-                            <div className="mt-6 flex text-center justify-between gap-x-6">
-                                <div className="flex items-center justify-between border w-[100px] h-[30px] rounded-sm hover:bg-muted-foreground">
+                                                    
                                     <Button
                                     className='flex'
                                         type="button"
@@ -433,17 +453,15 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                             router.visit(url);
                                         }}
                                     >
-                                        <X size={'20px'} className='mr-1 mt-[2px]'/>
+                                        <X size={'20px'} className='mr-1 '/>
                                         {t('ui.users.buttons.cancel')}
                                     </Button>
-                                </div>
-                                <div className='bg-chart-1 rounded-sm text-center justify-between w-[100px] h-[30px] hover:bg-chart-5'>
-                                    <Button type="submit" className='flex mt-1' onClick={handleSubmit}>
-                                        <Save size={'20px'} className=' mr-1 mt-[2px]'/>
+                                
+                                
+                                    <Button type="submit" className='bg-blue-500 hover:bg-blue-700' onClick={handleSubmit}>
+                                        <Save size={'20px'} className=' mr-1 '/>
                                         {initialData ? t('ui.users.buttons.update') : t('ui.users.buttons.save')}
                                     </Button>
-                                </div>
-                            </div>
                         </CardFooter>
                     </Card>
                 </TabsContent>

@@ -124,7 +124,7 @@ return [
             'roles' => 'Roles and permissions',
         ],
         'extra_info' => [
-            'create_user' => 'Ingresa la información para crear un nuevo usuario en el sistema',
+            'create_user' => 'Complete the fields below to create a new user',
             'role' => 'The role determines the level of access of the user',
         ],
         'roles' =>[ 
