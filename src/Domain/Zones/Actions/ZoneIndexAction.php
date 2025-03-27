@@ -1,23 +1,24 @@
 <?php
 
-namespace Domain\Floors\Actions;
+namespace Domain\Zones\Actions;
 
-use Domain\Floors\Data\Resources\FloorResource;
-use Domain\Floors\Models\Floor;
 
-class FloorIndexAction
+use Domain\Zones\Data\Resources\ZoneResource;
+use Domain\Zones\Models\Zone;
+
+class ZoneIndexAction
 {
     public function __invoke(?string $search = null, int $perPage = 10){
         
     
-        $floors = Floor::query()
+        $zones = Zone::query()
             ->when($search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
             ->latest()
             ->paginate($perPage);
 
-        return $floors->through(fn ($floor) => FloorResource::fromModel($floor));
+        return $zones->through(fn ($zone) => ZoneResource::fromModel($zone));
     
     }
 }

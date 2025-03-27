@@ -1,21 +1,22 @@
 <?php
 
-namespace App\Floors\Controllers\Api;
+namespace App\Zones\Controllers;
 
 use App\Core\Controllers\Controller;
-use Domain\Floors\Actions\FloorDestroyAction;
-use Domain\Floors\Actions\FloorIndexAction;
-use Domain\Floors\Models\Floor;
+use Domain\Zones\Actions\ZoneDestroyAction;
+use Domain\Zones\Models\Zone;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
-class FloorApiController extends Controller
+class ZoneController extends Controller
 {
     /**
-     * Display a listing of the resource search.
+     * Display a listing of the resource.
      */
-    public function index(Request $request, FloorIndexAction $action)
+    public function index()
     {
-        return response()->json($action($request->search, $request->integer('per_page',10)));
+
+        return Inertia::render('zones/Index');
     }
 
     /**
@@ -37,9 +38,9 @@ class FloorApiController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Floor $floor)
+    public function show(string $id)
     {
-        return response()->json(['floor' => $floor]);
+        //
     }
 
     /**
@@ -61,12 +62,11 @@ class FloorApiController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Floor $floor, FloorDestroyAction $action)
+    public function destroy(Zone $zone, ZoneDestroyAction $action)
     {
-        $action($floor);
+        $action($zone);
 
-        return response()->json([
-            'message' => __('messages.floors.deleted')
-        ]);
+        return redirect()->route('zones.index')
+            ->with('success', __('messages.zones.deleted'));
     }
 }

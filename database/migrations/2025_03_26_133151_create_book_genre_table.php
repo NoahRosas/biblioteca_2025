@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('book_genre', function (Blueprint $table) {
-            $table->uuid('id')->primary()->unique();
             $table->foreignUuid('book_id');
             $table->foreignUuid('genre_id');
+            $table->primary(['book_id', 'genre_id']);
         });
     }
 

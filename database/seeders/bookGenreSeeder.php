@@ -16,11 +16,16 @@ class bookGenreSeeder extends Seeder
         
         $books = Book::all();
         foreach ($books as $book) {
-            $genres = $book->explode(', ', $book->genres);
+            $genres = explode(', ', $book->genres);
+            $genreIds = [];
             foreach ($genres as $genre) {
-                $genreToSync = Genre::where($genre);
+                $genre = Genre::where('name', $genre)->first();
+                if ($genre) {
+                    $genreIds[] = $genre->id;
+                }
                 
             }
+            $book->genres()->syncWithoutDetaching($genreIds);
         }
     }
 }

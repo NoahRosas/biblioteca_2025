@@ -7,6 +7,8 @@ return [
             'dashboard' => 'Dashboard',
             'users' => 'Users',
             'floors' => 'Floors',
+            'zones' => 'Zones',
+            'bookshelves' => 'Bookshelves',
             'books' => 'Books',
             'repository' => 'Repository',
             'documentation' => 'Documentation',
@@ -220,11 +222,67 @@ return [
             '2nd Floor' => 'Second Floor' ,
             '3rd Floor' => 'Third Floor' ,
         ],
+        'columns' => [
+            'max_zones' => 'Max Zones',
+        ],
         'descriptions' => [
             '1st Floor' => "Building's first floor" ,
             '2nd Floor' => "Building's second floor" ,
             '3rd Floor' => "Building's third floor" ,
         ],
+        'placeholders' => [
+            'name' => 'Floor name',
+            'search' => 'Search floors...',
+        ],
+        'filters' => [
+            'search' => 'Search',
+            'name' => 'Floor name',
+        ],
         'error_loading' => 'Error loading floors. Please try again.'
+    ],
+    'zones' => [
+        'title' => 'Zones',
+        'create' => 'Create Zone',
+        'edit' => 'Edit Zone',
+        'buttons' =>[
+            'new' => 'Create Zone'
+        ],
+        'columns' => [
+            'name' => 'Zone name',
+            'max_bookshelves' => 'Bookshelves capacity',
+            'floor_name' => 'Floor ubication',
+        ],
+        'placeholders' => [
+            'name' => 'Zone name',
+            'search' => 'Search zones...',
+        ],
+        'filters' => [
+            'search' => 'Search',
+            'name' => 'Zone name',
+        ],
+        'error_loading' => 'Error loading zones. Please try again.',
+    ],
+    'bookshelves' => [
+        'title' => 'Bookshelves',
+        'create' => 'Create Bookshelf',
+        'edit' => 'Edit Bookshelf',
+        'buttons' =>[
+            'new' => 'Create Bookshelf'
+        ],
+        'columns' => [
+            'number' => 'Bookshelf number',
+            'max_books' => 'Books capacity',
+            'zone_name' => 'Zone ubication',
+            'floor_name' => 'Floor ubication',
+        ],
+        'placeholders' => [
+            'number' => 'Zone number',
+            'search' => 'Search bookshelves...',
+        ],
+        'filters' => [
+            'search' => 'Search',
+            'number' => 'Bookshelf number',
+        ],
+        'error_loading' => 'Error loading bookshelves. Please try again.',
     ],
 ];

@@ -8,6 +8,8 @@ return [
             'dashboard' => 'Panel',
             'users' => 'Usuarios',
             'floors' => 'Plantas',
+            'zones' => 'Zonas',
+            'bookshelves' => 'Estanterías',
             'books' => 'Libros',
             'repository' => 'Repositorio',
             'documentation' => 'Documentación',
@@ -226,6 +228,62 @@ return [
             '2nd Floor' => 'Segunda Planta del edificio' ,
             '3rd Floor' => 'Tercera Planta del edificio' ,
         ],
-        'error_loading' => 'Error al cargar los plantas. Inténtalo de nuevo.'
+        'columns' => [
+            'max_zones' => 'Máximo de zonas',
+        ],
+        'placeholders' => [
+            'name' => 'Nombre de la planta',
+            'search' => 'Buscar planta...',
+        ],
+        'filters' => [
+            'search' => 'Buscar',
+            'name' => 'Nombre de la planta',
+        ],
+        'error_loading' => 'Error al cargar las plantas. Inténtalo de nuevo.'
+    ],
+    'zones' => [
+        'title' => 'Zonas',
+        'create' => 'Crear zona',
+        'edit' => 'Editar zona',
+        'buttons' =>[
+            'new' => 'Crear Zona'
+        ],
+        'columns' => [
+            'name' => 'Nombre de la zona',
+            'max_bookshelves' => 'Capacidad de estanterías',
+            'floor_name' => 'Planta en la que está ubicada'
+        ],
+        'placeholders' => [
+            'name' => 'Nombre de la zona',
+            'search' => 'Buscar zonas...',
+        ],
+        'filters' => [
+            'search' => 'Buscar',
+            'name' => 'Nombre de la zona',
+        ],
+        'error_loading' => 'Error al cargar las zonas. Inténtalo de nuevo.',
+    ],
+    'bookshelves' => [
+        'title' => 'Estanterías',
+        'create' => 'Crear estantería',
+        'edit' => 'Editar estantería',
+        'buttons' =>[
+            'new' => 'Crear Estantería'
+        ],
+        'columns' => [
+            'number' => 'Número de estantería',
+            'max_books' => 'Capacidad de libros',
+            'zone_name' => 'Zona en la que está ubicada',
+            'floor_name' => 'Planta en la que está ubicada',
+        ],
+        'placeholders' => [
+            'number' => 'Número de estantería...',
+            'search' => 'Buscar estantería...',
+        ],
+        'filters' => [
+            'search' => 'Search',
+            'number' => 'Número de estantería',
+        ],
+        'error_loading' => 'Error al cargar las zonas. Inténtalo de nuevo.',
     ],
 ];

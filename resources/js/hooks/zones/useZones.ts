@@ -1,10 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "../../lib/axios";
 
-export interface Floor {
+export interface Zone {
   id: string;
   name: string;
-  max_zones: number;
+  max_bookshelves: number;
+  floor_name:string;
   created_at: string;
 }
 
@@ -42,17 +43,17 @@ export interface ApiPaginatedResponse<T> {
     };
   }
   
-  interface UseFloorsParams {
+  interface UseZonesParams {
     search?: string;
     page?: number;
     perPage?: number;
   }
 
-  export function useFloors({ search, page = 1, perPage = 10 }: UseFloorsParams = {}) {
+  export function useZones({ search, page = 1, perPage = 10 }: UseZonesParams = {}) {
     return useQuery({
-      queryKey: ["floors", { search, page, perPage }],
+      queryKey: ["zones", { search, page, perPage }],
       queryFn: async () => {
-        const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Floor>>("/api/floors", {
+        const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Zone>>("/api/zones", {
           params: {
             search,
             page,
@@ -75,15 +76,15 @@ export interface ApiPaginatedResponse<T> {
             to: apiResponse.to,
             total: apiResponse.total
           }
-        } as PaginatedResponse<Floor>;
+        } as PaginatedResponse<Zone>;
       },
     });
   }
 
-  export function useUpdateFloor(floorId: string) {
+  export function useUpdateZone(zoneId: string) {
     return useMutation({
-      mutationFn: async (data: { name: string; max_zones: number }) => {
-        const response = await axios.put(`/api/floors/${floorId}`, data, {
+      mutationFn: async (data: { name: string; max_bookshelves: number; floor_name:string }) => {
+        const response = await axios.put(`/api/zones/${zoneId}`, data, {
           headers: {
             'Accept': 'application/json',
             'X-Requested-With': 'XMLHttpRequest'
@@ -94,10 +95,10 @@ export interface ApiPaginatedResponse<T> {
     });
   }
 
-  export function useDeleteFloor() {
+  export function useDeleteZone() {
     return useMutation({
-      mutationFn: async (floorId: string) => {
-        await axios.delete(`/api/floors/${floorId}`, {
+      mutationFn: async (zoneId: string) => {
+        await axios.delete(`/api/zones/${zoneId}`, {
           headers: {
             'Accept': 'application/json',
             'X-Requested-With': 'XMLHttpRequest'

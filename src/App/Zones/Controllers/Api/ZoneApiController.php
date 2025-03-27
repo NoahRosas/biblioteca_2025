@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Floors\Controllers\Api;
+namespace App\Zones\Controllers\Api;
 
 use App\Core\Controllers\Controller;
-use Domain\Floors\Actions\FloorDestroyAction;
-use Domain\Floors\Actions\FloorIndexAction;
-use Domain\Floors\Models\Floor;
+use Domain\Zones\Actions\ZoneDestroyAction;
+use Domain\Zones\Actions\ZoneIndexAction;
+use Domain\Zones\Models\Zone;
 use Illuminate\Http\Request;
 
-class FloorApiController extends Controller
+class ZoneApiController extends Controller
 {
     /**
      * Display a listing of the resource search.
      */
-    public function index(Request $request, FloorIndexAction $action)
+    public function index(Request $request, ZoneIndexAction $action)
     {
         return response()->json($action($request->search, $request->integer('per_page',10)));
     }
@@ -37,9 +37,9 @@ class FloorApiController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Floor $floor)
+    public function show(Zone $zone)
     {
-        return response()->json(['floor' => $floor]);
+        return response()->json(['zone' => $zone]);
     }
 
     /**
@@ -61,12 +61,12 @@ class FloorApiController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Floor $floor, FloorDestroyAction $action)
+    public function destroy(Zone $zone, ZoneDestroyAction $action)
     {
-        $action($floor);
+        $action($zone);
 
         return response()->json([
-            'message' => __('messages.floors.deleted')
+            'message' => __('messages.zones.deleted')
         ]);
     }
 }

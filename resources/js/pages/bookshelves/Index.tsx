@@ -9,9 +9,12 @@ import {
     TableSkeleton,
 } from '@/components/stack-table';
 import { Button } from '@/components/ui/button';
-import { Floor, useDeleteFloor, useFloors } from '@/hooks/floors/useFloors';
+import { Bookshelf, useBookshelves, useDeleteBookshelf } from '@/hooks/bookshelves/useBookshelves';
 import { useTranslations } from '@/hooks/use-translations';
-import { FloorLayout } from '@/layouts/floors/FloorLayout';
+import { useDeleteZone, useZones, Zone } from '@/hooks/zones/useZones';
+import { BookshelfLayout } from '@/layouts/bookshelves/BookshelfLayout';
+import { ZoneLayout } from '@/layouts/zones/ZoneLayout';
+
 import { Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
@@ -20,7 +23,7 @@ import { toast } from 'sonner';
 
 
 
-export default function FloorsIndex() {
+export default function BookshelvesIndex() {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -33,20 +36,21 @@ export default function FloorsIndex() {
     const [currentPage, setCurrentPage] = useState(pageParam ? parseInt(pageParam) : 1);
     const [perPage, setPerPage] = useState(perPageParam ? parseInt(perPageParam) : 10);
     const [filters, setFilters] = useState<Record<string, any>>({});
+    
     // Combine name and email filters into a single search string if they exist
-    const combinedSearch = [filters.search, filters.name ? `name:${filters.name}` : null].filter(Boolean).join(' ');
+    const combinedSearch = [filters.search, filters.name ? `number:${filters.name}` : null].filter(Boolean).join(' ');
 
     const {
-        data: floors,
+        data: bookshelves,
         isLoading,
         isError,
         refetch,
-    } = useFloors({
+    } = useBookshelves({
         search: combinedSearch,
         page: currentPage,
         perPage: perPage,
     });
-    const deleteFloorMutation = useDeleteFloor();
+    const deleteBookshelfMutation = useDeleteBookshelf();
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -57,9 +61,9 @@ export default function FloorsIndex() {
         setCurrentPage(1); // Reset to first page when changing items per page
     };
 
-    const handleDeleteFloor = async (id: string) => {
+    const handleDeleteBookshelf = async (id: string) => {
         try {
-            await deleteFloorMutation.mutateAsync(id);
+            await deleteBookshelfMutation.mutateAsync(id);
             refetch();
         } catch (error) {
             toast.error(t('ui.users.deleted_error') || 'Error deleting user');
@@ -70,44 +74,56 @@ export default function FloorsIndex() {
     const columns = useMemo(
         () =>
             [
-                createTextColumn<Floor>({
-                    id: 'name',
-                    header: t('ui.floors.title') || 'Name',
-                    accessorKey: 'name',
+                createTextColumn<Bookshelf>({
+                    id: 'number',
+                    header: t('ui.bookshelves.columns.number') || 'Name',
+                    accessorKey: 'number',
                 }),
-                createTextColumn<Floor>({
-                    id: 'max_zones',
-                    header: t('ui.floors.columns.max_zones') || 'Max Zones',
-                    accessorKey: 'max_zones',
+                createTextColumn<Bookshelf>({
+                    id: 'max_books',
+                    header: t('ui.bookshelves.columns.max_books') || 'Max bookshelves',
+                    accessorKey: 'max_books',
                 }),
-                createDateColumn<Floor>({
+                createTextColumn<Bookshelf>({
+                    id: 'zone_name',
+                    header: t('ui.zones.columns.zone_name') || 'Floor ubication',
+                    accessorKey: 'zone_name',
+                }),
+                createTextColumn<Bookshelf>({
+                    id: 'floor_name',
+                    header: t('ui.zones.columns.floor_name') || 'Floor ubication',
+                    accessorKey: 'floor_name',
+                }),
+                createDateColumn<Bookshelf>({
                     id: 'created_at',
                     header: t('ui.users.columns.created_at') || 'Created At',
                     accessorKey: 'created_at',
                 }),
-                createActionsColumn<Floor>({
+                
+                
+                createActionsColumn<Bookshelf>({
                     id: 'actions',
                     header: t('ui.users.columns.actions') || 'Actions',
-                    renderActions: (floor) => (
+                    renderActions: (bookshelf) => (
                         <>
-                            <Link href={`/floors/${floor.id}/edit?page=${currentPage}&perPage=${perPage}`}>
+                            <Link href={`/bookshelves/${bookshelf.id}/edit?page=${currentPage}&perPage=${perPage}`}>
                                 <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit floot'}>
                                     <PencilIcon className="h-4 w-4" />
                                 </Button>
                             </Link>
                             <DeleteDialog
-                                id={floor.id}
-                                onDelete={handleDeleteFloor}
-                                title={t('ui.users.delete.title') || 'Delete floor'}
+                                id={bookshelf.id}
+                                onDelete={handleDeleteBookshelf}
+                                title={t('ui.users.delete.title') || 'Delete zone'}
                                 description={
-                                    t('ui.users.delete.description') || 'Are you sure you want to delete this floor? This action cannot be undone.'
+                                    t('ui.users.delete.description') || 'Are you sure you want to delete this zone? This action cannot be undone.'
                                 }
                                 trigger={
                                     <Button
                                         variant="outline"
                                         size="icon"
                                         className="text-destructive hover:text-destructive"
-                                        title={t('ui.users.buttons.delete') || 'Delete floor'}
+                                        title={t('ui.users.buttons.delete') || 'Delete zone'}
                                     >
                                         <TrashIcon className="h-4 w-4" />
                                     </Button>
@@ -116,20 +132,20 @@ export default function FloorsIndex() {
                         </>
                     ),
                 }),
-            ] as ColumnDef<Floor>[],
-        [t, handleDeleteFloor],
+            ] as ColumnDef<Bookshelf>[],
+        [t, handleDeleteBookshelf],
     );
 
     return (
-        <FloorLayout title={t('ui.floors.title')}>
+        <BookshelfLayout title={t('ui.bookshelves.title')}>
             <div className="p-6">
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                        <h1 className="text-3xl font-bold">{t('ui.floors.title')}</h1>
-                        <Link href="/floors/create">
+                        <h1 className="text-3xl font-bold">{t('ui.bookshelves.title')}</h1>
+                        <Link href="/bookshelves/create">
                             <Button>
                                 <PlusIcon className="mr-2 h-4 w-4" />
-                                {t('ui.floors.buttons.new')}
+                                {t('ui.bookshelves.buttons.new')}
                             </Button>
                         </Link>
                     </div>
@@ -140,21 +156,33 @@ export default function FloorsIndex() {
                                 [
                                     {
                                         id: 'search',
-                                        label: t('ui.floors.filters.search') || 'Buscar',
+                                        label: t('ui.users.filters.search') || 'Buscar',
                                         type: 'text',
-                                        placeholder: t('ui.floors.placeholders.search') || 'Buscar...',
+                                        placeholder: t('ui.bookshelves.placeholders.search') || 'Buscar...',
                                     },
                                     {
-                                        id: 'name',
-                                        label: t('ui.floors.filters.name') || 'Nombre',
+                                        id: 'number',
+                                        label: t('ui.bookshelves.filters.number') || 'Número',
                                         type: 'text',
-                                        placeholder: t('ui.floors.filters.name') || 'Nombre...',
+                                        placeholder: t('ui.bookshelves.filters.number') || 'Número...',
                                     },
                                     {
-                                        id: 'max_zones',
-                                        label: t('ui.floors.columns.max_zones') || 'Max zones',
+                                        id: 'max_books',
+                                        label: t('ui.bookshelves.columns.max_books') || 'Max books',
                                         type: 'number',
-                                        placeholder: t('ui.floors.columns.max_zones') || 'Max zones...',
+                                        placeholder: t('ui.bookshelves.columns.max_books') || 'Max books...',
+                                    },
+                                    {
+                                        id: 'zone_name',
+                                        label: t('ui.bookshelves.columns.zone_name') || 'Zone name',
+                                        type: 'text',
+                                        placeholder: t('ui.bookshelves.columns.zone_name') || 'Zone name...',
+                                    },
+                                    {
+                                        id: 'floor_name',
+                                        label: t('ui.bookshelves.columns.floor_name') || 'Floor name',
+                                        type: 'text',
+                                        placeholder: t('ui.bookshelves.columns.floor_name') || 'Floor name...',
                                     },
                                 ] as FilterConfig[]
                             }
@@ -168,7 +196,7 @@ export default function FloorsIndex() {
                             <TableSkeleton columns={4} rows={10} />
                         ) : isError ? (
                             <div className="p-4 text-center">
-                                <div className="mb-4 text-red-500">{t('ui.floors.error_loading')}</div>
+                                <div className="mb-4 text-red-500">{t('ui.zones.error_loading')}</div>
                                 <Button onClick={() => refetch()} variant="outline">
                                     {t('ui.users.buttons.retry')}
                                 </Button>
@@ -177,7 +205,7 @@ export default function FloorsIndex() {
                             <div>
                                 <Table
                                     data={
-                                        floors ?? {
+                                        bookshelves ?? {
                                             data: [],
                                             meta: {
                                                 current_page: 1,
@@ -193,13 +221,13 @@ export default function FloorsIndex() {
                                     onPageChange={handlePageChange}
                                     onPerPageChange={handlePerPageChange}
                                     perPageOptions={[10, 25, 50, 100]}
-                                    noResultsMessage={t('ui.users.no_results') || 'No floors found'}
+                                    noResultsMessage={t('ui.users.no_results') || 'No zones found'}
                                 />
                             </div>
                         )}
                     </div>
                 </div>
             </div>
-        </FloorLayout>
+        </BookshelfLayout>
     );
 }

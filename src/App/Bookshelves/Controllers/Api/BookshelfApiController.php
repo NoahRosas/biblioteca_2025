@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Floors\Controllers\Api;
+namespace App\Bookshelves\Controllers\Api;
 
 use App\Core\Controllers\Controller;
-use Domain\Floors\Actions\FloorDestroyAction;
-use Domain\Floors\Actions\FloorIndexAction;
-use Domain\Floors\Models\Floor;
+use Domain\Bookshelf\Actions\BookshelfDestroyAction;
+use Domain\Bookshelves\Actions\BookshelfIndexAction;
+use Domain\Bookshelves\Models\Bookshelf;
 use Illuminate\Http\Request;
 
-class FloorApiController extends Controller
+class BookshelfApiController extends Controller
 {
     /**
      * Display a listing of the resource search.
      */
-    public function index(Request $request, FloorIndexAction $action)
+    public function index(Request $request, BookshelfIndexAction $action)
     {
         return response()->json($action($request->search, $request->integer('per_page',10)));
     }
@@ -37,9 +37,9 @@ class FloorApiController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Floor $floor)
+    public function show(Bookshelf $bookshelf)
     {
-        return response()->json(['floor' => $floor]);
+        return response()->json(['bookshelf' => $bookshelf]);
     }
 
     /**
@@ -61,12 +61,12 @@ class FloorApiController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Floor $floor, FloorDestroyAction $action)
+    public function destroy(Bookshelf $bookshelf, BookshelfDestroyAction $action)
     {
-        $action($floor);
+        $action($bookshelf);
 
         return response()->json([
-            'message' => __('messages.floors.deleted')
+            'message' => __('messages.bookshelves.deleted')
         ]);
     }
 }

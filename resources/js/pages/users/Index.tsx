@@ -1,8 +1,13 @@
-import { createActionsColumn, createDateColumn, createTextColumn } from '@/components/stack-table/columnsTable';
-import { DeleteDialog } from '@/components/stack-table/DeleteDialog';
-import { FilterConfig, FiltersTable } from '@/components/stack-table/FiltersTable';
-import { Table } from '@/components/stack-table/Table';
-import { TableSkeleton } from '@/components/stack-table/TableSkeleton';
+import {
+    createActionsColumn,
+    createDateColumn,
+    createTextColumn,
+    DeleteDialog,
+    FilterConfig,
+    FiltersTable,
+    Table,
+    TableSkeleton,
+} from '@/components/stack-table';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from '@/hooks/use-translations';
 import { User, useDeleteUser, useUsers } from '@/hooks/users/useUsers';

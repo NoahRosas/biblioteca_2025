@@ -1,8 +1,9 @@
-import { useTranslations } from '@/hooks/use-translations';
-import { BreadcrumbItem } from '@/types';
+
 import { Head, usePage } from '@inertiajs/react';
 import { PropsWithChildren, useEffect } from 'react';
 import { toast } from 'sonner';
+import { useTranslations } from '@/hooks/use-translations';
+import { BreadcrumbItem } from '@/types';
 import AppLayout from '../app-layout';
 
 interface FlashMessages {
@@ -16,12 +17,11 @@ interface PageProps {
 }
 
 
-interface FloorLayoutProps extends PropsWithChildren {
+interface ZoneLayoutProps extends PropsWithChildren {
     title: string;
-    // floors: Floor[];
 }
 
-export function FloorLayout({ title,  children }: FloorLayoutProps) {
+export function ZoneLayout({ title,  children }: ZoneLayoutProps) {
     const { flash } = usePage<PageProps>().props;
     const { t } = useTranslations();
     useEffect(() => {
@@ -39,12 +39,12 @@ export function FloorLayout({ title,  children }: FloorLayoutProps) {
             href: '/dashboard',
         },
         {
-            title: t('ui.floors.title'),
-            href: '/floors',
+            title: t('ui.zones.title'),
+            href: '/zones',
         },
     ];
 
-    if (title !== t('ui.floors.title')) {
+    if (title !== t('ui.zones.title')) {
         breadcrumbs.push({
             title,
             href: '#',

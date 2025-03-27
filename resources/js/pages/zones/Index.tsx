@@ -9,9 +9,10 @@ import {
     TableSkeleton,
 } from '@/components/stack-table';
 import { Button } from '@/components/ui/button';
-import { Floor, useDeleteFloor, useFloors } from '@/hooks/floors/useFloors';
 import { useTranslations } from '@/hooks/use-translations';
-import { FloorLayout } from '@/layouts/floors/FloorLayout';
+import { useDeleteZone, useZones, Zone } from '@/hooks/zones/useZones';
+import { ZoneLayout } from '@/layouts/zones/ZoneLayout';
+
 import { Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
@@ -20,7 +21,7 @@ import { toast } from 'sonner';
 
 
 
-export default function FloorsIndex() {
+export default function ZonesIndex() {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -33,20 +34,21 @@ export default function FloorsIndex() {
     const [currentPage, setCurrentPage] = useState(pageParam ? parseInt(pageParam) : 1);
     const [perPage, setPerPage] = useState(perPageParam ? parseInt(perPageParam) : 10);
     const [filters, setFilters] = useState<Record<string, any>>({});
+    
     // Combine name and email filters into a single search string if they exist
     const combinedSearch = [filters.search, filters.name ? `name:${filters.name}` : null].filter(Boolean).join(' ');
 
     const {
-        data: floors,
+        data: zones,
         isLoading,
         isError,
         refetch,
-    } = useFloors({
+    } = useZones({
         search: combinedSearch,
         page: currentPage,
         perPage: perPage,
     });
-    const deleteFloorMutation = useDeleteFloor();
+    const deleteZoneMutation = useDeleteZone();
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -57,9 +59,9 @@ export default function FloorsIndex() {
         setCurrentPage(1); // Reset to first page when changing items per page
     };
 
-    const handleDeleteFloor = async (id: string) => {
+    const handleDeleteZone = async (id: string) => {
         try {
-            await deleteFloorMutation.mutateAsync(id);
+            await deleteZoneMutation.mutateAsync(id);
             refetch();
         } catch (error) {
             toast.error(t('ui.users.deleted_error') || 'Error deleting user');
@@ -70,44 +72,51 @@ export default function FloorsIndex() {
     const columns = useMemo(
         () =>
             [
-                createTextColumn<Floor>({
+                createTextColumn<Zone>({
                     id: 'name',
-                    header: t('ui.floors.title') || 'Name',
+                    header: t('ui.zones.columns.name') || 'Name',
                     accessorKey: 'name',
                 }),
-                createTextColumn<Floor>({
-                    id: 'max_zones',
-                    header: t('ui.floors.columns.max_zones') || 'Max Zones',
-                    accessorKey: 'max_zones',
+                createTextColumn<Zone>({
+                    id: 'max_bookshelves',
+                    header: t('ui.zones.columns.max_bookshelves') || 'Max bookshelves',
+                    accessorKey: 'max_bookshelves',
                 }),
-                createDateColumn<Floor>({
+                createTextColumn<Zone>({
+                    id: 'floor_name',
+                    header: t('ui.zones.columns.floor_name') || 'Floor ubication',
+                    accessorKey: 'floor_name',
+                }),
+                createDateColumn<Zone>({
                     id: 'created_at',
                     header: t('ui.users.columns.created_at') || 'Created At',
                     accessorKey: 'created_at',
                 }),
-                createActionsColumn<Floor>({
+                
+                
+                createActionsColumn<Zone>({
                     id: 'actions',
                     header: t('ui.users.columns.actions') || 'Actions',
-                    renderActions: (floor) => (
+                    renderActions: (zone) => (
                         <>
-                            <Link href={`/floors/${floor.id}/edit?page=${currentPage}&perPage=${perPage}`}>
+                            <Link href={`/zones/${zone.id}/edit?page=${currentPage}&perPage=${perPage}`}>
                                 <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit floot'}>
                                     <PencilIcon className="h-4 w-4" />
                                 </Button>
                             </Link>
                             <DeleteDialog
-                                id={floor.id}
-                                onDelete={handleDeleteFloor}
-                                title={t('ui.users.delete.title') || 'Delete floor'}
+                                id={zone.id}
+                                onDelete={handleDeleteZone}
+                                title={t('ui.users.delete.title') || 'Delete zone'}
                                 description={
-                                    t('ui.users.delete.description') || 'Are you sure you want to delete this floor? This action cannot be undone.'
+                                    t('ui.users.delete.description') || 'Are you sure you want to delete this zone? This action cannot be undone.'
                                 }
                                 trigger={
                                     <Button
                                         variant="outline"
                                         size="icon"
                                         className="text-destructive hover:text-destructive"
-                                        title={t('ui.users.buttons.delete') || 'Delete floor'}
+                                        title={t('ui.users.buttons.delete') || 'Delete zone'}
                                     >
                                         <TrashIcon className="h-4 w-4" />
                                     </Button>
@@ -116,20 +125,20 @@ export default function FloorsIndex() {
                         </>
                     ),
                 }),
-            ] as ColumnDef<Floor>[],
-        [t, handleDeleteFloor],
+            ] as ColumnDef<Zone>[],
+        [t, handleDeleteZone],
     );
 
     return (
-        <FloorLayout title={t('ui.floors.title')}>
+        <ZoneLayout title={t('ui.zones.title')}>
             <div className="p-6">
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                        <h1 className="text-3xl font-bold">{t('ui.floors.title')}</h1>
-                        <Link href="/floors/create">
+                        <h1 className="text-3xl font-bold">{t('ui.zones.title')}</h1>
+                        <Link href="/zones/create">
                             <Button>
                                 <PlusIcon className="mr-2 h-4 w-4" />
-                                {t('ui.floors.buttons.new')}
+                                {t('ui.zones.buttons.new')}
                             </Button>
                         </Link>
                     </div>
@@ -140,21 +149,21 @@ export default function FloorsIndex() {
                                 [
                                     {
                                         id: 'search',
-                                        label: t('ui.floors.filters.search') || 'Buscar',
+                                        label: t('ui.users.filters.search') || 'Buscar',
                                         type: 'text',
-                                        placeholder: t('ui.floors.placeholders.search') || 'Buscar...',
+                                        placeholder: t('ui.zones.placeholders.search') || 'Buscar...',
                                     },
                                     {
                                         id: 'name',
-                                        label: t('ui.floors.filters.name') || 'Nombre',
+                                        label: t('ui.zones.filters.name') || 'Nombre',
                                         type: 'text',
-                                        placeholder: t('ui.floors.filters.name') || 'Nombre...',
+                                        placeholder: t('ui.zones.filters.name') || 'Nombre...',
                                     },
                                     {
-                                        id: 'max_zones',
-                                        label: t('ui.floors.columns.max_zones') || 'Max zones',
+                                        id: 'max_bookshelves',
+                                        label: t('ui.zones.columns.max_bookshelves') || 'Max bookshelves',
                                         type: 'number',
-                                        placeholder: t('ui.floors.columns.max_zones') || 'Max zones...',
+                                        placeholder: t('ui.zones.columns.max_bookshelves') || 'Max bookshelves...',
                                     },
                                 ] as FilterConfig[]
                             }
@@ -168,7 +177,7 @@ export default function FloorsIndex() {
                             <TableSkeleton columns={4} rows={10} />
                         ) : isError ? (
                             <div className="p-4 text-center">
-                                <div className="mb-4 text-red-500">{t('ui.floors.error_loading')}</div>
+                                <div className="mb-4 text-red-500">{t('ui.zones.error_loading')}</div>
                                 <Button onClick={() => refetch()} variant="outline">
                                     {t('ui.users.buttons.retry')}
                                 </Button>
@@ -177,7 +186,7 @@ export default function FloorsIndex() {
                             <div>
                                 <Table
                                     data={
-                                        floors ?? {
+                                        zones ?? {
                                             data: [],
                                             meta: {
                                                 current_page: 1,
@@ -193,13 +202,13 @@ export default function FloorsIndex() {
                                     onPageChange={handlePageChange}
                                     onPerPageChange={handlePerPageChange}
                                     perPageOptions={[10, 25, 50, 100]}
-                                    noResultsMessage={t('ui.users.no_results') || 'No floors found'}
+                                    noResultsMessage={t('ui.users.no_results') || 'No zones found'}
                                 />
                             </div>
                         )}
                     </div>
                 </div>
             </div>
-        </FloorLayout>
+        </ZoneLayout>
     );
 }

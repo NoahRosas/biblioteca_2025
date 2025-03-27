@@ -1,10 +1,12 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "../../lib/axios";
 
-export interface Floor {
+export interface Bookshelf {
   id: string;
-  name: string;
-  max_zones: number;
+  number: number;
+  max_books: number;
+  floor_name:string;
+  zone_name:string;
   created_at: string;
 }
 
@@ -42,17 +44,17 @@ export interface ApiPaginatedResponse<T> {
     };
   }
   
-  interface UseFloorsParams {
+  interface UseBookshelvesParams {
     search?: string;
     page?: number;
     perPage?: number;
   }
 
-  export function useFloors({ search, page = 1, perPage = 10 }: UseFloorsParams = {}) {
+  export function useBookshelves({ search, page = 1, perPage = 10 }: UseBookshelvesParams = {}) {
     return useQuery({
-      queryKey: ["floors", { search, page, perPage }],
+      queryKey: ["bookshelves", { search, page, perPage }],
       queryFn: async () => {
-        const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Floor>>("/api/floors", {
+        const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Bookshelf>>("/api/bookshelves", {
           params: {
             search,
             page,
@@ -75,15 +77,15 @@ export interface ApiPaginatedResponse<T> {
             to: apiResponse.to,
             total: apiResponse.total
           }
-        } as PaginatedResponse<Floor>;
+        } as PaginatedResponse<Bookshelf>;
       },
     });
   }
 
-  export function useUpdateFloor(floorId: string) {
+  export function useUpdateBookshelf(bookshelfId: string) {
     return useMutation({
-      mutationFn: async (data: { name: string; max_zones: number }) => {
-        const response = await axios.put(`/api/floors/${floorId}`, data, {
+      mutationFn: async (data: { name: string; max_books: number; zone_name:string; floor_name:string }) => {
+        const response = await axios.put(`/api/bookshelves/${bookshelfId}`, data, {
           headers: {
             'Accept': 'application/json',
             'X-Requested-With': 'XMLHttpRequest'
@@ -94,10 +96,10 @@ export interface ApiPaginatedResponse<T> {
     });
   }
 
-  export function useDeleteFloor() {
+  export function useDeleteBookshelf() {
     return useMutation({
-      mutationFn: async (floorId: string) => {
-        await axios.delete(`/api/floors/${floorId}`, {
+      mutationFn: async (bookshelfId: string) => {
+        await axios.delete(`/api/bookshelves/${bookshelfId}`, {
           headers: {
             'Accept': 'application/json',
             'X-Requested-With': 'XMLHttpRequest'

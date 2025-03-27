@@ -3,6 +3,7 @@
 namespace App\Floors\Controllers;
 
 use App\Core\Controllers\Controller;
+use Domain\Floors\Actions\FloorDestroyAction;
 use Domain\Floors\Models\Floor;
 use Domain\Genres\Models\Genre;
 use Illuminate\Http\Request;
@@ -79,8 +80,11 @@ class FloorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Floor $floor, FloorDestroyAction $action)
     {
-        //
+        $action($floor);
+
+        return redirect()->route('floors.index')
+            ->with('success', __('messages.floors.deleted'));
     }
 }
