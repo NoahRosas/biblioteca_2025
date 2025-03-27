@@ -3,9 +3,13 @@
 namespace Domain\Books\Models;
 
 use Database\Factories\BookFactory;
+use Domain\Bookshelves\Models\Bookshelf;
+use Domain\Genres\Models\Genre;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Book extends Model
 {
@@ -35,5 +39,15 @@ class Book extends Model
         
         
     ];
+
+    public function floor(): BelongsTo
+    {
+        return $this->belongsTo(Bookshelf::class);
+    }
+
+    public function genres(): BelongsToMany
+    {
+        return $this->belongsToMany(Genre::class);
+    }
     
 }

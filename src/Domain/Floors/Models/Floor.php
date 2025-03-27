@@ -3,9 +3,11 @@
 namespace Domain\Floors\Models;
 
 use Database\Factories\FloorFactory;
+use Domain\Zones\Models\Zone;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Floor extends Model
 {
@@ -31,4 +33,10 @@ class Floor extends Model
         'max_zones',
         
     ];
+
+    public function zones(): HasMany
+    {
+        return $this->hasMany(Zone::class);
+    }
+
 }

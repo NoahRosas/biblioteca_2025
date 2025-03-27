@@ -6,6 +6,8 @@ return [
         'items' => [
             'dashboard' => 'Dashboard',
             'users' => 'Users',
+            'floors' => 'Floors',
+            'books' => 'Books',
             'repository' => 'Repository',
             'documentation' => 'Documentation',
         ],
@@ -205,5 +207,24 @@ return [
             'previous' => 'Previous',
             'next' => 'Next',
         ],
+    ],
+    'floors' => [
+        'title' => 'Floors',
+        'create' => 'Create Floor',
+        'edit' => 'Edit Floor',
+        'buttons' =>[
+            'new' => 'Create Floor'
+        ],
+        'titles' => [
+            '1st Floor' => 'First Floor' ,
+            '2nd Floor' => 'Second Floor' ,
+            '3rd Floor' => 'Third Floor' ,
+        ],
+        'descriptions' => [
+            '1st Floor' => "Building's first floor" ,
+            '2nd Floor' => "Building's second floor" ,
+            '3rd Floor' => "Building's third floor" ,
+        ],
+        'error_loading' => 'Error loading floors. Please try again.'
     ],
 ];

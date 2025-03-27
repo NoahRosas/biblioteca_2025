@@ -7,6 +7,8 @@ return [
         'items' => [
             'dashboard' => 'Panel',
             'users' => 'Usuarios',
+            'floors' => 'Plantas',
+            'books' => 'Libros',
             'repository' => 'Repositorio',
             'documentation' => 'Documentación',
         ],
@@ -206,5 +208,24 @@ return [
             'previous' => 'Anterior',
             'next' => 'Siguiente',
         ],
+    ],
+    'floors' => [
+        'title' => 'Plantas',
+        'create' => 'Crear Planta',
+        'edit' => 'Editar Planta',
+        'buttons' =>[
+            'new' => 'Crear Planta'
+        ],
+        'titles' => [
+            '1st Floor' => 'Primera Planta' ,
+            '2nd Floor' => 'Segunda Planta' ,
+            '3rd Floor' => 'Tercera Planta' ,
+        ],
+        'descriptions' => [
+            '1st Floor' => 'Primera Planta del edificio' ,
+            '2nd Floor' => 'Segunda Planta del edificio' ,
+            '3rd Floor' => 'Tercera Planta del edificio' ,
+        ],
+        'error_loading' => 'Error al cargar los plantas. Inténtalo de nuevo.'
     ],
 ];

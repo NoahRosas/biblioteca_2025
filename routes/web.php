@@ -15,20 +15,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::resource('users', App\Users\Controllers\UserController::class);
+    Route::resource('floors', App\Floors\Controllers\FloorController::class);
 });
 
-Route::get('/prueba', function(){
-    $permisos = Permission::all();
-    $prueba=[];
 
-    foreach ($permisos as $value) {
-        $category = explode('.', $value->name)[0];
-        $action = explode('.', $value->name)[1];
-        array_push($prueba, [$category, $action]);
-    }
-    dd($prueba);
-    
-
-});
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

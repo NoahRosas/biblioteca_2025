@@ -1,3 +1,4 @@
+import { useTranslations } from "@/hooks/use-translations";
 import AppLayout from "@/layouts/app-layout";
 import { BreadcrumbItem } from "@/types";
 import { Head, usePage } from "@inertiajs/react";
@@ -20,6 +21,7 @@ interface UserLayoutProps extends PropsWithChildren {
 
 export function UserLayout({ title, children }: UserLayoutProps) {
   const { flash } = usePage<PageProps>().props;
+  const { t } = useTranslations();
 
   useEffect(() => {
     if (flash.success) {
@@ -36,12 +38,12 @@ export function UserLayout({ title, children }: UserLayoutProps) {
       href: "/dashboard",
     },
     {
-      title: "Usuarios",
+      title: t('ui.users.title'),
       href: "/users",
     },
   ];
 
-  if (title !== "Usuarios") {
+  if (title !== t('ui.users.title')) {
     breadcrumbs.push({
       title,
       href: "#",
