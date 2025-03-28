@@ -5,8 +5,11 @@ namespace App\Floors\Controllers\Api;
 use App\Core\Controllers\Controller;
 use Domain\Floors\Actions\FloorDestroyAction;
 use Domain\Floors\Actions\FloorIndexAction;
+use Domain\Floors\Actions\FloorStoreAction;
+use Domain\Floors\Actions\FloorUpdateAction;
 use Domain\Floors\Models\Floor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class FloorApiController extends Controller
 {
@@ -29,9 +32,25 @@ class FloorApiController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, FloorStoreAction $action)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'max_zones' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $floor = $action($validator->validated());
+        
+        
+
+        return response()->json([
+            'message' => __('messages.floors.created'),
+            'floor' => $floor
+        ]);
     }
 
     /**
@@ -39,7 +58,7 @@ class FloorApiController extends Controller
      */
     public function show(Floor $floor)
     {
-        return response()->json(['floor' => $floor]);
+        
     }
 
     /**

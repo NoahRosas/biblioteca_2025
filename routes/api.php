@@ -1,5 +1,6 @@
 <?php
 
+use App\Books\Controllers\Api\BookApiController;
 use App\Bookshelves\Controllers\Api\BookshelfApiController;
 use App\Floors\Controllers\Api\FloorApiController;
 use App\Users\Controllers\Api\UserApiController;
@@ -39,5 +40,14 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/bookshelves', [BookshelfApiController::class, 'store']);
     Route::put('/bookshelves/{bookshelf}', [BookshelfApiController::class, 'update']);
     Route::delete('/bookshelves/{bookshelf}', [BookshelfApiController::class, 'destroy']);
+
+});
+
+Route::middleware(['web', 'auth'])->group(function () {
+    Route::get('/books', [BookApiController::class, 'index']);
+    Route::get('/books/{book}', [BookApiController::class, 'show']);
+    Route::post('/books', [BookApiController::class, 'store']);
+    Route::put('/books/{book}', [BookApiController::class, 'update']);
+    Route::delete('/books/{book}', [BookApiController::class, 'destroy']);
 
 });

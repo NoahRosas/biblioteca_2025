@@ -91,7 +91,7 @@ export default function FloorsIndex() {
                     renderActions: (floor) => (
                         <>
                             <Link href={`/floors/${floor.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-                                <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit floot'}>
+                                <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit floor'}>
                                     <PencilIcon className="h-4 w-4" />
                                 </Button>
                             </Link>

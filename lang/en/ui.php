@@ -222,13 +222,16 @@ return [
             '2nd Floor' => 'Second Floor' ,
             '3rd Floor' => 'Third Floor' ,
         ],
+        'extra_info'=>[
+            'create_floor' => 'Fill the fields to make a new floor',
+            'edit_floor' => 'Change the fields to edit a new floor'
+        ],
+        'fields' =>[
+            'name' => 'Floor name',
+            'max_zones' => 'Zone capacity',
+        ],
         'columns' => [
             'max_zones' => 'Max Zones',
-        ],
-        'descriptions' => [
-            '1st Floor' => "Building's first floor" ,
-            '2nd Floor' => "Building's second floor" ,
-            '3rd Floor' => "Building's third floor" ,
         ],
         'placeholders' => [
             'name' => 'Floor name',
@@ -284,5 +287,46 @@ return [
             'number' => 'Bookshelf number',
         ],
         'error_loading' => 'Error loading bookshelves. Please try again.',
+    ],
+    'books' => [
+        'title' => 'Books',
+        'create' => 'Create Book',
+        'edit' => 'Edit Book',
+        'buttons' =>[
+            'new' => 'Create Book'
+        ],
+        'columns' => [
+            'name' => 'Title',
+            'author' => 'Author',
+            'publisher' => 'Publisher',
+            'num_pages' => 'Number of pages',
+            'genres' => 'Genres',
+            'bookshelf_number' => 'Bookshelf number',
+            'zone_name' => 'Zone ubication',
+            'floor_name' => 'Floor ubication',
+        ],
+        'placeholders' => [
+            'search' => 'Search book...',
+            'name' => 'Book title...',
+            'author' => 'Author...',
+            'publisher' => 'Publisher...',
+            'num_pages' => 'Number of pages...',
+            'genres' => 'Genres...',
+            'bookshelf_number' => 'Bookshelf number...',
+            'zone_name' => 'Zone ubication...',
+            'floor_name' => 'Floor ubication...',
+        ],
+        'filters' => [
+            'search' => 'Search',
+            'name' => 'Book title',
+            'author' => 'Author',
+            'publisher' => 'Publisher',
+            'num_pages' => 'Number of pages',
+            'genres' => 'Genres',
+            'bookshelf_number' => 'Bookshelf number',
+            'zone_name' => 'Zone ubication',
+            'floor_name' => 'Floor ubication',
+        ],
+        'error_loading' => 'Error loading books. Please, try again.',
     ],
 ];

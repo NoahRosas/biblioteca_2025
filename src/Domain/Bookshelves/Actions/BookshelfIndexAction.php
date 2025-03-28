@@ -12,7 +12,7 @@ class BookshelfIndexAction
     
         $bookshelves = Bookshelf::query()
             ->when($search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%");
+                $query->where('id', 'like', "%{$search}%");
             })
             ->latest()
             ->paginate($perPage);

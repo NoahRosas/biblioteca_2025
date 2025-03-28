@@ -218,15 +218,17 @@ return [
         'buttons' =>[
             'new' => 'Crear Planta'
         ],
+        'extra_info'=>[
+            'create_floor' => 'Introduce la información para crear una nueva planta',
+        ],
         'titles' => [
             '1st Floor' => 'Primera Planta' ,
             '2nd Floor' => 'Segunda Planta' ,
             '3rd Floor' => 'Tercera Planta' ,
         ],
-        'descriptions' => [
-            '1st Floor' => 'Primera Planta del edificio' ,
-            '2nd Floor' => 'Segunda Planta del edificio' ,
-            '3rd Floor' => 'Tercera Planta del edificio' ,
+        'fields' =>[
+            'name' => 'Nombre de la planta',
+            'max_zones' => 'Máximo número de zonas',
         ],
         'columns' => [
             'max_zones' => 'Máximo de zonas',
@@ -281,9 +283,50 @@ return [
             'search' => 'Buscar estantería...',
         ],
         'filters' => [
-            'search' => 'Search',
+            'search' => 'Buscar',
             'number' => 'Número de estantería',
         ],
         'error_loading' => 'Error al cargar las zonas. Inténtalo de nuevo.',
+    ],
+    'books' => [
+        'title' => 'Libros',
+        'create' => 'Crear libro',
+        'edit' => 'Editar libro',
+        'buttons' =>[
+            'new' => 'Crear Libro'
+        ],
+        'columns' => [
+            'name' => 'Título del libro',
+            'author' => 'Autor/a',
+            'publisher' => 'Editorial',
+            'num_pages' => 'Número de páginas',
+            'genres' => 'Géneros',
+            'bookshelf_number' => 'Número de estantería en la que está',
+            'zone_name' => 'Zona en la que está ubicada',
+            'floor_name' => 'Planta en la que está ubicada',
+        ],
+        'placeholders' => [
+            'search' => 'Buscar libro...',
+            'name' => 'Nombre del libro...',
+            'author' => 'Autor/a...',
+            'publisher' => 'Editorial...',
+            'num_pages' => 'Número de páginas...',
+            'genres' => 'Géneros...',
+            'bookshelf_number' => 'Número de estantería en la que está...',
+            'zone_name' => 'Zona en la que está ubicada...',
+            'floor_name' => 'Planta en la que está ubicada...',
+        ],
+        'filters' => [
+            'search' => 'Buscar',
+            'name' => 'Nombre del libro',
+            'author' => 'Autor/a',
+            'publisher' => 'Editorial',
+            'num_pages' => 'Número de páginas',
+            'genres' => 'Géneros',
+            'bookshelf_number' => 'Número de estantería en la que está',
+            'zone_name' => 'Zona en la que está ubicada',
+            'floor_name' => 'Planta en la que está ubicada',
+        ],
+        'error_loading' => 'Error al cargar los libros. Inténtalo de nuevo.',
     ],
 ];

@@ -9,11 +9,9 @@ import {
     TableSkeleton,
 } from '@/components/stack-table';
 import { Button } from '@/components/ui/button';
-import { Bookshelf, useBookshelves, useDeleteBookshelf } from '@/hooks/bookshelves/useBookshelves';
+import { Book, useBooks, useDeleteBook } from '@/hooks/books/useBooks';
 import { useTranslations } from '@/hooks/use-translations';
-
-import { BookshelfLayout } from '@/layouts/bookshelves/BookshelfLayout';
-
+import { BookLayout } from '@/layouts/books/BookLayout';
 import { Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
@@ -22,7 +20,7 @@ import { toast } from 'sonner';
 
 
 
-export default function BookshelvesIndex() {
+export default function BooksIndex() {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -40,16 +38,16 @@ export default function BookshelvesIndex() {
     const combinedSearch = [filters.search, filters.name ? `number:${filters.name}` : null].filter(Boolean).join(' ');
 
     const {
-        data: bookshelves,
+        data: books,
         isLoading,
         isError,
         refetch,
-    } = useBookshelves({
+    } = useBooks({
         search: combinedSearch,
         page: currentPage,
         perPage: perPage,
     });
-    const deleteBookshelfMutation = useDeleteBookshelf();
+    const deleteBookMutation = useDeleteBook();
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -60,9 +58,9 @@ export default function BookshelvesIndex() {
         setCurrentPage(1); // Reset to first page when changing items per page
     };
 
-    const handleDeleteBookshelf = async (id: string) => {
+    const handleDeleteBook = async (id: string) => {
         try {
-            await deleteBookshelfMutation.mutateAsync(id);
+            await deleteBookMutation.mutateAsync(id);
             refetch();
         } catch (error) {
             toast.error(t('ui.users.deleted_error') || 'Error deleting user');
@@ -73,46 +71,61 @@ export default function BookshelvesIndex() {
     const columns = useMemo(
         () =>
             [
-                createTextColumn<Bookshelf>({
-                    id: 'number',
-                    header: t('ui.bookshelves.columns.number') || 'Name',
-                    accessorKey: 'number',
+                createTextColumn<Book>({
+                    id: 'name',
+                    header: t('ui.books.columns.name') || 'Name',
+                    accessorKey: 'name',
                 }),
-                createTextColumn<Bookshelf>({
-                    id: 'max_books',
-                    header: t('ui.bookshelves.columns.max_books') || 'Max bookshelves',
-                    accessorKey: 'max_books',
+                createTextColumn<Book>({
+                    id: 'author',
+                    header: t('ui.books.columns.author') || 'Author',
+                    accessorKey: 'author',
                 }),
-                createTextColumn<Bookshelf>({
+                createTextColumn<Book>({
+                    id: 'publisher',
+                    header: t('ui.books.columns.publisher') || 'Publisher',
+                    accessorKey: 'publisher',
+                }),
+                createTextColumn<Book>({
+                    id: 'genres',
+                    header: t('ui.books.columns.genres') || 'Genres',
+                    accessorKey: 'genres',
+                }),
+                createTextColumn<Book>({
+                    id: 'bookshelf_number',
+                    header: t('ui.books.columns.bookshelf_number') || 'Bookshelf number',
+                    accessorKey: 'bookshelf_number',
+                }),
+                createTextColumn<Book>({
                     id: 'zone_name',
-                    header: t('ui.bookshelves.columns.zone_name') || 'Zone ubication',
+                    header: t('ui.books.columns.zone_name') || 'Zone ubication',
                     accessorKey: 'zone_name',
                 }),
-                createTextColumn<Bookshelf>({
+                createTextColumn<Book>({
                     id: 'floor_name',
-                    header: t('ui.bookshelves.columns.floor_name') || 'Floor ubication',
+                    header: t('ui.books.columns.floor_name') || 'Floor ubication',
                     accessorKey: 'floor_name',
                 }),
-                createDateColumn<Bookshelf>({
+                createDateColumn<Book>({
                     id: 'created_at',
                     header: t('ui.users.columns.created_at') || 'Created At',
                     accessorKey: 'created_at',
                 }),
                 
                 
-                createActionsColumn<Bookshelf>({
+                createActionsColumn<Book>({
                     id: 'actions',
                     header: t('ui.users.columns.actions') || 'Actions',
-                    renderActions: (bookshelf) => (
+                    renderActions: (book) => (
                         <>
-                            <Link href={`/bookshelves/${bookshelf.id}/edit?page=${currentPage}&perPage=${perPage}`}>
+                            <Link href={`/books/${book.id}/edit?page=${currentPage}&perPage=${perPage}`}>
                                 <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit floot'}>
                                     <PencilIcon className="h-4 w-4" />
                                 </Button>
                             </Link>
                             <DeleteDialog
-                                id={bookshelf.id}
-                                onDelete={handleDeleteBookshelf}
+                                id={book.id}
+                                onDelete={handleDeleteBook}
                                 title={t('ui.users.delete.title') || 'Delete zone'}
                                 description={
                                     t('ui.users.delete.description') || 'Are you sure you want to delete this zone? This action cannot be undone.'
@@ -131,20 +144,20 @@ export default function BookshelvesIndex() {
                         </>
                     ),
                 }),
-            ] as ColumnDef<Bookshelf>[],
-        [t, handleDeleteBookshelf],
+            ] as ColumnDef<Book>[],
+        [t, handleDeleteBook],
     );
 
     return (
-        <BookshelfLayout title={t('ui.bookshelves.title')}>
+        <BookLayout title={t('ui.books.title')}>
             <div className="p-6">
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                        <h1 className="text-3xl font-bold">{t('ui.bookshelves.title')}</h1>
-                        <Link href="/bookshelves/create">
+                        <h1 className="text-3xl font-bold">{t('ui.books.title')}</h1>
+                        <Link href="/books/create">
                             <Button>
                                 <PlusIcon className="mr-2 h-4 w-4" />
-                                {t('ui.bookshelves.buttons.new')}
+                                {t('ui.books.buttons.new')}
                             </Button>
                         </Link>
                     </div>
@@ -157,31 +170,55 @@ export default function BookshelvesIndex() {
                                         id: 'search',
                                         label: t('ui.users.filters.search') || 'Buscar',
                                         type: 'text',
-                                        placeholder: t('ui.bookshelves.placeholders.search') || 'Buscar...',
+                                        placeholder: t('ui.books.placeholders.search') || 'Buscar...',
                                     },
                                     {
-                                        id: 'number',
-                                        label: t('ui.bookshelves.filters.number') || 'Número',
+                                        id: 'name',
+                                        label: t('ui.books.filters.name') || 'Title',
                                         type: 'text',
-                                        placeholder: t('ui.bookshelves.filters.number') || 'Número...',
+                                        placeholder: t('ui.books.placeholders.name') || 'Title...',
                                     },
                                     {
-                                        id: 'max_books',
-                                        label: t('ui.bookshelves.columns.max_books') || 'Max books',
+                                        id: 'author',
+                                        label: t('ui.books.filters.author') || 'Author',
+                                        type: 'text',
+                                        placeholder: t('ui.books.placeholders.author') || 'Author...',
+                                    },
+                                    {
+                                        id: 'publisher',
+                                        label: t('ui.books.filters.publisher') || 'Publisher',
+                                        type: 'text',
+                                        placeholder: t('ui.books.placeholders.publisher') || 'Publisher...',
+                                    },
+                                    {
+                                        id: 'num_pages',
+                                        label: t('ui.books.columns.num_pages') || 'Number of pages',
                                         type: 'number',
-                                        placeholder: t('ui.bookshelves.columns.max_books') || 'Max books...',
+                                        placeholder: t('ui.books.placeholders.num_pages') || 'Number of pages...',
+                                    },
+                                    {
+                                        id: 'genres',
+                                        label: t('ui.books.filters.genres') || 'Genres',
+                                        type: 'text',
+                                        placeholder: t('ui.books.placeholders.genres') || 'Genres...',
+                                    },
+                                    {
+                                        id: 'bookshelf_number',
+                                        label: t('ui.books.filters.bookshelf_number') || 'Bookshelf number',
+                                        type: 'text',
+                                        placeholder: t('ui.books.placeholders.bookshelf_number') || 'Bookshelf number...',
                                     },
                                     {
                                         id: 'zone_name',
-                                        label: t('ui.bookshelves.columns.zone_name') || 'Zone name',
+                                        label: t('ui.books.columns.zone_name') || 'Zone name',
                                         type: 'text',
-                                        placeholder: t('ui.bookshelves.columns.zone_name') || 'Zone name...',
+                                        placeholder: t('ui.books.placeholders.zone_name') || 'Zone name...',
                                     },
                                     {
                                         id: 'floor_name',
-                                        label: t('ui.bookshelves.columns.floor_name') || 'Floor name',
+                                        label: t('ui.books.columns.floor_name') || 'Floor name',
                                         type: 'text',
-                                        placeholder: t('ui.bookshelves.columns.floor_name') || 'Floor name...',
+                                        placeholder: t('ui.books.placeholders.floor_name') || 'Floor name...',
                                     },
                                 ] as FilterConfig[]
                             }
@@ -195,7 +232,7 @@ export default function BookshelvesIndex() {
                             <TableSkeleton columns={4} rows={10} />
                         ) : isError ? (
                             <div className="p-4 text-center">
-                                <div className="mb-4 text-red-500">{t('ui.zones.error_loading')}</div>
+                                <div className="mb-4 text-red-500">{t('ui.books.error_loading')}</div>
                                 <Button onClick={() => refetch()} variant="outline">
                                     {t('ui.users.buttons.retry')}
                                 </Button>
@@ -204,7 +241,7 @@ export default function BookshelvesIndex() {
                             <div>
                                 <Table
                                     data={
-                                        bookshelves ?? {
+                                        books ?? {
                                             data: [],
                                             meta: {
                                                 current_page: 1,
@@ -227,6 +264,6 @@ export default function BookshelvesIndex() {
                     </div>
                 </div>
             </div>
-        </BookshelfLayout>
+        </BookLayout>
     );
 }
