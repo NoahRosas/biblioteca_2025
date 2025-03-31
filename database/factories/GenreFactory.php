@@ -26,7 +26,7 @@ class GenreFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->unique()->randomElement($array = array('Fantasy', 'Romantic', 'Manga', 'Maths', 'Biology', 'Computer Science', 'Programming', 'Algebra', 'Sports', 'Mistery', 'Horror', 'Thriller', 'Filosophy', 'Robotics'))
+            'name' => fake()->unique()->randomElement($array = array('Fantasy', 'Romantic', 'Manga', 'Maths', 'Biology', 'Computer Science', 'Programming', 'Algebra', 'Sports', 'Mistery', 'Horror', 'Thriller', 'Philosophy', 'Robotics'))
         ];
     }
 }

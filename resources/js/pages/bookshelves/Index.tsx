@@ -106,16 +106,16 @@ export default function BookshelvesIndex() {
                     renderActions: (bookshelf) => (
                         <>
                             <Link href={`/bookshelves/${bookshelf.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-                                <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit floot'}>
+                                <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit bookshelf'}>
                                     <PencilIcon className="h-4 w-4" />
                                 </Button>
                             </Link>
                             <DeleteDialog
                                 id={bookshelf.id}
                                 onDelete={handleDeleteBookshelf}
-                                title={t('ui.users.delete.title') || 'Delete zone'}
+                                title={t('ui.users.delete.title') || 'Delete bookshelf'}
                                 description={
-                                    t('ui.users.delete.description') || 'Are you sure you want to delete this zone? This action cannot be undone.'
+                                    t('ui.users.delete.description') || 'Are you sure you want to delete this bookshelf? This action cannot be undone.'
                                 }
                                 trigger={
                                     <Button

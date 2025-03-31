@@ -25,7 +25,7 @@ class FloorFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->unique()->randomElement(array('1st Floor', '2nd Floor', '3rd Floor')),
+            'name' => fake()->unique()->randomElement(array('1', '2', '3')),
             'max_zones' => fake()->numberBetween(10, 20)
             
         ];

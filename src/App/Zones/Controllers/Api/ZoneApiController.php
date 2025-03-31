@@ -5,8 +5,10 @@ namespace App\Zones\Controllers\Api;
 use App\Core\Controllers\Controller;
 use Domain\Zones\Actions\ZoneDestroyAction;
 use Domain\Zones\Actions\ZoneIndexAction;
+use Domain\Zones\Actions\ZoneStoreAction;
 use Domain\Zones\Models\Zone;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ZoneApiController extends Controller
 {
@@ -29,9 +31,26 @@ class ZoneApiController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, ZoneStoreAction $action)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'max_zones' => ['required'],
+            'floor_id' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $zone = $action($validator->validated());
+        
+        
+
+        return response()->json([
+            'message' => __('messages.zones.created'),
+            'zone' => $zone
+        ]);
     }
 
     /**
@@ -39,7 +58,7 @@ class ZoneApiController extends Controller
      */
     public function show(Zone $zone)
     {
-        return response()->json(['zone' => $zone]);
+        //
     }
 
     /**

@@ -220,11 +220,12 @@ return [
         ],
         'extra_info'=>[
             'create_floor' => 'Introduce la información para crear una nueva planta',
+            'edit_floor' => 'Introduce los datos para editar esta zona',
         ],
         'titles' => [
-            '1st Floor' => 'Primera Planta' ,
-            '2nd Floor' => 'Segunda Planta' ,
-            '3rd Floor' => 'Tercera Planta' ,
+            '1' => 'Primera Planta' ,
+            '2' => 'Segunda Planta' ,
+            '3' => 'Tercera Planta' ,
         ],
         'fields' =>[
             'name' => 'Nombre de la planta',
@@ -250,14 +251,24 @@ return [
         'buttons' =>[
             'new' => 'Crear Zona'
         ],
+        'extra_info' =>[
+            'create_zone' => 'Introduce los datos para crear una nueva zona',
+            'edit_zone' => 'Introduce los datos para editar esta zona',
+        ],
         'columns' => [
             'name' => 'Nombre de la zona',
             'max_bookshelves' => 'Capacidad de estanterías',
             'floor_name' => 'Planta en la que está ubicada'
         ],
-        'placeholders' => [
+        'fields' =>[
             'name' => 'Nombre de la zona',
+            'floor_name' => 'Planta en la que está ubicada',
+            'max_bookshelves' => 'Capacidad de estanterías',
+        ],
+        'placeholders' => [
+            'name' => 'Nombre de la zona...',
             'search' => 'Buscar zonas...',
+            'floor_name' => 'Nombre de la planta...'
         ],
         'filters' => [
             'search' => 'Buscar',
@@ -328,5 +339,23 @@ return [
             'floor_name' => 'Planta en la que está ubicada',
         ],
         'error_loading' => 'Error al cargar los libros. Inténtalo de nuevo.',
+    ],
+    'genres' =>[
+        'names' => [
+            'Fantasy' => 'Fantasí',
+            'Romantic' => 'Romántica',
+            'Manga' => 'Manga',
+            'Maths' => 'Matemáticas',
+            'Biology' => 'Biología',
+            'Computer Science' => 'Informática',
+            'Programming' => 'Programación',
+            'Algebra' => 'Álgebra',
+            'Sports' => 'Deportes',
+            'Mistery' => 'Misterio',
+            'Horror' => 'Miedo',
+            'Thriller' => 'Thriller',
+            'Philosophy' => 'Filosofía',
+            'Robotics' => 'Robótica',
+        ],
     ],
 ];

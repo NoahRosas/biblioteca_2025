@@ -5,8 +5,10 @@ namespace App\Bookshelves\Controllers\Api;
 use App\Core\Controllers\Controller;
 use Domain\Bookshelf\Actions\BookshelfDestroyAction;
 use Domain\Bookshelves\Actions\BookshelfIndexAction;
+use Domain\Bookshelves\Actions\BookshelfStoreAction;
 use Domain\Bookshelves\Models\Bookshelf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class BookshelfApiController extends Controller
 {
@@ -29,9 +31,23 @@ class BookshelfApiController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, BookshelfStoreAction $action)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'zone_id' => ['required'],
+            'max_books' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+
+        $action($validator->validated());
+
+
+        return redirect()->route('bookshelves.index')
+            ->with('success', __('messages.bookshelves.created'));
     }
 
     /**

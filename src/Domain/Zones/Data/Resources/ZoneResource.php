@@ -27,7 +27,7 @@ class ZoneResource extends Data
             id: $zone->id,
             name: $zone->name,
             max_bookshelves: $zone->max_bookshelves,
-            floor_name:$floor,
+            floor_name: $floor,
             created_at: $zone->created_at->format('Y-m-d H:i:s'),
             updated_at: $zone->updated_at->format('Y-m-d H:i:s'),
         );

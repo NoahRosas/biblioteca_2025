@@ -33,6 +33,7 @@ class Zone extends Model
     protected $fillable = [
         'id',
         'name',
+        'floor_name',
         'floor_id',
         'max_bookshelves',
         

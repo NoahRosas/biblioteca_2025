@@ -100,7 +100,7 @@ export default function ZonesIndex() {
                     renderActions: (zone) => (
                         <>
                             <Link href={`/zones/${zone.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-                                <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit floot'}>
+                                <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit zone'}>
                                     <PencilIcon className="h-4 w-4" />
                                 </Button>
                             </Link>

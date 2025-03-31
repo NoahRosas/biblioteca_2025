@@ -21,7 +21,7 @@ return [
             'delete' => 'Error deleting floor',
         ],
     ],
-    'users' => [
+    'zones' => [
         'created' => 'Zone created successfully',
         'updated' => 'Zone updated successfully',
         'deleted' => 'Zone deleted successfully',
@@ -29,6 +29,26 @@ return [
             'create' => 'Error creating zone',
             'update' => 'Error updating zone',
             'delete' => 'Error deleting zone',
+        ],
+    ],
+    'bookshelves' => [
+        'created' => 'Bookshelf created successfully',
+        'updated' => 'Bookshelf updated successfully',
+        'deleted' => 'Bookshelf deleted successfully',
+        'error' => [
+            'create' => 'Error creating bookshelf',
+            'update' => 'Error updating bookshelf',
+            'delete' => 'Error deleting bookshelf',
+        ],
+    ],
+    'books' => [
+        'created' => 'Book created successfully',
+        'updated' => 'Book updated successfully',
+        'deleted' => 'Book deleted successfully',
+        'error' => [
+            'create' => 'Error creating book',
+            'update' => 'Error updating book',
+            'delete' => 'Error deleting book',
         ],
     ],
 ];

@@ -4,8 +4,12 @@ namespace App\Bookshelves\Controllers;
 
 use App\Core\Controllers\Controller;
 use Domain\Bookshelf\Actions\BookshelfDestroyAction;
+use Domain\Bookshelves\Actions\BookshelfStoreAction;
 use Domain\Bookshelves\Models\Bookshelf;
+use Domain\Floors\Models\Floor;
+use Domain\Zones\Models\Zone;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class BookshelfController extends Controller
@@ -24,15 +28,32 @@ class BookshelfController extends Controller
      */
     public function create()
     {
-        //
+        $floors = Floor::select('id', 'name')->get()->toArray();
+        $zones = Zone::all();
+        
+        return Inertia::render('bookshelves/Create', ['floors' => $floors, 'zones' => $zones]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, BookshelfStoreAction $action)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'number' => ['required'],
+            'zone_id' => ['required'],
+            'max_books' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+
+        $action($validator->validated());
+
+
+        return redirect()->route('bookshelves.index')
+            ->with('success', __('messages.bookshelves.created'));
     }
 
     /**
@@ -46,9 +67,17 @@ class BookshelfController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, Bookshelf $bookshelf)
     {
-        //
+        $floors = Floor::select('id', 'name')->get()->toArray();
+        $zones = Zone::all();
+        
+        return Inertia::render('bookshelves/Edit', [
+            'bookshelf' => $bookshelf,
+            'floors' => $floors,
+            'zones' => $zones,
+            'page' => $request->query('page'),
+            'perPage' => $request->query('perPage')]);
     }
 
     /**
