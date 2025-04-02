@@ -13,8 +13,8 @@ class BookshelfResource extends Data
         public readonly string $id,
         public readonly int $number,
         public readonly int $max_books,
-        public readonly string $floor_name,
-        public readonly string $zone_name,
+        public readonly string $floor_id,
+        public readonly string $zone_id,
         public readonly string $created_at,
         public readonly string $updated_at,
     ) {
@@ -29,8 +29,8 @@ class BookshelfResource extends Data
             id: $bookshelf->id,
             number: $bookshelf->number,
             max_books: $bookshelf->max_books,
-            floor_name:$floor->name,
-            zone_name:$zone->name,
+            floor_id:$floor->name,
+            zone_id:$zone->name,
             created_at: $zone->created_at->format('Y-m-d H:i:s'),
             updated_at: $zone->updated_at->format('Y-m-d H:i:s'),
         );

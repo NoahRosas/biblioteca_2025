@@ -3,7 +3,7 @@
 namespace App\Bookshelves\Controllers\Api;
 
 use App\Core\Controllers\Controller;
-use Domain\Bookshelf\Actions\BookshelfDestroyAction;
+use Domain\Bookshelves\Actions\BookshelfDestroyAction;
 use Domain\Bookshelves\Actions\BookshelfIndexAction;
 use Domain\Bookshelves\Actions\BookshelfStoreAction;
 use Domain\Bookshelves\Models\Bookshelf;

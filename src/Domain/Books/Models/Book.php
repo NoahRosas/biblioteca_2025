@@ -10,19 +10,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Book extends Model
+class Book extends Model implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\BookFactory> */
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, InteractsWithMedia;
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(){
+    protected static function newFactory()
+    {
         return BookFactory::new();
     }
 
-     /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
@@ -34,10 +39,9 @@ class Book extends Model
         'publisher',
         'num_pages',
         'genres',
-        'image_path',
         'bookshelf_id',
-        
-        
+
+
     ];
 
     public function floor(): BelongsTo
@@ -49,5 +53,12 @@ class Book extends Model
     {
         return $this->belongsToMany(Genre::class, "book_genre", 'book_id', 'genre_id');
     }
-    
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this
+            ->addMediaConversion('preview')
+            ->fit(Fit::Contain, 300, 300)
+            ->nonQueued();
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\Book\Actions;
+namespace Domain\Books\Actions;
 
 use Domain\Books\Models\Book;
 

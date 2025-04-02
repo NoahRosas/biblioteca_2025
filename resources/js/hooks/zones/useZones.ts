@@ -5,6 +5,7 @@ export interface Zone {
   id: string;
   name: string;
   max_bookshelves: number;
+  bookshelves_count:number;
   floor_id:string;
   created_at: string;
 }

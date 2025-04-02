@@ -30,7 +30,7 @@ class ZoneController extends Controller
     public function create()
     {
         $genres = Genre::select('id', 'name')->get()->toArray();
-        $floors = Floor::select('id', 'name')->get()->toArray();
+        $floors = Floor::withCount('zones')->get()->toArray();
         return Inertia::render('zones/Create', ['floors' => $floors, 'genres' => $genres]);
     }
 

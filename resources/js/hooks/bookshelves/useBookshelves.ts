@@ -5,8 +5,9 @@ export interface Bookshelf {
   id: string;
   number: number;
   max_books: number;
-  floor_name:string;
-  zone_name:string;
+  floor_id:string;
+  zone_id:string;
+  books_count:number;
   created_at: string;
 }
 
@@ -84,7 +85,7 @@ export interface ApiPaginatedResponse<T> {
 
   export function useUpdateBookshelf(bookshelfId: string) {
     return useMutation({
-      mutationFn: async (data: { name: string; max_books: number; zone_name:string; floor_name:string }) => {
+      mutationFn: async (data: { name: string; max_books: number; zone_id:string; floor_id:string }) => {
         const response = await axios.put(`/api/bookshelves/${bookshelfId}`, data, {
           headers: {
             'Accept': 'application/json',

@@ -2,7 +2,7 @@
 
 namespace App\Books\Controllers\Api;
 use App\Core\Controllers\Controller;
-use Domain\Book\Actions\BookDestroyAction;
+use Domain\Books\Actions\BookDestroyAction;
 use Domain\Books\Actions\BookIndexAction;
 use Domain\Books\Models\Book;
 use Illuminate\Http\Request;

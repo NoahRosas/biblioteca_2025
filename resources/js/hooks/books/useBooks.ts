@@ -8,9 +8,9 @@ export interface Book {
   publisher: string;
   num_pages: number;
   genres: string;
-  bookshelf_number: number;
-  zone_name:string;
-  floor_name:string;
+  bookshelf_id: string;
+  zone_id:string;
+  floor_id:string;
   image_path: string;
   created_at: string;
 }

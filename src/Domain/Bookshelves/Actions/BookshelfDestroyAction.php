@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\Bookshelf\Actions;
+namespace Domain\Bookshelves\Actions;
 
 use Domain\Bookshelves\Models\Bookshelf;
 

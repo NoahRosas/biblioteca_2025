@@ -74,6 +74,7 @@ export default function FloorsIndex() {
                     id: 'name',
                     header: t('ui.floors.title') || 'Name',
                     accessorKey: 'name',
+                    format: (value)=>t(`ui.floors.titles.${value}`)
                 }),
                 createTextColumn<Floor>({
                     id: 'max_zones',

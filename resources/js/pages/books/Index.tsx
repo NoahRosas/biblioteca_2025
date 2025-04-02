@@ -90,21 +90,40 @@ export default function BooksIndex() {
                     id: 'genres',
                     header: t('ui.books.columns.genres') || 'Genres',
                     accessorKey: 'genres',
+                    format: (value)=>{
+                        let aux;
+                        let res : string[] = [];
+                        if (value.includes(',')) {
+                           aux = value.split(', ');
+                           aux.map((genre) =>{
+                            genre = t(`ui.genres.names.${genre}`)
+                            res.push(genre);
+                            // console.log(genre);
+                           })
+                        //    console.log(res);
+                           aux = res.join(', ');
+                           return aux;
+                        }else{
+                            return t(`ui.genres.names.${value}`);
+                        } 
+                    }
                 }),
                 createTextColumn<Book>({
-                    id: 'bookshelf_number',
-                    header: t('ui.books.columns.bookshelf_number') || 'Bookshelf number',
-                    accessorKey: 'bookshelf_number',
+                    id: 'bookshelf_id',
+                    header: t('ui.books.columns.bookshelf_id') || 'Bookshelf number',
+                    accessorKey: 'bookshelf_id',
                 }),
                 createTextColumn<Book>({
-                    id: 'zone_name',
-                    header: t('ui.books.columns.zone_name') || 'Zone ubication',
-                    accessorKey: 'zone_name',
+                    id: 'zone_id',
+                    header: t('ui.books.columns.zone_id') || 'Zone ubication',
+                    accessorKey: 'zone_id',
+                    format: (value) =>  t(`ui.genres.names.${value}`)
+                    
                 }),
                 createTextColumn<Book>({
-                    id: 'floor_name',
-                    header: t('ui.books.columns.floor_name') || 'Floor ubication',
-                    accessorKey: 'floor_name',
+                    id: 'floor_id',
+                    header: t('ui.books.columns.floor_id') || 'Floor ubication',
+                    accessorKey: 'floor_id',
                 }),
                 createDateColumn<Book>({
                     id: 'created_at',
@@ -203,22 +222,22 @@ export default function BooksIndex() {
                                         placeholder: t('ui.books.placeholders.genres') || 'Genres...',
                                     },
                                     {
-                                        id: 'bookshelf_number',
-                                        label: t('ui.books.filters.bookshelf_number') || 'Bookshelf number',
+                                        id: 'bookshelf_id',
+                                        label: t('ui.books.filters.bookshelf_id') || 'Bookshelf number',
                                         type: 'text',
-                                        placeholder: t('ui.books.placeholders.bookshelf_number') || 'Bookshelf number...',
+                                        placeholder: t('ui.books.placeholders.bookshelf_id') || 'Bookshelf number...',
                                     },
                                     {
-                                        id: 'zone_name',
-                                        label: t('ui.books.columns.zone_name') || 'Zone name',
+                                        id: 'zone_id',
+                                        label: t('ui.books.columns.zone_id') || 'Zone name',
                                         type: 'text',
-                                        placeholder: t('ui.books.placeholders.zone_name') || 'Zone name...',
+                                        placeholder: t('ui.books.placeholders.zone_id') || 'Zone name...',
                                     },
                                     {
-                                        id: 'floor_name',
-                                        label: t('ui.books.columns.floor_name') || 'Floor name',
+                                        id: 'floor_id',
+                                        label: t('ui.books.columns.floor_id') || 'Floor name',
                                         type: 'text',
-                                        placeholder: t('ui.books.placeholders.floor_name') || 'Floor name...',
+                                        placeholder: t('ui.books.placeholders.floor_id') || 'Floor name...',
                                     },
                                 ] as FilterConfig[]
                             }

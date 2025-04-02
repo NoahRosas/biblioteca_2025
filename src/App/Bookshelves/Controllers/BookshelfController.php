@@ -3,8 +3,9 @@
 namespace App\Bookshelves\Controllers;
 
 use App\Core\Controllers\Controller;
-use Domain\Bookshelf\Actions\BookshelfDestroyAction;
+use Domain\Bookshelves\Actions\BookshelfDestroyAction;
 use Domain\Bookshelves\Actions\BookshelfStoreAction;
+use Domain\Bookshelves\Actions\BookshelfUpdateAction;
 use Domain\Bookshelves\Models\Bookshelf;
 use Domain\Floors\Models\Floor;
 use Domain\Zones\Models\Zone;
@@ -29,7 +30,7 @@ class BookshelfController extends Controller
     public function create()
     {
         $floors = Floor::select('id', 'name')->get()->toArray();
-        $zones = Zone::all();
+        $zones = Zone::withCount('bookshelves')->get()->toArray();
         
         return Inertia::render('bookshelves/Create', ['floors' => $floors, 'zones' => $zones]);
     }
@@ -83,10 +84,34 @@ class BookshelfController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Bookshelf $bookshelf, BookshelfUpdateAction $action)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'number' => ['required'],
+            'max_books' => ['required'],
+            'zone_id' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+
+        $action($bookshelf, $validator->validated());
+
+        $redirectUrl = route('bookshelves.index');
+        
+        // Añadir parámetros de página a la redirección si existen
+        if ($request->has('page')) {
+            $redirectUrl .= "?page=" . $request->query('page');
+            if ($request->has('perPage')) {
+                $redirectUrl .= "&per_page=" . $request->query('perPage');
+            }
+        }
+
+        return redirect($redirectUrl)
+            ->with('success', __('messages.bookshelves.updated'));
     }
+
 
     /**
      * Remove the specified resource from storage.

@@ -226,6 +226,13 @@ return [
             '1' => 'Primera Planta' ,
             '2' => 'Segunda Planta' ,
             '3' => 'Tercera Planta' ,
+            '4' => 'Cuarta Planta' ,
+            '5' => 'Quinta Planta' ,
+            '6' => 'Sexta Planta' ,
+            '7' => 'Séptima Planta' ,
+            '8' => 'Octava Planta' ,
+            '9' => 'Novena Planta' ,
+            '10' => 'Décima Planta' ,
         ],
         'fields' =>[
             'name' => 'Nombre de la planta',
@@ -242,7 +249,8 @@ return [
             'search' => 'Buscar',
             'name' => 'Nombre de la planta',
         ],
-        'error_loading' => 'Error al cargar las plantas. Inténtalo de nuevo.'
+        'error_loading' => 'Error al cargar las plantas. Inténtalo de nuevo.',
+        'deleted_error' => 'Error al eliminar la planta',
     ],
     'zones' => [
         'title' => 'Zonas',
@@ -275,6 +283,7 @@ return [
             'name' => 'Nombre de la zona',
         ],
         'error_loading' => 'Error al cargar las zonas. Inténtalo de nuevo.',
+        'deleted_error' => 'Error al eliminar la zona',
     ],
     'bookshelves' => [
         'title' => 'Estanterías',
@@ -283,21 +292,34 @@ return [
         'buttons' =>[
             'new' => 'Crear Estantería'
         ],
+        'extra_info' =>[
+            'create' => 'Completa el formulario para crear una nueva estantería',
+            'edit' => 'Introduce los datos para editar esta estantería',
+        ],
         'columns' => [
             'number' => 'Número de estantería',
             'max_books' => 'Capacidad de libros',
-            'zone_name' => 'Zona en la que está ubicada',
-            'floor_name' => 'Planta en la que está ubicada',
+            'zone_id' => 'Zona en la que está ubicada',
+            'floor_id' => 'Planta en la que está ubicada',
+        ],
+        'fields' => [
+            'number' => 'Número de estantería',
+            'floor_id' => 'Planta en la que está ubicada',
+            'zone_id' => 'Zona en la que está ubicada',
+            'max_books' => 'Capacidad de libros'
         ],
         'placeholders' => [
             'number' => 'Número de estantería...',
-            'search' => 'Buscar estantería...',
+            'search' => 'Buscar estanterías...',
+            'floor_id'=> 'Planta en la que está ubicada...',
+            'zone_id' => 'Zona en la que está ubicada...'
         ],
         'filters' => [
             'search' => 'Buscar',
             'number' => 'Número de estantería',
         ],
         'error_loading' => 'Error al cargar las zonas. Inténtalo de nuevo.',
+        'deleted_error' => 'Error al eliminar la estantería',
     ],
     'books' => [
         'title' => 'Libros',
@@ -306,15 +328,29 @@ return [
         'buttons' =>[
             'new' => 'Crear Libro'
         ],
+        'extra_info' =>[
+            'create' => 'Completa el formulario para crear un nuevo libro',
+            'edit' => 'Introduce los datos para editar este libro',
+        ],
         'columns' => [
             'name' => 'Título del libro',
             'author' => 'Autor/a',
             'publisher' => 'Editorial',
             'num_pages' => 'Número de páginas',
             'genres' => 'Géneros',
-            'bookshelf_number' => 'Número de estantería en la que está',
-            'zone_name' => 'Zona en la que está ubicada',
-            'floor_name' => 'Planta en la que está ubicada',
+            'bookshelf_id' => 'Número de estantería en el que está',
+            'zone_id' => 'Zona en la que está ubicado',
+            'floor_id' => 'Planta en la que está ubicado',
+        ],
+        'fields' => [
+            'name' => 'Título del libro',
+            'author' => 'Autor/a',
+            'publisher' => 'Editorial',
+            'num_pages' => 'Número de páginas',
+            'genres' => 'Géneros',
+            'bookshelf_id' => 'Número de estantería en el que está',
+            'zone_id' => 'Zona en la que está ubicado',
+            'floor_id' => 'Planta en la que está ubicado',
         ],
         'placeholders' => [
             'search' => 'Buscar libro...',
@@ -323,9 +359,9 @@ return [
             'publisher' => 'Editorial...',
             'num_pages' => 'Número de páginas...',
             'genres' => 'Géneros...',
-            'bookshelf_number' => 'Número de estantería en la que está...',
-            'zone_name' => 'Zona en la que está ubicada...',
-            'floor_name' => 'Planta en la que está ubicada...',
+            'bookshelf_id' => 'Número de estantería en el que está...',
+            'zone_id' => 'Zona en la que está ubicado...',
+            'floor_id' => 'Planta en la que está ubicada...',
         ],
         'filters' => [
             'search' => 'Buscar',
@@ -334,15 +370,16 @@ return [
             'publisher' => 'Editorial',
             'num_pages' => 'Número de páginas',
             'genres' => 'Géneros',
-            'bookshelf_number' => 'Número de estantería en la que está',
-            'zone_name' => 'Zona en la que está ubicada',
-            'floor_name' => 'Planta en la que está ubicada',
+            'bookshelf_id' => 'Número de estantería en la que está',
+            'zone_id' => 'Zona en la que está ubicada',
+            'floor_id' => 'Planta en la que está ubicada',
         ],
         'error_loading' => 'Error al cargar los libros. Inténtalo de nuevo.',
+        'deleted_error' => 'Error al eliminar el libro',
     ],
     'genres' =>[
         'names' => [
-            'Fantasy' => 'Fantasí',
+            'Fantasy' => 'Fantasía',
             'Romantic' => 'Romántica',
             'Manga' => 'Manga',
             'Maths' => 'Matemáticas',

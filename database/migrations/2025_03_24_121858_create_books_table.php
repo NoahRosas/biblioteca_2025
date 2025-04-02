@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('publisher');
             $table->integer('num_pages');
             $table->string('genres');
-            $table->string('image_path');
             $table->foreignUuid('bookshelf_id')->references("id")->on("bookshelves")->onDelete('cascade');
             $table->timestamps();
         });

@@ -65,8 +65,8 @@ export default function BookshelvesIndex() {
             await deleteBookshelfMutation.mutateAsync(id);
             refetch();
         } catch (error) {
-            toast.error(t('ui.users.deleted_error') || 'Error deleting user');
-            console.error('Error deleting user:', error);
+            toast.error(t('ui.bookshelves.deleted_error') || 'Error deleting bookshelf');
+            console.error('Error deleting bookshelf:', error);
         }
     };
 
@@ -84,14 +84,15 @@ export default function BookshelvesIndex() {
                     accessorKey: 'max_books',
                 }),
                 createTextColumn<Bookshelf>({
-                    id: 'zone_name',
-                    header: t('ui.bookshelves.columns.zone_name') || 'Zone ubication',
-                    accessorKey: 'zone_name',
+                    id: 'zone_id',
+                    header: t('ui.bookshelves.columns.zone_id') || 'Zone ubication',
+                    accessorKey: 'zone_id',
+                    format: (value) =>  t(`ui.genres.names.${value}`)
                 }),
                 createTextColumn<Bookshelf>({
-                    id: 'floor_name',
-                    header: t('ui.bookshelves.columns.floor_name') || 'Floor ubication',
-                    accessorKey: 'floor_name',
+                    id: 'floor_id',
+                    header: t('ui.bookshelves.columns.floor_id') || 'Floor ubication',
+                    accessorKey: 'floor_id',
                 }),
                 createDateColumn<Bookshelf>({
                     id: 'created_at',
@@ -172,16 +173,16 @@ export default function BookshelvesIndex() {
                                         placeholder: t('ui.bookshelves.columns.max_books') || 'Max books...',
                                     },
                                     {
-                                        id: 'zone_name',
-                                        label: t('ui.bookshelves.columns.zone_name') || 'Zone name',
+                                        id: 'zone_id',
+                                        label: t('ui.bookshelves.columns.zone_id') || 'Zone name',
                                         type: 'text',
-                                        placeholder: t('ui.bookshelves.columns.zone_name') || 'Zone name...',
+                                        placeholder: t('ui.bookshelves.columns.zone_id') || 'Zone name...',
                                     },
                                     {
-                                        id: 'floor_name',
-                                        label: t('ui.bookshelves.columns.floor_name') || 'Floor name',
+                                        id: 'floor_id',
+                                        label: t('ui.bookshelves.columns.floor_id') || 'Floor name',
                                         type: 'text',
-                                        placeholder: t('ui.bookshelves.columns.floor_name') || 'Floor name...',
+                                        placeholder: t('ui.bookshelves.columns.floor_id') || 'Floor name...',
                                     },
                                 ] as FilterConfig[]
                             }
@@ -195,7 +196,7 @@ export default function BookshelvesIndex() {
                             <TableSkeleton columns={4} rows={10} />
                         ) : isError ? (
                             <div className="p-4 text-center">
-                                <div className="mb-4 text-red-500">{t('ui.zones.error_loading')}</div>
+                                <div className="mb-4 text-red-500">{t('ui.bookshelves.error_loading')}</div>
                                 <Button onClick={() => refetch()} variant="outline">
                                     {t('ui.users.buttons.retry')}
                                 </Button>
@@ -220,7 +221,7 @@ export default function BookshelvesIndex() {
                                     onPageChange={handlePageChange}
                                     onPerPageChange={handlePerPageChange}
                                     perPageOptions={[10, 25, 50, 100]}
-                                    noResultsMessage={t('ui.users.no_results') || 'No zones found'}
+                                    noResultsMessage={t('ui.users.no_results') || 'No bookshelves found'}
                                 />
                             </div>
                         )}

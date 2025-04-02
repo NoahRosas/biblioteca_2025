@@ -128,7 +128,7 @@ return [
             'roles' => 'Roles and permissions',
         ],
         'extra_info' => [
-            'create_user' => 'Complete the fields below to create a new user',
+            'create' => 'Complete the fields below to create a new user',
             'role' => 'The role determines the level of access of the user',
         ],
         'roles' =>[ 
@@ -221,10 +221,17 @@ return [
             '1' => '1st Floor' ,
             '2' => '2nd Floor' ,
             '3' => '3rd Floor' ,
+            '4' => '4th Floor' ,
+            '5' => '5th Floor' ,
+            '6' => '6th Floor' ,
+            '7' => '7th Floor' ,
+            '8' => '8th Floor' ,
+            '9' => '9th Floor' ,
+            '10' => '10th Floor' ,
         ],
         'extra_info'=>[
-            'create_floor' => 'Fill the fields to make a new floor',
-            'edit_floor' => 'Fill the fields to edit this floor'
+            'create' => 'Fill the fields to make a new floor',
+            'edit' => 'Fill the fields to edit this floor'
         ],
         'fields' =>[
             'name' => 'Floor name',
@@ -241,6 +248,7 @@ return [
             'search' => 'Search',
             'name' => 'Floor name',
         ],
+        'deleted_error' => 'Error deleting floor',
         'error_loading' => 'Error loading floors. Please try again.'
     ],
     'zones' => [
@@ -251,28 +259,29 @@ return [
             'new' => 'Create Zone'
         ],
         'extra_info' =>[
-            'create_zone' => 'Fill the fields to create a new zone',
-            'edit_zone' => 'Update the fields to edit this zone ',
+            'create' => 'Fill the fields to create a new zone',
+            'edit' => 'Update the fields to edit this zone ',
         ],
         'columns' => [
             'name' => 'Zone name',
             'max_bookshelves' => 'Bookshelves capacity',
-            'floor_name' => 'Floor ubication',
+            'floor_id' => 'Floor ubication',
         ],
         'fields' =>[
             'name' => 'Zone name',
-            'floor_name' => 'Floor ubication',
+            'floor_id' => 'Floor ubication',
             'max_bookshelves' => 'Bookshelves capacity',
         ],
         'placeholders' => [
             'name' => 'Zone name...',
             'search' => 'Search zones...',
-            'floor_name' => 'Floor name...'
+            'floor_id' => 'Floor name...'
         ],
         'filters' => [
             'search' => 'Search',
             'name' => 'Zone name',
         ],
+        'deleted_error' => 'Error deleting zone',
         'error_loading' => 'Error loading zones. Please try again.',
     ],
     'bookshelves' => [
@@ -282,20 +291,33 @@ return [
         'buttons' =>[
             'new' => 'Create Bookshelf'
         ],
+        'extra_info' =>[
+            'create' => 'Fill the fields to create a new bookshelf',
+            'edit' => 'Update the fields to edit this bookshelf'
+        ],
         'columns' => [
             'number' => 'Bookshelf number',
             'max_books' => 'Books capacity',
-            'zone_name' => 'Zone ubication',
-            'floor_name' => 'Floor ubication',
+            'zone_id' => 'Zone ubication',
+            'floor_id' => 'Floor ubication',
+        ],
+        'fields' => [
+            'number' => 'Bookshelf number',
+            'floor_id' => 'Floor ubication',
+            'zone_id' => 'Zone ubication',
+            'max_books' => 'Books capacity'
         ],
         'placeholders' => [
-            'number' => 'Zone number',
+            'number' => 'Bookshelf number...',
             'search' => 'Search bookshelves...',
+            'floor_id'=> 'Floor ubication...',
+            'zone_id' => 'Zone ubication...'
         ],
         'filters' => [
             'search' => 'Search',
             'number' => 'Bookshelf number',
         ],
+        'deleted_error' => 'Error deleting bookshelf',
         'error_loading' => 'Error loading bookshelves. Please try again.',
     ],
     'books' => [
@@ -305,15 +327,29 @@ return [
         'buttons' =>[
             'new' => 'Create Book'
         ],
+        'extra_info'=>[
+            'create' => 'Fill the fields to create a new book',
+            'edit' => 'Update the fields to edit this book'
+        ],
         'columns' => [
             'name' => 'Title',
             'author' => 'Author',
             'publisher' => 'Publisher',
             'num_pages' => 'Number of pages',
             'genres' => 'Genres',
-            'bookshelf_number' => 'Bookshelf number',
-            'zone_name' => 'Zone ubication',
-            'floor_name' => 'Floor ubication',
+            'bookshelf_id' => 'Bookshelf number',
+            'zone_id' => 'Zone ubication',
+            'floor_id' => 'Floor ubication',
+        ],
+        'fields' => [
+            'name' => 'Title',
+            'author' => 'Author',
+            'publisher' => 'Publisher',
+            'num_pages' => 'Number of pages',
+            'genres' => 'Genres',
+            'bookshelf_id' => 'Bookshelf number',
+            'zone_id' => 'Zone ubication',
+            'floor_id' => 'Floor ubication',
         ],
         'placeholders' => [
             'search' => 'Search book...',
@@ -322,9 +358,9 @@ return [
             'publisher' => 'Publisher...',
             'num_pages' => 'Number of pages...',
             'genres' => 'Genres...',
-            'bookshelf_number' => 'Bookshelf number...',
-            'zone_name' => 'Zone ubication...',
-            'floor_name' => 'Floor ubication...',
+            'bookshelf_id' => 'Bookshelf number...',
+            'zone_id' => 'Zone ubication...',
+            'floor_id' => 'Floor ubication...',
         ],
         'filters' => [
             'search' => 'Search',
@@ -333,10 +369,11 @@ return [
             'publisher' => 'Publisher',
             'num_pages' => 'Number of pages',
             'genres' => 'Genres',
-            'bookshelf_number' => 'Bookshelf number',
-            'zone_name' => 'Zone ubication',
-            'floor_name' => 'Floor ubication',
+            'bookshelf_id' => 'Bookshelf number',
+            'zone_id' => 'Zone ubication',
+            'floor_id' => 'Floor ubication',
         ],
+        'deleted_error' => 'Error deleting book',
         'error_loading' => 'Error loading books. Please, try again.',
     ],
     'genres' =>[

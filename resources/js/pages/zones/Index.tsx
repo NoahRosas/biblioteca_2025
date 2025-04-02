@@ -76,6 +76,7 @@ export default function ZonesIndex() {
                     id: 'name',
                     header: t('ui.zones.columns.name') || 'Name',
                     accessorKey: 'name',
+                    format: (value) =>  t(`ui.genres.names.${value}`)
                 }),
                 createTextColumn<Zone>({
                     id: 'max_bookshelves',
@@ -83,9 +84,9 @@ export default function ZonesIndex() {
                     accessorKey: 'max_bookshelves',
                 }),
                 createTextColumn<Zone>({
-                    id: 'floor_name',
-                    header: t('ui.zones.columns.floor_name') || 'Floor ubication',
-                    accessorKey: 'floor_name',
+                    id: 'floor_id',
+                    header: t('ui.zones.columns.floor_id') || 'Floor ubication',
+                    accessorKey: 'floor_id',
                 }),
                 createDateColumn<Zone>({
                     id: 'created_at',

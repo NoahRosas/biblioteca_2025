@@ -17,7 +17,6 @@ export interface BookshelfFormProps {
         id: string;
         number: number;
         max_books: number;
-        floor_id: string;
         zone_id: string;
     };
     page?: string;
@@ -39,16 +38,21 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function BookshelfForm({ initialData, page, perPage, floors, zones}: BookshelfFormProps) {
-    // console.log(initialData);
+export function BookshelfForm({ initialData, page, perPage, floors, zones }: BookshelfFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
-    const [selectedFloor, setSelectedFloor] = useState(initialData?.floor_id ?? undefined);
+    let floorNow = undefined;
+
+    if (initialData) {
+        floorNow = zones.filter((zone) => zone.id === initialData?.zone_id)[0].floor_id;
+    }
+
+    console.log(floorNow);
+    const [selectedFloor, setSelectedFloor] = useState<string | undefined>(floorNow ?? undefined);
     const form = useForm({
         defaultValues: {
             number: initialData?.number ?? '',
             max_books: initialData?.max_books ?? '',
-            floor_id: initialData?.floor_id ?? '',
             zone_id: initialData?.zone_id ?? '',
         },
         onSubmit: async ({ value }) => {
@@ -70,6 +74,16 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones}: Book
             }
         },
     });
+
+    function checkFloor() {
+        let check;
+        if (selectedFloor == undefined) {
+            check = true;
+        } else {
+            check = false;
+        }
+        return check;
+    }
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -127,33 +141,31 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones}: Book
 
                         {/* Floor id field */}
                         <div className="space-y-1">
-                                        <div className="mt-3 mb-2 flex">
-                                            <Label className="mt-0.5 ml-1">
-                                                {t('ui.bookshelves.fields.floor_id')}
-                                            </Label>
-                                        </div>
+                            <div className="mt-3 mb-2 flex">
+                                <Label className="mt-0.5 ml-1">{t('ui.bookshelves.fields.floor_id')}</Label>
+                            </div>
 
-                                        <Select
-                                            value={selectedFloor}
-                                            onValueChange={(value) => {
-                                                setSelectedFloor(value);
-                                                console.log(value);
-                                            }}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder={t('ui.bookshelves.placeholders.zone_id')} />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {floors?.map((floor) => (
-                                                    <SelectItem key={floor.id} value={floor.id}>
-                                                        {t(`ui.floors.titles.${floor.name}`)}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-
-                                     
- 
+                            <Select
+                                value={selectedFloor}
+                                onValueChange={(value) => {
+                                    setSelectedFloor(value);
+                                    console.log(value);
+                                }}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder={t('ui.bookshelves.placeholders.floor_id')} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {floors?.map((floor) => (
+                                        <SelectItem key={floor.id} value={floor.id}>
+                                            {t(`ui.floors.titles.${floor.name}`)}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <div className="mt-3 mb-2 flex">
+                                <Label className="mt-0.5 ml-1">{t('ui.bookshelves.fields.zone_id')}</Label>
+                            </div>
                             <form.Field
                                 name="zone_id"
                                 validators={{
@@ -174,16 +186,19 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones}: Book
                                             console.log(value);
                                         }}
                                         required={true}
+                                        disabled={checkFloor()}
                                     >
                                         <SelectTrigger>
                                             <SelectValue placeholder={t('ui.bookshelves.placeholders.zone_id')} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {zones.filter(zone => zone.floor_id === selectedFloor).map((zone)=>(
-                                                <SelectItem key={zone.id} value={zone.id}>
-                                                    {t(`ui.genres.names.${zone.name}`)}
-                                                </SelectItem>
-                                            ))}
+                                            {zones
+                                                .filter((zone) => zone.floor_id === selectedFloor)
+                                                .map((zone) => (
+                                                    <SelectItem key={zone.id} value={zone.id} disabled={zone.bookshelves_count>=zone.max_bookshelves}>
+                                                        {t(`ui.genres.names.${zone.name}`)} - {zone.bookshelves_count}/{zone.max_bookshelves}
+                                                    </SelectItem>
+                                                ))}
                                         </SelectContent>
                                     </Select>
                                 )}
@@ -199,9 +214,9 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones}: Book
                                         await new Promise((resolve) => setTimeout(resolve, 500));
                                         const numValue = Number(value);
                                         return !numValue
-                                            ? t('ui.validation.required', { attribute: t('ui.bookshelves.fields.max_bookshelves').toLowerCase() })
+                                            ? t('ui.validation.required', { attribute: t('ui.bookshelves.fields.max_books').toLowerCase() })
                                             : numValue < 0
-                                              ? t('ui.validation.required', { attribute: t('ui.bookshelves.fields.max_bookshelves').toLowerCase() })
+                                              ? t('ui.validation.required', { attribute: t('ui.bookshelves.fields.max_books').toLowerCase() })
                                               : undefined;
                                     },
                                 }}
@@ -210,7 +225,7 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones}: Book
                                     <>
                                         <div className="mt-3 mb-2 flex">
                                             <Label htmlFor={field.name} className="mt-0.5 ml-1">
-                                                {t('ui.bookshelves.fields.max_bookshelves')}
+                                                {t('ui.bookshelves.fields.max_books')}
                                             </Label>
                                         </div>
 
@@ -221,7 +236,7 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones}: Book
                                             value={Number(field.state.value)}
                                             onChange={(e) => field.handleChange(e.target.value)}
                                             onBlur={field.handleBlur}
-                                            max={30}
+                                            max={70}
                                             min={1}
                                             placeholder={t('ui.bookshelves.placeholders.max_bookshelves')}
                                             disabled={form.state.isSubmitting}

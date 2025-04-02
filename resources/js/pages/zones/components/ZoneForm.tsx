@@ -3,6 +3,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Genre } from '@/hooks/genres/useGenres';
 import { useTranslations } from '@/hooks/use-translations';
 import { router } from '@inertiajs/react';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
@@ -21,7 +22,9 @@ export interface ZoneFormProps {
     perPage?: string;
     floors: {
         id:string,
-        name:string
+        name:string,
+        zones_count:number,
+        max_zones:number,
     }[];
     genres: {
         id:string,
@@ -152,8 +155,8 @@ export function ZoneForm({ initialData, page, perPage, floors, genres }: ZoneFor
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {floors?.map((floor) => (
-                                                    <SelectItem key={floor.id} value={floor.id}>
-                                                        {t(`ui.floors.titles.${floor.name}`)}
+                                                    <SelectItem key={floor.id} value={floor.id} disabled={floor.zones_count>=floor.max_zones}>
+                                                        {t(`ui.floors.titles.${floor.name}`)} - {floor.zones_count}/{floor.max_zones}
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>

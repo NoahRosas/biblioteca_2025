@@ -9,6 +9,8 @@ interface CreateZoneProps extends PageProps{
     floors: {
         id:string,
         name:string
+        zones_count:number,
+        max_zones:number,
     }[];
     genres: {
         id:string,

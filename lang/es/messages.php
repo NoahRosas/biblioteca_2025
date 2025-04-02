@@ -34,7 +34,7 @@ return [
     'bookshelves' => [
         'created' => 'Estantería creada correctamente',
         'updated' => 'Estantería actualizada correctamente',
-        'deleted' => 'Estanteríaeliminada correctamente',
+        'deleted' => 'Estantería eliminada correctamente',
         'error' => [
             'create' => 'Error al crear la estantería',
             'update' => 'Error al actualizar la estantería',

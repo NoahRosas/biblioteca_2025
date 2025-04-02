@@ -10,6 +10,7 @@ use Domain\Floors\Models\Floor;
 use Domain\Genres\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class FloorController extends Controller
@@ -55,7 +56,8 @@ class FloorController extends Controller
     {   
         // dd(request()->all());
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255',
+        Rule::unique('floors', 'name')],
             'max_zones' => ['required'],
         ]);
 
@@ -96,7 +98,8 @@ class FloorController extends Controller
     public function update(Request $request, Floor $floor, FloorUpdateAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255',
+            Rule::unique('floors', 'name')->ignore($request->id)],
             'max_zones' => ['required']
             
         ]);
