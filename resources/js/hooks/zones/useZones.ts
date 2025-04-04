@@ -46,7 +46,7 @@ export interface ApiPaginatedResponse<T> {
   }
   
   interface UseZonesParams {
-    search?: string;
+    search?: any[];
     page?: number;
     perPage?: number;
   }

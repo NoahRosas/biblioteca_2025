@@ -22,7 +22,8 @@ class BookUpdateAction
         $book->update($updateData);
         
         foreach ($image as $img) {
-            $book->updateMedia($img, 'images')->toMediaCollection('images', 'images');
+            $book->getMedia('images')[0]->delete();
+            $book->addMedia($img)->toMediaCollection('images', 'images');
         }
 
         return BookResource::fromModel($book->fresh());

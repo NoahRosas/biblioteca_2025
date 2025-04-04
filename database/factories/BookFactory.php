@@ -32,7 +32,7 @@ class BookFactory extends Factory
             'author' => fake()->name(),
             'publisher' => fake()->company(),
             'num_pages' => fake()->numberBetween(50, 1200),
-            'genres'=>implode(', ', fake()->randomElements($array=$genres, $count=fake()->numberBetween(1, 3))),
+            'genres'=>implode(', ', fake()->randomElements($genres, fake()->numberBetween(1, 3))),
             'bookshelf_id' => $bookshelf->id,
         ];
     }

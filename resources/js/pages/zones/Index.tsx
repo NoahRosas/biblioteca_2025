@@ -36,7 +36,11 @@ export default function ZonesIndex() {
     const [filters, setFilters] = useState<Record<string, any>>({});
     
     // Combine name and email filters into a single search string if they exist
-    const combinedSearch = [filters.search, filters.name ? `name:${filters.name}` : null].filter(Boolean).join(' ');
+    const combinedSearch = [
+        filters.name ? filters.name : 'null',
+        filters.number ? filters.number : 'null',
+        filters.max_bookshelves ? filters.max_bookshelves : 'null',
+        filters.floor_id ? filters.floor_id : 'null'];
 
     const {
         data: zones,
@@ -154,12 +158,6 @@ export default function ZonesIndex() {
                             filters={
                                 [
                                     {
-                                        id: 'search',
-                                        label: t('ui.users.filters.search') || 'Buscar',
-                                        type: 'text',
-                                        placeholder: t('ui.zones.placeholders.search') || 'Buscar...',
-                                    },
-                                    {
                                         id: 'name',
                                         label: t('ui.zones.filters.name') || 'Nombre',
                                         type: 'text',
@@ -169,6 +167,8 @@ export default function ZonesIndex() {
                                         id: 'number',
                                         label: t('ui.zones.filters.number') || 'Number',
                                         type: 'number',
+                                        min: 1,
+                                        step:1,
                                         placeholder: t('ui.zones.filters.number') || 'Number...',
                                     },
                                     {
@@ -176,6 +176,12 @@ export default function ZonesIndex() {
                                         label: t('ui.zones.columns.max_bookshelves') || 'Max bookshelves',
                                         type: 'number',
                                         placeholder: t('ui.zones.columns.max_bookshelves') || 'Max bookshelves...',
+                                    },
+                                    {
+                                        id: 'floor_id',
+                                        label: t('ui.zones.columns.floor_id') || 'Floor Ubication',
+                                        type: 'number',
+                                        placeholder: t('ui.zones.columns.floor_id') || 'Floor Ubication...',
                                     },
                                 ] as FilterConfig[]
                             }

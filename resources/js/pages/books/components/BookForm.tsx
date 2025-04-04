@@ -73,6 +73,15 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
         },
 
         onSubmit: async ({ value }) => {
+            const formData = new FormData;
+                formData.append('name', value.name);
+                formData.append('author', value.author);
+                formData.append('publisher', value.publisher);
+                formData.append('num_pages', value.num_pages);
+                formData.append('bookshelf_id', value.bookshelf_id);
+                formData.append('image', selectedImage);
+                formData.append('_method', 'PUT');
+                formData.append('genres', selectedGenres.join(', '));
             const options = {
                 onSuccess: () => {
                     queryClient.invalidateQueries({ queryKey: ['books'] });
@@ -85,7 +94,7 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
             };
 
             if (initialData) {
-                router.put(`/books/${initialData.id}`, value, options);
+                router.post(`/books/${initialData.id}`, formData, options);
             } else {
                 router.post('/books', value, options);
             }
@@ -136,7 +145,6 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
         event.preventDefault();
         event.stopPropagation();
         form.setFieldValue('genres', selectedGenres.join(', '));
-        
         form.handleSubmit();
     };
     return (
@@ -440,19 +448,13 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                         <div className="space-y-1">
                             <form.Field
                                 name="image"
-                                // validators={{
-                                //     onChangeAsync: async ({ value }) => {
-                                //         await new Promise((resolve) => setTimeout(resolve, 500));
-                                //         return !value
-                                //             ? t('ui.validation.required', { attribute: t('ui.books.fields.publisher').toLowerCase() })
-                                //             : value.length < 2
-                                //               ? t('ui.validation.min.string', {
-                                //                     attribute: t('ui.books.fields.publisher').toLowerCase(),
-                                //                     min: '2',
-                                //                 })
-                                //               : undefined;
-                                //     },
-                                // }}
+                                validators={{
+                                    onChangeAsync: async ({ value }) => {
+                                        await new Promise((resolve) => setTimeout(resolve, 500));
+                                        return !selectedImage && !image_path ?
+                                        t('ui.validation.required', { attribute: t('ui.books.fields.image').toLowerCase() }) : null;
+                                    },
+                                }}
                             >
                                 {(field) => (
                                     <>
@@ -469,7 +471,6 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                             // value={field.state.value}
                                             onChange={(e) => {
                                                 field.handleChange(e.target.files[0]);
-                                                console.log(e.target.files[0]);
                                                 setSelectedImage(e.target.files[0]);
                                             }}
                                             onBlur={field.handleBlur}

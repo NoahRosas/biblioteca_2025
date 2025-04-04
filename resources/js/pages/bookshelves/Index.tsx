@@ -37,7 +37,12 @@ export default function BookshelvesIndex() {
     const [filters, setFilters] = useState<Record<string, any>>({});
     
     // Combine name and email filters into a single search string if they exist
-    const combinedSearch = [filters.search, filters.name ? `number:${filters.name}` : null].filter(Boolean).join(' ');
+    const combinedSearch = [
+        filters.number ? filters.number : 'null',
+        filters.max_books? filters.max_books : 'null',
+        filters.zone_id ? filters.zone_id : 'null',
+        filters.zone_name? filters.zone_name : 'null',
+        filters.floor_id ? filters.floor_id : 'null'];
 
     const {
         data: bookshelves,
@@ -87,12 +92,13 @@ export default function BookshelvesIndex() {
                     id: 'zone_id',
                     header: t('ui.bookshelves.columns.zone_id') || 'Zone ubication',
                     accessorKey: 'zone_id',
-                    format: (value) =>  t(`ui.genres.names.${value}`)
+                    
                 }),
                 createTextColumn<Bookshelf>({
-                    id: 'zone_number',
-                    header: t('ui.bookshelves.columns.zone_number') || 'Zone ubication',
-                    accessorKey: 'zone_number',
+                    id: 'zone_name',
+                    header: t('ui.bookshelves.columns.zone_name') || 'Zone ubication',
+                    accessorKey: 'zone_name',
+                    format: (value) =>  t(`ui.genres.names.${value}`)
                 }),
                 createTextColumn<Bookshelf>({
                     id: 'floor_id',
@@ -160,12 +166,6 @@ export default function BookshelvesIndex() {
                             filters={
                                 [
                                     {
-                                        id: 'search',
-                                        label: t('ui.users.filters.search') || 'Buscar',
-                                        type: 'text',
-                                        placeholder: t('ui.bookshelves.placeholders.search') || 'Buscar...',
-                                    },
-                                    {
                                         id: 'number',
                                         label: t('ui.bookshelves.filters.number') || 'Número',
                                         type: 'text',
@@ -180,8 +180,14 @@ export default function BookshelvesIndex() {
                                     {
                                         id: 'zone_id',
                                         label: t('ui.bookshelves.columns.zone_id') || 'Zone name',
-                                        type: 'text',
+                                        type: 'number',
                                         placeholder: t('ui.bookshelves.columns.zone_id') || 'Zone name...',
+                                    },
+                                    {
+                                        id: 'zone_name',
+                                        label: t('ui.bookshelves.columns.zone_id') || 'Zone number',
+                                        type: 'text',
+                                        placeholder: t('ui.bookshelves.columns.zone_number') || 'Zone number...',
                                     },
                                     {
                                         id: 'floor_id',

@@ -35,7 +35,17 @@ export default function BooksIndex() {
     const [filters, setFilters] = useState<Record<string, any>>({});
     
     // Combine name and email filters into a single search string if they exist
-    const combinedSearch = [filters.search, filters.name ? `number:${filters.name}` : null].filter(Boolean).join(' ');
+    const combinedSearch = [
+        filters.name ? filters.name : 'null',
+        filters.author ? filters.author : 'null',
+        filters.publisher ? filters.publisher : 'null',
+        filters.num_pages ? filters.num_pages : 'null',
+        filters.genres ? filters.genres : 'null',
+        filters.bookshelf_id ? filters.bookshelf_id : 'null',
+        filters.zone_id ? filters.zone_id : 'null',
+        filters.zone_name ? filters.zone_name : 'null',
+        filters.floor_id ? filters.floor_id : 'null',
+    ];
 
     const {
         data: books,
@@ -81,10 +91,16 @@ export default function BooksIndex() {
                     header: t('ui.books.columns.author') || 'Author',
                     accessorKey: 'author',
                 }),
+                
                 createTextColumn<Book>({
                     id: 'publisher',
                     header: t('ui.books.columns.publisher') || 'Publisher',
                     accessorKey: 'publisher',
+                }),
+                createTextColumn<Book>({
+                    id: 'num_pages',
+                    header: t('ui.books.columns.num_pages') || 'Number of pages',
+                    accessorKey: 'num_pages',
                 }),
                 createTextColumn<Book>({
                     id: 'genres',
@@ -117,9 +133,18 @@ export default function BooksIndex() {
                     id: 'zone_id',
                     header: t('ui.books.columns.zone_id') || 'Zone ubication',
                     accessorKey: 'zone_id',
+                    
+                    
+                }),
+                createTextColumn<Book>({
+                    id: 'zone_name',
+                    header: t('ui.books.columns.zone_name') || 'Zone name',
+                    accessorKey: 'zone_name',
                     format: (value) =>  t(`ui.genres.names.${value}`)
                     
                 }),
+
+                
                 createTextColumn<Book>({
                     id: 'floor_id',
                     header: t('ui.books.columns.floor_id') || 'Floor ubication',
@@ -186,12 +211,6 @@ export default function BooksIndex() {
                             filters={
                                 [
                                     {
-                                        id: 'search',
-                                        label: t('ui.users.filters.search') || 'Buscar',
-                                        type: 'text',
-                                        placeholder: t('ui.books.placeholders.search') || 'Buscar...',
-                                    },
-                                    {
                                         id: 'name',
                                         label: t('ui.books.filters.name') || 'Title',
                                         type: 'text',
@@ -224,14 +243,20 @@ export default function BooksIndex() {
                                     {
                                         id: 'bookshelf_id',
                                         label: t('ui.books.filters.bookshelf_id') || 'Bookshelf number',
-                                        type: 'text',
+                                        type: 'number',
                                         placeholder: t('ui.books.placeholders.bookshelf_id') || 'Bookshelf number...',
                                     },
                                     {
                                         id: 'zone_id',
-                                        label: t('ui.books.columns.zone_id') || 'Zone name',
+                                        label: t('ui.books.columns.zone_id') || 'Zone number',
+                                        type: 'number',
+                                        placeholder: t('ui.books.placeholders.zone_id') || 'Zone number...',
+                                    },
+                                    {
+                                        id: 'zone_name',
+                                        label: t('ui.books.columns.zone_name') || 'Zone name',
                                         type: 'text',
-                                        placeholder: t('ui.books.placeholders.zone_id') || 'Zone name...',
+                                        placeholder: t('ui.books.placeholders.zone_name') || 'Zone name...',
                                     },
                                     {
                                         id: 'floor_id',

@@ -6,8 +6,8 @@ export interface Bookshelf {
   number: number;
   max_books: number;
   floor_id:string;
-  zone_id:string;
-  zone_number:number;
+  zone_id:number;
+  zone_name:string;
   books_count:number;
   created_at: string;
 }
@@ -47,7 +47,7 @@ export interface ApiPaginatedResponse<T> {
   }
   
   interface UseBookshelvesParams {
-    search?: string;
+    search?: any[];
     page?: number;
     perPage?: number;
   }

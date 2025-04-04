@@ -8,8 +8,9 @@ export interface Book {
   publisher: string;
   num_pages: number;
   genres: string;
-  bookshelf_id: string;
-  zone_id:string;
+  bookshelf_id: number;
+  zone_id:number;
+  zone_name:string;
   floor_id:string;
   image_path: string;
   created_at: string;
@@ -50,7 +51,7 @@ export interface ApiPaginatedResponse<T> {
   }
   
   interface UseBooksParams {
-    search?: string;
+    search?: any[];
     page?: number;
     perPage?: number;
   }

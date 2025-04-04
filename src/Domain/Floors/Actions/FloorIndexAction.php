@@ -7,12 +7,19 @@ use Domain\Floors\Models\Floor;
 
 class FloorIndexAction
 {
-    public function __invoke(?string $search = null, int $perPage = 10){
+    public function __invoke(?array $search = null, int $perPage = 10){
         
-    
+       
+        $name = $search[0];
+        $max_zones = $search[1];
+
         $floors = Floor::query()
-            ->when($search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%");
+            ->when($name !== "null", function ($query) use ($name) {
+
+                $query->where('name', 'like', $name);
+            })
+            ->when($max_zones !== "null", function ($query) use ($max_zones) {
+                $query->where('max_zones', '=', $max_zones);
             })
             ->latest()
             ->paginate($perPage);

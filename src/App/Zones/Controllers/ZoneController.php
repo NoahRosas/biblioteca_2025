@@ -90,7 +90,7 @@ class ZoneController extends Controller
     public function update(Request $request, Zone $zone, ZoneUpdateAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255', Rule::unique('zones', 'name')],
+            'name' => ['required', 'string', 'max:255', Rule::unique('zones', 'number')->where(fn($query) => $query->where('floor_id', $request->floor_id))->ignore($request->id)],
             'max_bookshelves' => ['required'],
             'floor_id' => ['required'],
             
