@@ -12,7 +12,7 @@ import { router } from '@inertiajs/react';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
 import { Save, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Tipado de las props
 export interface BookFormProps {
@@ -24,7 +24,6 @@ export interface BookFormProps {
         num_pages: number;
         genres: string;
         bookshelf_id: string;
-
     };
     page?: string;
     perPage?: string;
@@ -32,7 +31,7 @@ export interface BookFormProps {
         id: string;
         name: string;
     }[];
-    img_path?: File;
+    image_path?: string;
     zones: Zone[];
     bookshelves: Bookshelf[];
     genres: Genre[];
@@ -48,7 +47,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function BookForm({ initialData, page, perPage, floors, zones, bookshelves, genres, img_path}: BookFormProps) {
+export function BookForm({ initialData, page, perPage, floors, zones, bookshelves, genres, image_path }: BookFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
     let zoneNow: string | undefined = undefined,
@@ -61,7 +60,7 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
     const [selectedZone, setSelectedZone] = useState<string | undefined>(zoneNow ?? undefined);
     const [selectedFloor, setSelectedFloor] = useState<string | undefined>(floorNow ?? undefined);
     const [selectedGenres, setSelectedGenres] = useState<string[]>(initialData?.genres.split(', ') || []);
-    const [selectedImage, setSelectedImage] = useState(img_path || undefined);
+    const [selectedImage, setSelectedImage] = useState<File | undefined>(undefined);
     const form = useForm({
         defaultValues: {
             name: initialData?.name ?? '',
@@ -70,8 +69,9 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
             num_pages: initialData?.num_pages ?? undefined,
             genres: initialData?.genres ?? '',
             bookshelf_id: initialData?.bookshelf_id ?? '',
-            img_path: img_path ?? undefined,
+            image: undefined,
         },
+
         onSubmit: async ({ value }) => {
             const options = {
                 onSuccess: () => {
@@ -94,21 +94,31 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
 
     function checkFloor() {
         let check;
-        if (selectedFloor == undefined) {
+        if (selectedGenres.length == 0) {
             check = true;
-        } else {
-            check = false;
+        }else{
+            if (selectedFloor == undefined) {
+                check = true;
+            } else {
+                check = false;
+            }
         }
+        
         return check;
     }
 
     function checkZone() {
         let check;
-        if (selectedZone == undefined) {
+        if (selectedGenres.length == 0) {
             check = true;
-        } else {
-            check = false;
+        }else{
+            if (selectedZone == undefined) {
+                check = true;
+            } else {
+                check = false;
+            }
         }
+        
         return check;
     }
 
@@ -116,17 +126,17 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
     const transformGenres = (genres: Genre[]) => {
         return genres.map((genre) => ({
             ...genre,
-            label: t(`ui.genres.names.${genre.value}`), // Create the translation key dynamically
+            label: t(`ui.genres.names.${genre.value}`),
         }));
     };
-
+    
     const transformedGenres = transformGenres(genres);
-
+    
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         event.stopPropagation();
         form.setFieldValue('genres', selectedGenres.join(', '));
-
+        
         form.handleSubmit();
     };
     return (
@@ -329,6 +339,7 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                 variant="inverted"
                                 animation={2}
                                 maxCount={5}
+                                
                             />
                         </div>
                         {/* Bookshelf id field */}
@@ -348,7 +359,7 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                     <SelectValue placeholder={t('ui.books.placeholders.floor_id')} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {floors?.map((floor) => (
+                                    { floors?.map((floor) => (
                                         <SelectItem key={floor.id} value={floor.id}>
                                             {t(`ui.floors.titles.${floor.name}`)}
                                         </SelectItem>
@@ -428,7 +439,7 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                         {/* img path field */}
                         <div className="space-y-1">
                             <form.Field
-                                name="img_path"
+                                name="image"
                                 // validators={{
                                 //     onChangeAsync: async ({ value }) => {
                                 //         await new Promise((resolve) => setTimeout(resolve, 500));
@@ -447,7 +458,7 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                     <>
                                         <div className="mt-3 mb-2 flex">
                                             <Label htmlFor={field.name} className="mt-0.5 ml-1">
-                                                {t('ui.books.fields.img_path')}
+                                                {t('ui.books.fields.image')}
                                             </Label>
                                         </div>
 
@@ -458,6 +469,7 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                             // value={field.state.value}
                                             onChange={(e) => {
                                                 field.handleChange(e.target.files[0]);
+                                                console.log(e.target.files[0]);
                                                 setSelectedImage(e.target.files[0]);
                                             }}
                                             onBlur={field.handleBlur}
@@ -468,15 +480,21 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                             accept="image/*"
                                         />
 
-                                        {selectedImage ? (
-                                            <div>
-                                                {/* Display the selected image */}
-                                                <img alt="not found" width={'250px'}  />
-                                                
-                                            </div>
-                                        )
-                                        : <p>No image</p>
-                                        }
+                                        {selectedImage && (
+                                            <img
+                                                src={URL.createObjectURL(selectedImage)}
+                                                alt="Preview"
+                                                style={{ width: '200px', height: 'auto', marginTop: '10px' }}
+                                            />
+                                        )}
+
+                                        {/* Image Preview */}
+
+                                        {image_path && !selectedImage && (
+                                            <span>
+                                                <img src={image_path} alt="Preview" style={{ width: '200px', height: 'auto', marginTop: '10px' }} />
+                                            </span>
+                                        )}
                                         <FieldInfo field={field} />
                                     </>
                                 )}

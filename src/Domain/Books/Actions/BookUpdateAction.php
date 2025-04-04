@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\FileBag;
 
 class BookUpdateAction
 {
-    public function __invoke(Book $book, array $data, FileBag $img_path): BookResource
+    public function __invoke(Book $book, array $data, FileBag $image): BookResource
     {
         $updateData = [
             'name' => $data['name'],
@@ -21,8 +21,8 @@ class BookUpdateAction
 
         $book->update($updateData);
         
-        foreach ($img_path as $img) {
-            $book->updateMedia($img)->toMediaCollection('images', 'images');
+        foreach ($image as $img) {
+            $book->updateMedia($img, 'images')->toMediaCollection('images', 'images');
         }
 
         return BookResource::fromModel($book->fresh());

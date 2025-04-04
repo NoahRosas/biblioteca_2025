@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('zones', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            //identificador por si luego da problema con los nombres
+            $table->integer('number');
             $table->string('name')->references('name')->on('genres')->onDelete('cascade');
             $table->foreignUuid('floor_id')->references("id")->on("floors")->onDelete('cascade');
             $table->integer('max_bookshelves');

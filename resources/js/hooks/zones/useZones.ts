@@ -4,6 +4,7 @@ import axios from "../../lib/axios";
 export interface Zone {
   id: string;
   name: string;
+  number:number;
   max_bookshelves: number;
   bookshelves_count:number;
   floor_id:string;

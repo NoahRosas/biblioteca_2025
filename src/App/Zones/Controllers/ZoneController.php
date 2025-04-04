@@ -11,6 +11,7 @@ use Domain\Zones\Actions\ZoneUpdateAction;
 use Domain\Zones\Models\Zone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class ZoneController extends Controller
@@ -31,6 +32,7 @@ class ZoneController extends Controller
     {
         $genres = Genre::select('id', 'name')->get()->toArray();
         $floors = Floor::withCount('zones')->get()->toArray();
+        
         return Inertia::render('zones/Create', ['floors' => $floors, 'genres' => $genres]);
     }
 
@@ -42,6 +44,7 @@ class ZoneController extends Controller
         // dd($request->all());
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
+            'number' => ['integer', 'min:1', Rule::unique('zones', 'number')->where(fn($query) => $query->where('floor_id', $request->floor_id)) ],
             'max_bookshelves' => ['required'],
             'floor_id' => ['required'],
         ]);
@@ -87,7 +90,7 @@ class ZoneController extends Controller
     public function update(Request $request, Zone $zone, ZoneUpdateAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', Rule::unique('zones', 'name')],
             'max_bookshelves' => ['required'],
             'floor_id' => ['required'],
             

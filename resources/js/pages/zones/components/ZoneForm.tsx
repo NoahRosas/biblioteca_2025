@@ -3,7 +3,6 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Genre } from '@/hooks/genres/useGenres';
 import { useTranslations } from '@/hooks/use-translations';
 import { router } from '@inertiajs/react';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
@@ -15,6 +14,7 @@ export interface ZoneFormProps {
     initialData?: {
         id: string;
         name: string;
+        number: number;
         max_bookshelves: number;
         floor_id: string;
     };
@@ -49,6 +49,7 @@ export function ZoneForm({ initialData, page, perPage, floors, genres }: ZoneFor
     const form = useForm({
         defaultValues: {
             name: initialData?.name ?? '',
+            number:initialData?.number ?? '',
             max_bookshelves: initialData?.max_bookshelves ?? '',
             floor_id: initialData?.floor_id ?? '',
         },
@@ -119,6 +120,50 @@ export function ZoneForm({ initialData, page, perPage, floors, genres }: ZoneFor
                                                 ))}
                                             </SelectContent>
                                         </Select>
+                                        <FieldInfo field={field} />
+                                    </>
+                                )}
+                            </form.Field>
+                        </div>
+                        
+                        {/* Number field */}
+                        <div className="space-y-1">
+                            <form.Field
+                                name="number"
+                                validators={{
+                                    onChangeAsync: async ({ value }) => {
+                                        await new Promise((resolve) => setTimeout(resolve, 500));
+                                        const numValue = Number(value);
+                                        return !numValue
+                                            ? t('ui.validation.required', { attribute: t('ui.zones.fields.max_bookshelves').toLowerCase() })
+                                            : numValue < 0
+                                              ? t('ui.validation.required', { attribute: t('ui.zones.fields.max_bookshelves').toLowerCase() })
+                                              : undefined;
+                                    },
+                                }}
+                            >
+                                {(field) => (
+                                    <>
+                                        <div className="mt-3 mb-2 flex">
+                                            <Label htmlFor={field.name} className="mt-0.5 ml-1">
+                                                {t('ui.zones.fields.number')}
+                                            </Label>
+                                        </div>
+
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            type="number"
+                                            value={Number(field.state.value)}
+                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            onBlur={field.handleBlur}
+                                            max={30}
+                                            min={1}
+                                            placeholder={t('ui.zones.placeholders.number')}
+                                            disabled={form.state.isSubmitting}
+                                            required={true}
+                                            autoComplete="off"
+                                        />
                                         <FieldInfo field={field} />
                                     </>
                                 )}

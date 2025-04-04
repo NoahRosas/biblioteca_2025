@@ -15,6 +15,7 @@ interface EditBookProps extends PageProps{
     book: {
         id:string,
         name: string,
+        number: number,
         author: string,
         publisher: string,
         num_pages: number,
@@ -31,11 +32,11 @@ interface EditBookProps extends PageProps{
     page?: string;
     perPage?: string;
     genres:Genre[];
-    img_path: File,
+    image_path:string,
     
 }
 
-export default function EditBook({book, floors, zones,bookshelves, page, perPage, genres, img_path, path}:EditBookProps) {
+export default function EditBook({book, floors, zones,bookshelves, page, perPage, genres, image_path}:EditBookProps) {
   const { t } = useTranslations();
   return (
         <BookLayout title={t('ui.books.edit')}>
@@ -45,7 +46,7 @@ export default function EditBook({book, floors, zones,bookshelves, page, perPage
                 
             </h3>
             <p className="text-s text-center mb-2 text-muted-foreground">{t('ui.books.extra_info.edit')}</p>
-            <BookForm initialData={book} floors={floors} zones={zones} bookshelves={bookshelves} page={page} perPage={perPage} genres={genres} img_path={img_path} />
+            <BookForm initialData={book} floors={floors} zones={zones} bookshelves={bookshelves} page={page} perPage={perPage} genres={genres} image_path={image_path}/>
         </BookLayout>
   );
 }

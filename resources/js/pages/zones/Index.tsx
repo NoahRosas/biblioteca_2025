@@ -79,6 +79,11 @@ export default function ZonesIndex() {
                     format: (value) =>  t(`ui.genres.names.${value}`)
                 }),
                 createTextColumn<Zone>({
+                    id: 'number',
+                    header: t('ui.zones.columns.number') || 'Zone number',
+                    accessorKey: 'number',
+                }),
+                createTextColumn<Zone>({
                     id: 'max_bookshelves',
                     header: t('ui.zones.columns.max_bookshelves') || 'Max bookshelves',
                     accessorKey: 'max_bookshelves',
@@ -159,6 +164,12 @@ export default function ZonesIndex() {
                                         label: t('ui.zones.filters.name') || 'Nombre',
                                         type: 'text',
                                         placeholder: t('ui.zones.filters.name') || 'Nombre...',
+                                    },
+                                    {
+                                        id: 'number',
+                                        label: t('ui.zones.filters.number') || 'Number',
+                                        type: 'number',
+                                        placeholder: t('ui.zones.filters.number') || 'Number...',
                                     },
                                     {
                                         id: 'max_bookshelves',

@@ -8,7 +8,7 @@ import { PageProps } from "@/types";
 interface CreateZoneProps extends PageProps{
     floors: {
         id:string,
-        name:string
+        name:string,
         zones_count:number,
         max_zones:number,
     }[];

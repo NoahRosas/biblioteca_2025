@@ -225,7 +225,7 @@ export const MultiSelect = React.forwardRef<
                           <IconComponent className="h-4 w-4 mr-2" />
                         )}
                         {option?.label}
-                        <Button
+                        <span
                           className="ml-2 h-4 w-4 cursor-pointer"
                           onClick={(event) => {
                             event.stopPropagation();
@@ -238,7 +238,7 @@ export const MultiSelect = React.forwardRef<
                         //     event.stopPropagation();
                         //     toggleOption(value);
                         //   }}
-                        /></Button>
+                        /></span>
                       </Badge>
                     );
                   })}
@@ -252,7 +252,7 @@ export const MultiSelect = React.forwardRef<
                       style={{ animationDuration: `${animation}s` }}
                     >
                       {`+ ${selectedValues.length - maxCount} more`}
-                      <Button
+                      <span
                         className="bg-transparent text-foreground border-foreground/1 hover:bg-transparent cursor-pointer"
                         onClick={(event) => {
                           event.stopPropagation();
@@ -264,7 +264,7 @@ export const MultiSelect = React.forwardRef<
                         //   event.stopPropagation();
                         //   clearExtraOptions();
                         // }}
-                      /></Button>
+                      /></span>
                     </Badge>
                   )}
                 </div>

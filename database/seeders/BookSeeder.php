@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Domain\Books\Models\Book;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
 use Illuminate\Database\Seeder;
 
 class BookSeeder extends Seeder
@@ -13,6 +13,12 @@ class BookSeeder extends Seeder
      */
     public function run(): void
     {
-        Book::factory(200)->create();
+        Book::factory(100)->create();
+
+        $books = Book::all();
+
+        foreach ($books as $book) {
+            $book->addMediaFromUrl('https://img.freepik.com/free-vector/abstract-elegant-winter-book-cover_23-2148798745.jpg')->toMediaCollection('images');
+        }
     }
 }

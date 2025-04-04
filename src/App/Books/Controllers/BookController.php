@@ -4,6 +4,7 @@ namespace App\Books\Controllers;
 use App\Core\Controllers\Controller;
 use Domain\Books\Actions\BookDestroyAction;
 use Domain\Books\Actions\BookStoreAction;
+use Domain\Books\Actions\BookUpdateAction;
 use Domain\Books\Models\Book;
 use Domain\Bookshelves\Models\Bookshelf;
 use Domain\Floors\Models\Floor;
@@ -81,6 +82,7 @@ class BookController extends Controller
      */
     public function edit(Request $request, Book $book)
     {
+        
         $floors = Floor::select('id', 'name')->get()->toArray();
         $zones = Zone::all();
         $bookshelves = Bookshelf::withCount('books')->get()->toArray();
@@ -89,15 +91,17 @@ class BookController extends Controller
                 'value' => $genre->name
             ];
         });
-        $image = $book->getMedia('images');
+        
+        $image_path = $book->getFirstMediaUrl('images');
+        // dd($image, $image_path);
+        
         return Inertia::render('books/Edit', [
             'book' => $book,
             'floors' => $floors,
             'zones' => $zones,
             'bookshelves'=> $bookshelves,
             'genres' => $genres,
-            'img_path' => $image[0],
-            'path' => $image[0]->getPath(),
+            'image_path'=>$image_path,
             'page' => $request->query('page'),
             'perPage' => $request->query('perPage')]);
     }
@@ -106,9 +110,36 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Book $book, BookUpdateAction $action)
     {
-        //
+        // dd($request);
+        $validator = Validator::make($request->all(), [
+            'name' => ['required'],
+            'author' => ['required'],
+            'publisher' => ['required'],
+            'num_pages' => ['required'],
+            'bookshelf_id' => ['required'],
+            'genres' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+
+        $action($book, $validator->validated(), $request->files);
+
+        $redirectUrl = route('books.index');
+
+        // Añadir parámetros de página a la redirección si existen
+        if ($request->has('page')) {
+            $redirectUrl .= "?page=" . $request->query('page');
+            if ($request->has('perPage')) {
+                $redirectUrl .= "&per_page=" . $request->query('perPage');
+            }
+        }
+
+        return redirect($redirectUrl)
+            ->with('success', __('messages.books.updated'));
     }
 
     /**

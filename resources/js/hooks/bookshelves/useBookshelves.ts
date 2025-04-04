@@ -7,6 +7,7 @@ export interface Bookshelf {
   max_books: number;
   floor_id:string;
   zone_id:string;
+  zone_number:number;
   books_count:number;
   created_at: string;
 }

@@ -28,7 +28,8 @@ class ZoneFactory extends Factory
         $floor = Floor::all()->random();
         $genres = Genre::all()->pluck('name')->toArray();
         return [
-            'name' => fake()->randomElement($array=$genres),
+            'name' => fake()->randomElement($genres),
+            'number' => fake()->numberBetween(1, $floor->max_zones),
             'max_bookshelves' => fake()->numberBetween(50, 100),
             'floor_id' => $floor->id
             

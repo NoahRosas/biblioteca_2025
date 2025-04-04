@@ -11,6 +11,7 @@ use Domain\Floors\Models\Floor;
 use Domain\Zones\Models\Zone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class BookshelfController extends Controller
@@ -41,7 +42,7 @@ class BookshelfController extends Controller
     public function store(Request $request, BookshelfStoreAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'number' => ['required'],
+            'number' => ['required', Rule::unique('bookshelves', 'number')->where(fn($query) => $query->where('zone_id', $request->zone_id))],
             'zone_id' => ['required'],
             'max_books' => ['required'],
         ]);
@@ -87,7 +88,7 @@ class BookshelfController extends Controller
     public function update(Request $request, Bookshelf $bookshelf, BookshelfUpdateAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'number' => ['required'],
+            'number' => ['required', Rule::unique('bookshelves', 'number')],
             'max_books' => ['required'],
             'zone_id' => ['required'],
         ]);

@@ -57,7 +57,7 @@ class FloorController extends Controller
         // dd(request()->all());
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255',
-        Rule::unique('floors', 'name')],
+                Rule::unique('floors', 'name')],
             'max_zones' => ['required'],
         ]);
 

@@ -196,7 +196,7 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones }: Boo
                                                 .filter((zone) => zone.floor_id === selectedFloor)
                                                 .map((zone) => (
                                                     <SelectItem key={zone.id} value={zone.id} disabled={zone.bookshelves_count>=zone.max_bookshelves}>
-                                                        {t(`ui.genres.names.${zone.name}`)} - {zone.bookshelves_count}/{zone.max_bookshelves}
+                                                        {t(`ui.genres.names.${zone.name}`)}-{zone.number} - {zone.bookshelves_count}/{zone.max_bookshelves}
                                                     </SelectItem>
                                                 ))}
                                         </SelectContent>

@@ -90,6 +90,11 @@ export default function BookshelvesIndex() {
                     format: (value) =>  t(`ui.genres.names.${value}`)
                 }),
                 createTextColumn<Bookshelf>({
+                    id: 'zone_number',
+                    header: t('ui.bookshelves.columns.zone_number') || 'Zone ubication',
+                    accessorKey: 'zone_number',
+                }),
+                createTextColumn<Bookshelf>({
                     id: 'floor_id',
                     header: t('ui.bookshelves.columns.floor_id') || 'Floor ubication',
                     accessorKey: 'floor_id',

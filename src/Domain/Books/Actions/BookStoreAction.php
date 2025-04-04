@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\FileBag;
 
 class BookStoreAction
 {
-    public function __invoke(array $data, FileBag $img_path):BookResource
+    public function __invoke(array $data, FileBag $image):BookResource
     {
         $book = Book::create([
             'name' => $data['name'],
@@ -19,7 +19,7 @@ class BookStoreAction
             'genres' => $data['genres'],
         ]);
 
-        foreach ($img_path as $img) {
+        foreach ($image as $img) {
             $book->addMedia($img)->toMediaCollection('images', 'images');
         }
         return BookResource::fromModel($book);
