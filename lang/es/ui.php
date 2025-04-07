@@ -113,6 +113,7 @@ return [
         'title' => 'Usuarios',
         'create' => 'Crear Usuario',
         'edit' => 'Editar Usuario',
+        'description' => 'Gestiona los usuarios del sistema',
         'fields' => [
             'name' => 'Nombre',
             'email' => 'Email',
@@ -180,7 +181,6 @@ return [
             'name' => 'Nombre completo del usuario',
             'email' => 'correo@ejemplo.com',
             'password' => 'Contraseña segura',
-            'search' => 'Buscar usuarios...',
         ],
         'buttons' => [
             'new' => 'Nuevo Usuario',
@@ -215,6 +215,7 @@ return [
         'title' => 'Plantas',
         'create' => 'Crear Planta',
         'edit' => 'Editar Planta',
+        'description' => 'Gestiona las plantas del sistema',
         'buttons' =>[
             'new' => 'Crear Planta'
         ],
@@ -223,31 +224,22 @@ return [
             'edit_floor' => 'Introduce los datos para editar esta zona',
         ],
         'titles' => [
-            '1' => 'Primera Planta' ,
-            '2' => 'Segunda Planta' ,
-            '3' => 'Tercera Planta' ,
-            '4' => 'Cuarta Planta' ,
-            '5' => 'Quinta Planta' ,
-            '6' => 'Sexta Planta' ,
-            '7' => 'Séptima Planta' ,
-            '8' => 'Octava Planta' ,
-            '9' => 'Novena Planta' ,
-            '10' => 'Décima Planta' ,
+            'floor' => 'Planta' ,
         ],
         'fields' =>[
             'name' => 'Nombre de la planta',
             'max_zones' => 'Máximo número de zonas',
         ],
         'columns' => [
-            'max_zones' => 'Máximo de zonas',
+            'max_zones' => 'Máximo número de zonas',
         ],
         'placeholders' => [
-            'name' => 'Nombre de la planta',
-            'search' => 'Buscar planta...',
+            'name' => 'Nombre de la planta...',
+            'max_zones' => 'Máximo número de zonas...',
         ],
         'filters' => [
-            'search' => 'Buscar',
             'name' => 'Nombre de la planta',
+            'max_zones' => 'Máximo número de zonas',
         ],
         'error_loading' => 'Error al cargar las plantas. Inténtalo de nuevo.',
         'deleted_error' => 'Error al eliminar la planta',
@@ -256,6 +248,7 @@ return [
         'title' => 'Zonas',
         'create' => 'Crear zona',
         'edit' => 'Editar zona',
+        'description' => 'Gestiona las zonas del sistema',
         'buttons' =>[
             'new' => 'Crear Zona'
         ],
@@ -270,17 +263,21 @@ return [
         ],
         'fields' =>[
             'name' => 'Nombre de la zona',
-            'floor_name' => 'Planta en la que está ubicada',
+            'number' => 'Número de la zona',
+            'floor_id' => 'Planta en la que está ubicada',
             'max_bookshelves' => 'Capacidad de estanterías',
         ],
         'placeholders' => [
             'name' => 'Nombre de la zona...',
-            'search' => 'Buscar zonas...',
-            'floor_name' => 'Nombre de la planta...'
+            'number' => 'Número de la zona...',
+            'max_bookshelves' => 'Capacidad de estanterías...',
+            'floor_id' => 'Planta en la que está ubicada...',
         ],
         'filters' => [
-            'search' => 'Buscar',
             'name' => 'Nombre de la zona',
+            'number' => 'Número de la zona',
+            'max_bookshelves' => 'Capacidad de estanterías',
+            'floor_id' => 'Planta en la que está ubicada',
         ],
         'error_loading' => 'Error al cargar las zonas. Inténtalo de nuevo.',
         'deleted_error' => 'Error al eliminar la zona',
@@ -289,6 +286,7 @@ return [
         'title' => 'Estanterías',
         'create' => 'Crear estantería',
         'edit' => 'Editar estantería',
+        'description' => 'Gestiona las estanterías del sistema',
         'buttons' =>[
             'new' => 'Crear Estantería'
         ],
@@ -299,6 +297,7 @@ return [
         'columns' => [
             'number' => 'Número de estantería',
             'max_books' => 'Capacidad de libros',
+            'zone_name'=> 'Género de la zona',
             'zone_id' => 'Zona en la que está ubicada',
             'floor_id' => 'Planta en la que está ubicada',
         ],
@@ -306,17 +305,22 @@ return [
             'number' => 'Número de estantería',
             'floor_id' => 'Planta en la que está ubicada',
             'zone_id' => 'Zona en la que está ubicada',
+            'zone_name'=> 'Género de la zona',
             'max_books' => 'Capacidad de libros'
         ],
         'placeholders' => [
             'number' => 'Número de estantería...',
-            'search' => 'Buscar estanterías...',
             'floor_id'=> 'Planta en la que está ubicada...',
-            'zone_id' => 'Zona en la que está ubicada...'
+            'zone_id' => 'Zona en la que está ubicada...',
+            'zone_name'=> 'Género de la zona...',
+            'max_books' => 'Capacidad de libros...'
         ],
         'filters' => [
-            'search' => 'Buscar',
             'number' => 'Número de estantería',
+            'floor_id'=> 'Planta en la que está ubicada',
+            'zone_id' => 'Zona en la que está ubicada',
+            'zone_name'=> 'Género de la zona',
+            'max_books' => 'Capacidad de libros'
         ],
         'error_loading' => 'Error al cargar las zonas. Inténtalo de nuevo.',
         'deleted_error' => 'Error al eliminar la estantería',
@@ -325,6 +329,8 @@ return [
         'title' => 'Libros',
         'create' => 'Crear libro',
         'edit' => 'Editar libro',
+        'description' => 'Gestiona los libros del sistema',
+
         'buttons' =>[
             'new' => 'Crear Libro'
         ],
@@ -340,6 +346,7 @@ return [
             'genres' => 'Géneros',
             'bookshelf_id' => 'Número de estantería en el que está',
             'zone_id' => 'Zona en la que está ubicado',
+            'zone_name' => 'Género de la zona en la que está',
             'floor_id' => 'Planta en la que está ubicado',
         ],
         'fields' => [
@@ -361,6 +368,7 @@ return [
             'genres' => 'Géneros...',
             'bookshelf_id' => 'Número de estantería en el que está...',
             'zone_id' => 'Zona en la que está ubicado...',
+            'zone_name' => 'Género de la zona en la que está...',
             'floor_id' => 'Planta en la que está ubicada...',
         ],
         'filters' => [

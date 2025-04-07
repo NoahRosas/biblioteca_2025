@@ -27,7 +27,7 @@ export default function CreateFloor({floors, genres}:CreateZoneProps) {
                 {t('ui.zones.create')}
                 
             </h3>
-            <p className="text-s text-center mb-2 text-muted-foreground">{t('ui.zones.extra_info.create_zone')}</p>
+            <p className="text-s text-center mb-2 text-muted-foreground">{t('ui.zones.extra_info.create')}</p>
             <ZoneForm floors={floors} genres={genres} />
         </ZoneLayout>
   );

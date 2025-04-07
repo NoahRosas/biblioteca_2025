@@ -74,7 +74,7 @@ class ZoneController extends Controller
     public function edit(Request $request, Zone $zone)
     { 
         $genres = Genre::select('id', 'name')->get()->toArray();
-        $floors = Floor::select('id', 'name')->get()->toArray();
+        $floors = Floor::withCount('zones')->get()->toArray();
         return Inertia::render('zones/Edit', [
             'zone' => $zone,
             'genres' => $genres,

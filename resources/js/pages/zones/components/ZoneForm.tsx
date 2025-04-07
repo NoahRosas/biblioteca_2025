@@ -187,7 +187,7 @@ export function ZoneForm({ initialData, page, perPage, floors, genres }: ZoneFor
                                     <>
                                         <div className="mt-3 mb-2 flex">
                                             <Label htmlFor={field.name} className="mt-0.5 ml-1">
-                                                {t('ui.zones.fields.floor_name')}
+                                                {t('ui.zones.fields.floor_id')}
                                             </Label>
                                         </div>
 
@@ -196,12 +196,12 @@ export function ZoneForm({ initialData, page, perPage, floors, genres }: ZoneFor
                                             console.log(value);
                                             }}>
                                             <SelectTrigger>
-                                                <SelectValue placeholder={t('ui.zones.placeholders.floor_name')} />
+                                                <SelectValue placeholder={t('ui.zones.placeholders.floor_id')} />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {floors?.map((floor) => (
                                                     <SelectItem key={floor.id} value={floor.id} disabled={floor.zones_count>=floor.max_zones}>
-                                                        {t(`ui.floors.titles.${floor.name}`)} - {floor.zones_count}/{floor.max_zones}
+                                                        {t(`ui.floors.titles.floor`)} {floor.name} - {floor.zones_count}/{floor.max_zones}
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>

@@ -18,6 +18,7 @@ class FloorResource extends Data
 
     public static function fromModel(Floor $floor): self
     {
+        $fas  = Floor::withCount('zones')->find($floor->id);
         return new self(
             id: $floor->id,
             name: $floor->name,

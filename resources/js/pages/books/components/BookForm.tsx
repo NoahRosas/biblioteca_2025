@@ -369,7 +369,7 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                 <SelectContent>
                                     { floors?.map((floor) => (
                                         <SelectItem key={floor.id} value={floor.id}>
-                                            {t(`ui.floors.titles.${floor.name}`)}
+                                            {t(`ui.floors.titles.floor`)} {floor.name}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>

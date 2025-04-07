@@ -43,7 +43,7 @@ export interface PaginatedResponse<T> {
 }
 
 interface UseUsersParams {
-  search?: string;
+  search?: any[];
   page?: number;
   perPage?: number;
 }

@@ -7,12 +7,15 @@ use Domain\Users\Models\User;
 
 class UserIndexAction
 {
-    public function __invoke(?string $search = null, int $perPage = 10)
+    public function __invoke(?array $search = null, int $perPage = 10)
     {
+        $username = $search[0];
+        $email = $search[1];
         $users = User::query()
-            ->when($search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
+            ->when($username !== 'null', function ($query) use ($username) {
+                $query->where('name', 'like', "%{$username}%");
+            })->when($email !== 'null', function ($query) use ($email) {
+                $query->where('email', 'like', "%{$email}%");
             })
             ->latest()
             ->paginate($perPage);

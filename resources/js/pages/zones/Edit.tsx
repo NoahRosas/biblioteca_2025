@@ -9,6 +9,7 @@ interface EditZoneProps extends PageProps{
     zone: {
         id:string,
         name:string,
+        number:number,
         max_bookshelves:number,
         floor_id:string
     };
@@ -16,7 +17,9 @@ interface EditZoneProps extends PageProps{
     perPage?: string;
     floors: {
         id:string,
-        name:string
+        name:string,
+        zones_count:number,
+        max_zones:number,
     }[];
     genres: {
         id:string,
@@ -33,7 +36,7 @@ export default function EditZone({zone, page, perPage, floors, genres}:EditZoneP
                 {t('ui.zones.edit')}
                 
             </h3>
-            <p className="text-s text-center mb-2 text-muted-foreground">{t('ui.zones.extra_info.edit_zone')}</p>
+            <p className="text-s text-center mb-2 text-muted-foreground">{t('ui.zones.extra_info.edit')}</p>
             <ZoneForm initialData={zone} page={page} perPage={perPage} floors={floors} genres={genres} />
         </ZoneLayout>
   );

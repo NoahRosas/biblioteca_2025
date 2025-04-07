@@ -161,7 +161,7 @@ export default function ZonesIndex() {
                                         id: 'name',
                                         label: t('ui.zones.filters.name') || 'Nombre',
                                         type: 'text',
-                                        placeholder: t('ui.zones.filters.name') || 'Nombre...',
+                                        placeholder: t('ui.zones.placeholders.name') || 'Nombre...',
                                     },
                                     {
                                         id: 'number',
@@ -169,19 +169,19 @@ export default function ZonesIndex() {
                                         type: 'number',
                                         min: 1,
                                         step:1,
-                                        placeholder: t('ui.zones.filters.number') || 'Number...',
+                                        placeholder: t('ui.zones.placeholders.number') || 'Number...',
                                     },
                                     {
                                         id: 'max_bookshelves',
-                                        label: t('ui.zones.columns.max_bookshelves') || 'Max bookshelves',
+                                        label: t('ui.zones.filters.max_bookshelves') || 'Max bookshelves',
                                         type: 'number',
-                                        placeholder: t('ui.zones.columns.max_bookshelves') || 'Max bookshelves...',
+                                        placeholder: t('ui.zones.placeholders.max_bookshelves') || 'Max bookshelves...',
                                     },
                                     {
                                         id: 'floor_id',
-                                        label: t('ui.zones.columns.floor_id') || 'Floor Ubication',
+                                        label: t('ui.zones.filters.floor_id') || 'Floor Ubication',
                                         type: 'number',
-                                        placeholder: t('ui.zones.columns.floor_id') || 'Floor Ubication...',
+                                        placeholder: t('ui.zones.placeholders.floor_id') || 'Floor Ubication...',
                                     },
                                 ] as FilterConfig[]
                             }

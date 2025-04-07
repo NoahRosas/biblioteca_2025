@@ -169,31 +169,31 @@ export default function BookshelvesIndex() {
                                         id: 'number',
                                         label: t('ui.bookshelves.filters.number') || 'Número',
                                         type: 'text',
-                                        placeholder: t('ui.bookshelves.filters.number') || 'Número...',
+                                        placeholder: t('ui.bookshelves.placeholders.number') || 'Número...',
                                     },
                                     {
                                         id: 'max_books',
                                         label: t('ui.bookshelves.columns.max_books') || 'Max books',
                                         type: 'number',
-                                        placeholder: t('ui.bookshelves.columns.max_books') || 'Max books...',
+                                        placeholder: t('ui.bookshelves.placeholders.max_books') || 'Max books...',
                                     },
                                     {
                                         id: 'zone_id',
                                         label: t('ui.bookshelves.columns.zone_id') || 'Zone name',
                                         type: 'number',
-                                        placeholder: t('ui.bookshelves.columns.zone_id') || 'Zone name...',
+                                        placeholder: t('ui.bookshelves.placeholders.zone_id') || 'Zone name...',
                                     },
                                     {
                                         id: 'zone_name',
-                                        label: t('ui.bookshelves.columns.zone_id') || 'Zone number',
+                                        label: t('ui.bookshelves.columns.zone_name') || 'Zone number',
                                         type: 'text',
-                                        placeholder: t('ui.bookshelves.columns.zone_number') || 'Zone number...',
+                                        placeholder: t('ui.bookshelves.placeholders.zone_name') || 'Zone number...',
                                     },
                                     {
                                         id: 'floor_id',
                                         label: t('ui.bookshelves.columns.floor_id') || 'Floor name',
                                         type: 'text',
-                                        placeholder: t('ui.bookshelves.columns.floor_id') || 'Floor name...',
+                                        placeholder: t('ui.bookshelves.placeholders.floor_id') || 'Floor name...',
                                     },
                                 ] as FilterConfig[]
                             }

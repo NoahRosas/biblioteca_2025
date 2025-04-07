@@ -77,7 +77,7 @@ export default function FloorsIndex() {
                     id: 'name',
                     header: t('ui.floors.title') || 'Name',
                     accessorKey: 'name',
-                    format: (value)=>t(`ui.floors.titles.${value}`)
+                    format: (value)=>t(`ui.floors.titles.floor`)+' '+value
                 }),
                 createTextColumn<Floor>({
                     id: 'max_zones',
@@ -146,13 +146,13 @@ export default function FloorsIndex() {
                                         id: 'name',
                                         label: t('ui.floors.filters.name') || 'Nombre',
                                         type: 'text',
-                                        placeholder: t('ui.floors.filters.name') || 'Nombre...',
+                                        placeholder: t('ui.floors.placeholders.name') || 'Nombre...',
                                     },
                                     {
                                         id: 'max_zones',
-                                        label: t('ui.floors.columns.max_zones') || 'Max zones',
+                                        label: t('ui.floors.filters.max_zones') || 'Max zones',
                                         type: 'number',
-                                        placeholder: t('ui.floors.columns.max_zones') || 'Max zones...',
+                                        placeholder: t('ui.floors.placeholders.max_zones') || 'Max zones...',
                                     },
                                 ] as FilterConfig[]
                             }

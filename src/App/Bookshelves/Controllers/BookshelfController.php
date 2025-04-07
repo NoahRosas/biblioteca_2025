@@ -72,8 +72,7 @@ class BookshelfController extends Controller
     public function edit(Request $request, Bookshelf $bookshelf)
     {
         $floors = Floor::select('id', 'name')->get()->toArray();
-        $zones = Zone::all();
-        
+        $zones = Zone::withCount('bookshelves')->get()->toArray();        
         return Inertia::render('bookshelves/Edit', [
             'bookshelf' => $bookshelf,
             'floors' => $floors,
