@@ -10,6 +10,7 @@ return [
             'zones' => 'Zones',
             'bookshelves' => 'Bookshelves',
             'books' => 'Books',
+            'loans' => 'Loans',
             'repository' => 'Repository',
             'documentation' => 'Documentation',
         ],
@@ -404,5 +405,51 @@ return [
             'Philosophy' => 'Philosophy',
             'Robotics' => 'Robotics',
         ],
+    ],
+
+    'loans' => [
+        'title' => 'Loans',
+        'create' => 'Create loan',
+        'edit' => 'Edit loan',
+        'description' => 'Manage loans in the system',
+        'buttons' =>[
+            'new' => 'Create Loan'
+        ],
+        'extra_info' =>[
+            'create' => 'Completa el formulario para crear un nuevo préstamo',
+            'edit' => 'Introduce los datos para editar este préstamo',
+        ],
+        'columns' => [
+            'user_email' => 'User',
+            'book_name' => 'Book title',
+            'book_ISBN' => 'ISBN',
+            'created_at' => 'Expedit date',
+            'end_loan' => 'Expiration date',
+            'borrowed' => 'Borrowed now',
+            'is_overdue' => 'Overdue',
+        ],
+        'fields' => [
+            'user_email' => 'User email',
+            'book_id' => 'Book id',
+            'created_at' => 'Expedit date',
+            'end_loan' => 'Expiration date',
+        ],
+        'placeholders' => [
+            'user_email' => 'User email...',
+            'book_id' => 'Book id...',
+            'created_at' => 'Expedit date...',
+            'end_loan' => 'Expiration date...',
+        ],
+        'filters' => [
+            'user_email' => 'User',
+            'book_name' => 'Book title',
+            'book_ISBN' => 'ISBN',
+            'created_at' => 'Expedit date',
+            'end_loan' => 'Expiration date',
+            'borrowed' => 'Borrowed now',
+            'is_overdue' => 'Overdue',
+        ],
+        'deleted_error' => 'Error deleting loan',
+        'error_loading' => 'Error loading loans. Please, try again.',
     ],
 ];

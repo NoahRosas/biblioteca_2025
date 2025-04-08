@@ -12,6 +12,7 @@ class BookResource extends Data
 {
     public function __construct(
         public readonly string $id,
+        public readonly string $ISBN,
         public readonly string $name,
         public readonly string $author,
         public readonly string $publisher,
@@ -34,6 +35,7 @@ class BookResource extends Data
 
         return new self(
             id: $book->id,
+            ISBN:$book->ISBN,
             name: $book->name,
             author:$book->author,
             publisher: $book->publisher,

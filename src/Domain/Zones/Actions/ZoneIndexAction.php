@@ -15,11 +15,11 @@ class ZoneIndexAction
         $number = $search[1];
         $max_bookshelves = $search[2];
         $floor = $search[3];
-
-        $floor_id = Floor::query()->when($floor!== 'null', function ($query) use ($floor){
+        // dd($floor);
+        $floor_id = Floor::query()->when($floor !== 'null', function ($query) use ($floor){
             $query->where('name', 'like', $floor);
         })->first()->id;
-
+        // dd($floor_id);
         $zones = Zone::query()
             ->when($name !== "null", function ($query) use ($name) {
 
@@ -33,9 +33,9 @@ class ZoneIndexAction
 
                 $query->where('max_bookshelves', '=', $max_bookshelves);
             })
-            ->when($floor_id !== "null", function ($query) use ($floor_id) {
+            ->when($floor_id !== 'null', function ($query) use ($floor_id) {
 
-                $query->where('floor_id', '=', $floor_id);
+                $query->where('floor_id', 'like', $floor_id);
             })
             ->latest()
             ->paginate($perPage);

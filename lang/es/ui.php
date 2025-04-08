@@ -11,6 +11,7 @@ return [
             'zones' => 'Zonas',
             'bookshelves' => 'Estanterías',
             'books' => 'Libros',
+            'loans' => 'Préstamos',
             'repository' => 'Repositorio',
             'documentation' => 'Documentación',
         ],
@@ -402,5 +403,55 @@ return [
             'Philosophy' => 'Filosofía',
             'Robotics' => 'Robótica',
         ],
+    ],
+
+    'loans' => [
+        'title' => 'Préstamos',
+        'create' => 'Crear préstamo',
+        'edit' => 'Editar préstamo',
+        'description' => 'Gestiona los préstamo del sistema',
+        'buttons' =>[
+            'new' => 'Crear Préstamo'
+        ],
+        'extra_info' =>[
+            'create' => 'Completa el formulario para crear un nuevo préstamo',
+            'edit' => 'Introduce los datos para editar este préstamo',
+        ],
+        'columns' => [
+            'user_email' => 'Usuario',
+            'book_name' => 'Título del libro',
+            'book_ISBN' => 'ISBN',
+            'created_at' => 'Fecha creación',
+            'end_loan' => 'Fecha vencimiento',
+            'borrowed' => 'Prestado actualmente',
+            'is_overdue' => 'Con retraso',
+        ],
+        'fields' => [
+            'user_email' => 'Email de usuario',
+            'book_name' => 'Título del libro',
+            'book_ISBN' => 'ISBN',
+            'created_at' => 'Fecha expedición',
+            'end_loan' => 'Fecha vencimiento',
+            'borrowed' => 'Prestado actualmente',
+            'is_overdue' => 'Con retraso',
+        ],
+        'placeholders' => [
+            'user_email' => 'Email de usuario...',
+            'book_name' => 'Título del libro...',
+            'book_ISBN' => 'ISBN...',
+            'created_at' => 'Fecha expedición...',
+            'end_loan' => 'Fecha vencimiento...',
+        ],
+        'filters' => [
+            'user_email' => 'Email de usuario',
+            'book_name' => 'Título del libro',
+            'book_ISBN' => 'ISBN',
+            'created_at' => 'Fecha expedición',
+            'end_loan' => 'Fecha vencimiento',
+            'borrowed' => 'Prestado actualmente',
+            'is_overdue' => 'Con retraso',
+        ],
+        'error_loading' => 'Error al cargar los préstamo. Inténtalo de nuevo.',
+        'deleted_error' => 'Error al eliminar el préstamo',
     ],
 ];

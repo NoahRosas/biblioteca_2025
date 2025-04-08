@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
+            $table->string('ISBN');
             $table->string('name');
             $table->string('author');
             $table->string('publisher');

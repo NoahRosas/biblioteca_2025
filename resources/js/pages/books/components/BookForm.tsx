@@ -54,7 +54,7 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
         floorNow = undefined;
 
     if (initialData) {
-        zoneNow = bookshelves.filter((bookshelf) => bookshelf.id === initialData?.bookshelf_id)[0].zone_name;
+        zoneNow = bookshelves.filter((bookshelf) => bookshelf.id === initialData?.bookshelf_id)[0].zone_id;
         floorNow = zones.filter((zone) => zone.id === zoneNow)[0].floor_id;
     }
     const [selectedZone, setSelectedZone] = useState<string | undefined>(zoneNow ?? undefined);

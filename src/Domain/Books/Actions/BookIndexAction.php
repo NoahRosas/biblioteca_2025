@@ -15,14 +15,15 @@ class BookIndexAction
     public function __invoke(?array $search = null, int $perPage = 10){
         
         $name = $search[0];
-        $author = $search[1];
-        $publisher = $search[2];
-        $num_pages = $search[3];
-        $genres = $search[4];
-        $bookshelf_number = $search[5];
-        $zone = $search[6];
-        $zone_name = $search[7];
-        $floor = $search[8];
+        $ISBN = $search[1];
+        $author = $search[2];
+        $publisher = $search[3];
+        $num_pages = $search[4];
+        $genres = $search[5];
+        $bookshelf_number = $search[6];
+        $zone = $search[7];
+        $zone_name = $search[8];
+        $floor = $search[9];
 
 
         $floor_id = Floor::query()->when($floor !== 'null', function ($query) use ($floor){
@@ -53,6 +54,8 @@ class BookIndexAction
         $books = Book::query()
             ->when($name !== 'null', function ($query) use ($name) {
                 $query->where('name', 'ILIKE', "%".$name."%");
+            })->when($ISBN !== 'null', function ($query) use ($ISBN) {
+                $query->where('ISBN', 'ILIKE', "%".$ISBN."%");
             })->when($author !== 'null', function ($query) use ($author) {
                 $query->where('author', 'ILIKE', "%".$author."%");
             })->when($publisher !== 'null', function ($query) use ($publisher) {

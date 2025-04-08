@@ -1,5 +1,5 @@
 import { DashboardCard } from '@/components/dashboard/DashboardCard';
-import { Users, User, Building, Cuboid, Container, BookText } from 'lucide-react';
+import { Users, User, Building, Cuboid, Container, BookText, Handshake, Library } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
@@ -43,7 +43,7 @@ export default function Dashboard() {
                     title={t(`ui.bookshelves.title`)}
                     description={t(`ui.bookshelves.description`)}
                     href="/bookshelves"
-                    icon={Container}
+                    icon={Library}
                 />
                 <DashboardCard
                     title={t(`ui.books.title`)}
@@ -51,6 +51,13 @@ export default function Dashboard() {
                     href="/books"
                     icon={BookText}
                 />
+                <DashboardCard
+                    title={t(`ui.loans.title`)}
+                    description={t(`ui.loans.description`)}
+                    href="/loans"
+                    icon={Handshake}
+                />
+
 
                 {/* <CardFlip
                     contentFront={

@@ -1,5 +1,5 @@
 import { useTranslations } from "@/hooks/use-translations";
-import { Container} from "lucide-react";
+import { Container, Library} from "lucide-react";
 import { PageProps } from "@/types";
 import { BookshelfLayout } from "@/layouts/bookshelves/BookshelfLayout";
 import { BookshelfForm } from "./components/BookshelfForm";
@@ -29,7 +29,7 @@ export default function EditBookshelf({bookshelf, page, perPage, floors, zones}:
   return (
         <BookshelfLayout title={t('ui.bookshelves.edit')}>
             <h3 className="flex ml-auto mr-auto mt-2 mb-1">
-                <Container className="mr-1 " />
+                <Library className="mr-1 " />
                 {t('ui.bookshelves.edit')}
                 
             </h3>

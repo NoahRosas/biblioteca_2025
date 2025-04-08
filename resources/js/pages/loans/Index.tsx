@@ -9,19 +9,20 @@ import {
     TableSkeleton,
 } from '@/components/stack-table';
 import { Button } from '@/components/ui/button';
+import { Loan, useDeleteLoan, useLoans } from '@/hooks/loans/useLoans';
+
 import { useTranslations } from '@/hooks/use-translations';
-import { useDeleteZone, useZones, Zone } from '@/hooks/zones/useZones';
-import { ZoneLayout } from '@/layouts/zones/ZoneLayout';
+import { LoanLayout } from '@/layouts/loans/LoanLayout';
 
 import { Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
+import { Check, PencilIcon, PlusIcon, TrashIcon, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 
 
-export default function ZonesIndex() {
+export default function BooksIndex() {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -37,23 +38,22 @@ export default function ZonesIndex() {
     
     // Combine name and email filters into a single search string if they exist
     const combinedSearch = [
-        filters.name ? filters.name : 'null',
-        filters.number ? filters.number : 'null',
-        filters.max_bookshelves ? filters.max_bookshelves : 'null',
-        filters.floor_id ? filters.floor_id : 'null',
+        filters.user_email ? filters.user_email : 'null',
+        filters.book_name ? filters.book_name : 'null',
+        filters.book_ISBN ? filters.book_ISBN : 'null',
     ];
 
     const {
-        data: zones,
+        data: books,
         isLoading,
         isError,
         refetch,
-    } = useZones({
+    } = useLoans({
         search: combinedSearch,
         page: currentPage,
         perPage: perPage,
     });
-    const deleteZoneMutation = useDeleteZone();
+    const deleteLoanMutation = useDeleteLoan();
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -64,63 +64,77 @@ export default function ZonesIndex() {
         setCurrentPage(1); // Reset to first page when changing items per page
     };
 
-    const handleDeleteZone = async (id: string) => {
+    const handleDeleteLoan = async (id: string) => {
         try {
-            await deleteZoneMutation.mutateAsync(id);
+            await deleteLoanMutation.mutateAsync(id);
             refetch();
         } catch (error) {
-            toast.error(t('ui.users.deleted_error') || 'Error deleting user');
-            console.error('Error deleting user:', error);
+            toast.error(t('ui.loans.deleted_error') || 'Error deleting loan');
+            console.error('Error deleting loan:', error);
         }
     };
 
     const columns = useMemo(
         () =>
             [
-                createTextColumn<Zone>({
-                    id: 'name',
-                    header: t('ui.zones.columns.name') || 'Name',
-                    accessorKey: 'name',
-                    format: (value) =>  t(`ui.genres.names.${value}`)
+                createTextColumn<Loan>({
+                    id: 'user_email',
+                    header: t('ui.loans.columns.user_email') || 'Name',
+                    accessorKey: 'user_email',
                 }),
-                createTextColumn<Zone>({
-                    id: 'number',
-                    header: t('ui.zones.columns.number') || 'Zone number',
-                    accessorKey: 'number',
+                createTextColumn<Loan>({
+                    id: 'book_name',
+                    header: t('ui.loans.columns.book_name') || 'Name',
+                    accessorKey: 'book_name',
                 }),
-                createTextColumn<Zone>({
-                    id: 'max_bookshelves',
-                    header: t('ui.zones.columns.max_bookshelves') || 'Max bookshelves',
-                    accessorKey: 'max_bookshelves',
+                createTextColumn<Loan>({
+                    id: 'book_ISBN',
+                    header: t('ui.loans.columns.book_ISBN') || 'Author',
+                    accessorKey: 'book_ISBN',
                 }),
-                createTextColumn<Zone>({
-                    id: 'floor_id',
-                    header: t('ui.zones.columns.floor_id') || 'Floor ubication',
-                    accessorKey: 'floor_id',
-                }),
-                createDateColumn<Zone>({
+                createTextColumn<Loan>({
                     id: 'created_at',
-                    header: t('ui.users.columns.created_at') || 'Created At',
+                    header: t('ui.loans.columns.created_at') || 'Number of pages',
                     accessorKey: 'created_at',
                 }),
+                createTextColumn<Loan>({
+                    id: 'end_loan',
+                    header: t('ui.loans.columns.end_loan') || 'Publisher',
+                    accessorKey: 'end_loan',
+                }),
+                createTextColumn<Loan>({
+                    id: 'borrowed',
+                    header: t('ui.loans.columns.borrowed') || 'Bookshelf number',
+                    accessorKey: 'borrowed',
+                    format: (value) =>{
+                        return value ? <Check/> : <X/>
+                    }
+                }),
+                createTextColumn<Loan>({
+                    id: 'is_overdue',
+                    header: t('ui.loans.columns.is_overdue') || 'Genres',
+                    accessorKey: 'is_overdue',
+                    format: (value) =>{
+                        return value ? <Check/> : <X/>
+                    }
+                }),
                 
-                
-                createActionsColumn<Zone>({
+                createActionsColumn<Loan>({
                     id: 'actions',
                     header: t('ui.users.columns.actions') || 'Actions',
-                    renderActions: (zone) => (
+                    renderActions: (loan) => (
                         <>
-                            <Link href={`/zones/${zone.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-                                <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit zone'}>
+                            <Link href={`/loans/${loan.id}/edit?page=${currentPage}&perPage=${perPage}`}>
+                                <Button variant="outline" size="icon" title={t('ui.loans.buttons.edit') || 'Edit loan'}>
                                     <PencilIcon className="h-4 w-4" />
                                 </Button>
                             </Link>
                             <DeleteDialog
-                                id={zone.id}
-                                onDelete={handleDeleteZone}
-                                title={t('ui.users.delete.title') || 'Delete zone'}
+                                id={loan.id}
+                                onDelete={handleDeleteLoan}
+                                title={t('ui.loans.delete.title') || 'Delete zone'}
                                 description={
-                                    t('ui.users.delete.description') || 'Are you sure you want to delete this zone? This action cannot be undone.'
+                                    t('ui.loans.delete.description') || 'Are you sure you want to delete this loan? This action cannot be undone.'
                                 }
                                 trigger={
                                     <Button
@@ -136,20 +150,20 @@ export default function ZonesIndex() {
                         </>
                     ),
                 }),
-            ] as ColumnDef<Zone>[],
-        [t, handleDeleteZone],
+            ] as ColumnDef<Loan>[],
+        [t, handleDeleteLoan],
     );
 
     return (
-        <ZoneLayout title={t('ui.zones.title')}>
+        <LoanLayout title={t('ui.loans.title')}>
             <div className="p-6">
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
-                        <h1 className="text-3xl font-bold">{t('ui.zones.title')}</h1>
-                        <Link href="/zones/create">
+                        <h1 className="text-3xl font-bold">{t('ui.loans.title')}</h1>
+                        <Link href="/loans/create">
                             <Button>
                                 <PlusIcon className="mr-2 h-4 w-4" />
-                                {t('ui.zones.buttons.new')}
+                                {t('ui.loans.buttons.new')}
                             </Button>
                         </Link>
                     </div>
@@ -159,31 +173,36 @@ export default function ZonesIndex() {
                             filters={
                                 [
                                     {
-                                        id: 'name',
-                                        label: t('ui.zones.filters.name') || 'Nombre',
+                                        id: 'user_email',
+                                        label: t('ui.loans.filters.user_email') || 'Title',
                                         type: 'text',
-                                        placeholder: t('ui.zones.placeholders.name') || 'Nombre...',
+                                        placeholder: t('ui.loans.placeholders.user_email') || 'Title...',
                                     },
                                     {
-                                        id: 'number',
-                                        label: t('ui.zones.filters.number') || 'Number',
-                                        type: 'number',
-                                        min: 1,
-                                        step:1,
-                                        placeholder: t('ui.zones.placeholders.number') || 'Number...',
+                                        id: 'book_name',
+                                        label: t('ui.loans.filters.book_name') || 'Title',
+                                        type: 'text',
+                                        placeholder: t('ui.loans.placeholders.book_name') || 'Title...',
                                     },
                                     {
-                                        id: 'max_bookshelves',
-                                        label: t('ui.zones.filters.max_bookshelves') || 'Max bookshelves',
-                                        type: 'number',
-                                        placeholder: t('ui.zones.placeholders.max_bookshelves') || 'Max bookshelves...',
+                                        id: 'book_ISBN',
+                                        label: t('ui.loans.filters.book_ISBN') || 'Author',
+                                        type: 'text',
+                                        placeholder: t('ui.loans.placeholders.book_ISBN') || 'Author...',
                                     },
                                     {
-                                        id: 'floor_id',
-                                        label: t('ui.zones.filters.floor_id') || 'Floor Ubication',
-                                        type: 'number',
-                                        placeholder: t('ui.zones.placeholders.floor_id') || 'Floor Ubication...',
+                                        id: 'created_at',
+                                        label: t('ui.loans.filters.created_at') || 'Publisher',
+                                        type: 'date',
+                                        placeholder: t('ui.loans.placeholders.created_at') || 'Publisher...',
                                     },
+                                    {
+                                        id: 'end_loan',
+                                        label: t('ui.loans.columns.end_loan') || 'Number of pages',
+                                        type: 'date',
+                                        placeholder: t('ui.loans.placeholders.end_loan') || 'Number of pages...',
+                                    },
+                                    ,
                                 ] as FilterConfig[]
                             }
                             onFilterChange={setFilters}
@@ -196,7 +215,7 @@ export default function ZonesIndex() {
                             <TableSkeleton columns={4} rows={10} />
                         ) : isError ? (
                             <div className="p-4 text-center">
-                                <div className="mb-4 text-red-500">{t('ui.zones.error_loading')}</div>
+                                <div className="mb-4 text-red-500">{t('ui.loans.error_loading')}</div>
                                 <Button onClick={() => refetch()} variant="outline">
                                     {t('ui.users.buttons.retry')}
                                 </Button>
@@ -205,7 +224,7 @@ export default function ZonesIndex() {
                             <div>
                                 <Table
                                     data={
-                                        zones ?? {
+                                        books ?? {
                                             data: [],
                                             meta: {
                                                 current_page: 1,
@@ -221,13 +240,13 @@ export default function ZonesIndex() {
                                     onPageChange={handlePageChange}
                                     onPerPageChange={handlePerPageChange}
                                     perPageOptions={[10, 25, 50, 100]}
-                                    noResultsMessage={t('ui.users.no_results') || 'No zones found'}
+                                    noResultsMessage={t('ui.loans.no_results') || 'No loans found'}
                                 />
                             </div>
                         )}
                     </div>
                 </div>
             </div>
-        </ZoneLayout>
+        </LoanLayout>
     );
 }

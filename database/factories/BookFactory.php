@@ -25,9 +25,10 @@ class BookFactory extends Factory
      */
     public function definition(): array
     {
-       $genres = Genre::all()->pluck('name');
+        $genres = Genre::all()->pluck('name');
         $bookshelf = Bookshelf::all()->random();
         return [
+            'ISBN' => fake()->isbn13(),
             'name' => fake()->name(),
             'author' => fake()->name(),
             'publisher' => fake()->company(),

@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('loans', function (Blueprint $table) {
-            $table->uuid('id');
-            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignUuid('book_id')->references('id')->on('books')->onDelete('cascade');
-            $table->date('start_loan');
+            $table->uuid('id')->primary()->unique();
+            $table->foreignUuid('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreignUuid('book_id')->references('id')->on('books')->cascadeOnDelete();
             $table->date('end_loan');
-            $table->boolean('borrowed_state');
+            $table->boolean('borrowed')->default(true);
+            $table->boolean('is_overdue')->default(false);
             $table->timestamps();
         });
     }

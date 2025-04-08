@@ -80,4 +80,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Loan::class);
     }
+    public function activeLoans(): HasMany
+    {
+        return $this->hasMany(Loan::class)->where('borrowed', true);
+    }
 }

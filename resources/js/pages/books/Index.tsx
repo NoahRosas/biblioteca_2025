@@ -37,6 +37,7 @@ export default function BooksIndex() {
     // Combine name and email filters into a single search string if they exist
     const combinedSearch = [
         filters.name ? filters.name : 'null',
+        filters.ISBN ? filters.ISBN : 'null',
         filters.author ? filters.author : 'null',
         filters.publisher ? filters.publisher : 'null',
         filters.num_pages ? filters.num_pages : 'null',
@@ -85,6 +86,11 @@ export default function BooksIndex() {
                     id: 'name',
                     header: t('ui.books.columns.name') || 'Name',
                     accessorKey: 'name',
+                }),
+                createTextColumn<Book>({
+                    id: 'ISBN',
+                    header: t('ui.books.columns.ISBN') || 'Name',
+                    accessorKey: 'ISBN',
                 }),
                 createTextColumn<Book>({
                     id: 'author',
@@ -217,6 +223,12 @@ export default function BooksIndex() {
                                         placeholder: t('ui.books.placeholders.name') || 'Title...',
                                     },
                                     {
+                                        id: 'ISBN',
+                                        label: t('ui.books.filters.ISBN') || 'Title',
+                                        type: 'text',
+                                        placeholder: t('ui.books.placeholders.ISBN') || 'Title...',
+                                    },
+                                    {
                                         id: 'author',
                                         label: t('ui.books.filters.author') || 'Author',
                                         type: 'text',
@@ -261,7 +273,7 @@ export default function BooksIndex() {
                                     {
                                         id: 'floor_id',
                                         label: t('ui.books.columns.floor_id') || 'Floor name',
-                                        type: 'text',
+                                        type: 'number',
                                         placeholder: t('ui.books.placeholders.floor_id') || 'Floor name...',
                                     },
                                 ] as FilterConfig[]
