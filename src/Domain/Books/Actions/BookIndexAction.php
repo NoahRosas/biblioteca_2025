@@ -6,6 +6,7 @@ use Domain\Books\Data\Resources\BookResource;
 use Domain\Books\Models\Book;
 use Domain\Bookshelves\Models\Bookshelf;
 use Domain\Floors\Models\Floor;
+use Domain\Loans\Models\Loan;
 use Domain\Zones\Models\Zone;
 
 
@@ -24,6 +25,7 @@ class BookIndexAction
         $zone = $search[7];
         $zone_name = $search[8];
         $floor = $search[9];
+        $is_available = $search[10];
 
 
         $floor_id = Floor::query()->when($floor !== 'null', function ($query) use ($floor){
@@ -50,6 +52,9 @@ class BookIndexAction
             $query->where('number', '=', $bookshelf_number);
         })->pluck('id');
 
+        $loans = Loan::query()->when($is_available !== 'null', function ($query) use ($is_available){
+            $query->where('borrowed', '=', $is_available);
+        })->pluck('book_id');
 
         $books = Book::query()
             ->when($name !== 'null', function ($query) use ($name) {
@@ -66,6 +71,8 @@ class BookIndexAction
                 $query->where('genres', 'ILIKE', "%".$genres."%");
             })->when($bookshelves !== 'null', function ($query) use ($bookshelves) {
                 $query->whereIn('bookshelf_id',$bookshelves);
+            })->when($is_available !== 'null', function ($query) use ($loans) {
+                $query->whereIn('id',$loans);
             })
             ->latest()
             ->paginate($perPage);

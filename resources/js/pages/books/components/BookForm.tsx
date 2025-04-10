@@ -19,6 +19,7 @@ export interface BookFormProps {
     initialData?: {
         id: string;
         name: string;
+        ISBN: string;
         author: string;
         publisher: string;
         num_pages: number;
@@ -64,6 +65,7 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
     const form = useForm({
         defaultValues: {
             name: initialData?.name ?? '',
+            ISBN: initialData?.ISBN ?? '',
             author: initialData?.author ?? '',
             publisher: initialData?.publisher ?? '',
             num_pages: initialData?.num_pages ?? undefined,
@@ -75,6 +77,7 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
         onSubmit: async ({ value }) => {
             const formData = new FormData;
                 formData.append('name', value.name);
+                formData.append('ISBN', value.ISBN);
                 formData.append('author', value.author);
                 formData.append('publisher', value.publisher);
                 formData.append('num_pages', value.num_pages);
@@ -197,6 +200,58 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                 )}
                             </form.Field>
                         </div>
+                        
+                        {/* ISBN field */}
+                        <div className="space-y-1">
+                            <form.Field
+                                name="ISBN"
+                                validators={{
+                                    onChangeAsync: async ({ value }) => {
+                                        await new Promise((resolve) => setTimeout(resolve, 500));
+                                        return !value
+                                            ? t('ui.validation.required', { attribute: t('ui.books.fields.ISBN').toLowerCase() })
+                                            : value.length < 13
+                                              ? t('ui.validation.min.string', {
+                                                    attribute: t('ui.books.fields.ISBN').toLowerCase(),
+                                                    min: '13',
+                                                })
+                                              : value.length>13 
+                                              ? t('ui.validation.max.string', {
+                                                attribute: t('ui.books.fields.ISBN').toLowerCase(),
+                                                max: '13',
+                                            }) : undefined
+                                            ;
+                                    },
+                                }}
+                            >
+                                {(field) => (
+                                    <>
+                                        <div className="mt-3 mb-2 flex">
+                                            <Label htmlFor={field.name} className="mt-0.5 ml-1">
+                                                {t('ui.books.fields.ISBN')}
+                                            </Label>
+                                        </div>
+
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            type="text"
+                                            value={field.state.value}
+                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            onBlur={field.handleBlur}
+                                            max={13}
+                                            min={13}
+                                            placeholder={t('ui.books.placeholders.ISBN')}
+                                            disabled={form.state.isSubmitting}
+                                            required={true}
+                                            autoComplete="off"
+                                        />
+                                        <FieldInfo field={field} />
+                                    </>
+                                )}
+                            </form.Field>
+                        </div>
+
 
                         {/* Author field */}
                         <div className="space-y-1">
@@ -428,7 +483,7 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                         </SelectTrigger>
                                         <SelectContent>
                                             {bookshelves
-                                                .filter((bookshelf) => bookshelf.zone_id === selectedZone)
+                                                .filter((bookshelf) => bookshelf.zone_name === selectedZone)
                                                 .map((bookshelf) => (
                                                     <SelectItem
                                                         key={bookshelf.id}

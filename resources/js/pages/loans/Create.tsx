@@ -1,17 +1,17 @@
 import { useTranslations } from "@/hooks/use-translations";
 import { LoanLayout } from "@/layouts/loans/LoanLayout";
 
-import { Building } from "lucide-react";
+import { Building, Handshake } from "lucide-react";
 import { LoanForm } from "./components/LoanForm";
 
 
 
-export default function CreateFloor() {
+export default function CreateLoan() {
   const { t } = useTranslations();
   return (
         <LoanLayout title={t('ui.loans.create')}>
             <h3 className="flex ml-auto mr-auto mt-2 mb-1">
-                <Building className="mr-1 " />
+                <Handshake className="mr-1 " />
                 {t('ui.loans.create')}
                 
             </h3>

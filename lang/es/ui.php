@@ -342,6 +342,7 @@ return [
         'columns' => [
             'name' => 'Título del libro',
             'author' => 'Autor/a',
+            'ISBN' => 'ISBN',
             'publisher' => 'Editorial',
             'num_pages' => 'Número de páginas',
             'genres' => 'Géneros',
@@ -349,20 +350,24 @@ return [
             'zone_id' => 'Zona en la que está ubicado',
             'zone_name' => 'Género de la zona en la que está',
             'floor_id' => 'Planta en la que está ubicado',
+            'is_available' => 'Disponible',
+            'available' => 'Copias prestadas:'
         ],
         'fields' => [
             'name' => 'Título del libro',
             'author' => 'Autor/a',
+            'ISBN' => 'ISBN',
             'publisher' => 'Editorial',
             'num_pages' => 'Número de páginas',
             'genres' => 'Géneros',
             'bookshelf_id' => 'Número de estantería en el que está',
             'zone_id' => 'Zona en la que está ubicado',
             'floor_id' => 'Planta en la que está ubicado',
+            'image' => 'Imagen de portada',
         ],
         'placeholders' => [
-            'search' => 'Buscar libro...',
             'name' => 'Nombre del libro...',
+            'ISBN' => 'ISBN...',
             'author' => 'Autor/a...',
             'publisher' => 'Editorial...',
             'num_pages' => 'Número de páginas...',
@@ -371,20 +376,26 @@ return [
             'zone_id' => 'Zona en la que está ubicado...',
             'zone_name' => 'Género de la zona en la que está...',
             'floor_id' => 'Planta en la que está ubicada...',
+            'is_available' => 'Disponible...',
         ],
         'filters' => [
-            'search' => 'Buscar',
             'name' => 'Nombre del libro',
             'author' => 'Autor/a',
+            'ISBN' => 'ISBN',
             'publisher' => 'Editorial',
             'num_pages' => 'Número de páginas',
             'genres' => 'Géneros',
             'bookshelf_id' => 'Número de estantería en la que está',
             'zone_id' => 'Zona en la que está ubicada',
             'floor_id' => 'Planta en la que está ubicada',
+            'is_available' => 'Disponible',
         ],
         'error_loading' => 'Error al cargar los libros. Inténtalo de nuevo.',
         'deleted_error' => 'Error al eliminar el libro',
+        'availability' => [
+            'false' => 'Disponible',
+            'true' => 'No disponible'
+        ],
     ],
     'genres' =>[
         'names' => [
@@ -411,7 +422,11 @@ return [
         'edit' => 'Editar préstamo',
         'description' => 'Gestiona los préstamo del sistema',
         'buttons' =>[
-            'new' => 'Crear Préstamo'
+            'new' => 'Crear Préstamo',
+            'return' =>[
+                'true' => 'Devolver libro',
+                'false' => 'Cancelar'
+            ],
         ],
         'extra_info' =>[
             'create' => 'Completa el formulario para crear un nuevo préstamo',
@@ -428,7 +443,7 @@ return [
         ],
         'fields' => [
             'user_email' => 'Email de usuario',
-            'book_name' => 'Título del libro',
+            'book_id' => 'Id del libro',
             'book_ISBN' => 'ISBN',
             'created_at' => 'Fecha expedición',
             'end_loan' => 'Fecha vencimiento',
@@ -437,8 +452,9 @@ return [
         ],
         'placeholders' => [
             'user_email' => 'Email de usuario...',
+            'book_id' => 'Id del libro...',
             'book_name' => 'Título del libro...',
-            'book_ISBN' => 'ISBN...',
+            'ISBN' => 'ISBN...',
             'created_at' => 'Fecha expedición...',
             'end_loan' => 'Fecha vencimiento...',
         ],
@@ -453,5 +469,21 @@ return [
         ],
         'error_loading' => 'Error al cargar los préstamo. Inténtalo de nuevo.',
         'deleted_error' => 'Error al eliminar el préstamo',
+        'return' => [
+            'title'=>'¿Quieres devolver este libro?',
+            'description'=> 'Si devuelves el libro, tendrás que hacer un nuevo préstamo si lo quieres volver a tener.',
+            'end_loan' => 'La fecha para que se agote el préstamo es: ',
+        ],
+        
+        'response' => [
+            'true' => 'Sí',
+            'false' => 'No',
+            'return' => 'Devuelto el: ',
+        ],
+        'overdue' => [
+            'one' => 'Día de retraso: ',
+            'more' => 'Días de retraso: ',
+            'false' => 'A tiempo'
+        ],
     ],
 ];

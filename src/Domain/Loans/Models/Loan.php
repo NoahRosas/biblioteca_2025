@@ -29,6 +29,7 @@ class Loan extends Model
         'book_id',
         'end_loan',
         'borrowed',
+        'return_date',
         'is_overdue',
     ];
 
@@ -41,4 +42,6 @@ class Loan extends Model
     {
         return $this->belongsTo(Book::class, 'book_id');
     }
+
+    
 }

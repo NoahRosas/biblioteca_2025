@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('genres');
             $table->foreignUuid('bookshelf_id')->references("id")->on("bookshelves")->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

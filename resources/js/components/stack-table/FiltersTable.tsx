@@ -369,9 +369,6 @@ function renderFilterInput(
             />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">
-              {filter.placeholder || "Todos"}
-            </SelectItem>
             {(filter as SelectFilterConfig).options.map((option) => (
               <SelectItem key={option.value} value={option.value}>
                 {option.label}
@@ -402,6 +399,7 @@ function renderFilterInput(
           <PopoverContent className="w-auto p-0">
             <Calendar
               mode="single"
+              timeZone="Europe/Madrid"
               selected={field.value}
               onSelect={(date: Date | undefined) => {
                 field.onChange(date);

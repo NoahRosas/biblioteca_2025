@@ -33,7 +33,7 @@ class ZoneIndexAction
 
                 $query->where('max_bookshelves', '=', $max_bookshelves);
             })
-            ->when($floor_id !== 'null', function ($query) use ($floor_id) {
+            ->when($floor !== 'null', function ($query) use ($floor_id) {
 
                 $query->where('floor_id', 'like', $floor_id);
             })

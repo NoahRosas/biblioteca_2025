@@ -9,6 +9,9 @@ export interface Book {
   publisher: string;
   num_pages: number;
   genres: string;
+  available: boolean;
+  ISBN_count:number;
+  ISBN_loan_count:number;
   bookshelf_id: number;
   zone_id:number;
   zone_name:string;

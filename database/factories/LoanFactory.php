@@ -33,7 +33,7 @@ class LoanFactory extends Factory
         return [
             'user_id' => $user->id,
             'book_id' => $book->id,
-            'end_loan' => date('d,m,Y', strtotime('+1 month')),
+            'end_loan' => date('Y, m, d', strtotime('+1 month')),
         ];
     }
 }

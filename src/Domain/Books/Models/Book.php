@@ -5,7 +5,7 @@ namespace Domain\Books\Models;
 use Database\Factories\BookFactory;
 use Domain\Bookshelves\Models\Bookshelf;
 use Domain\Genres\Models\Genre;
-use Domain\Loan\Models\Loan;
+use Domain\Loans\Models\Loan;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -21,7 +22,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Book extends Model implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\BookFactory> */
-    use HasFactory, HasUuids, InteractsWithMedia;
+    use HasFactory, HasUuids, InteractsWithMedia, SoftDeletes;
     /**
      * Create a new factory instance for the model.
      */
@@ -38,6 +39,7 @@ class Book extends Model implements HasMedia
     protected $fillable = [
         'id',
         'name',
+        'ISBN',
         'author',
         'publisher',
         'num_pages',

@@ -5,6 +5,7 @@ namespace Domain\Books\Data\Resources;
 use Domain\Books\Models\Book;
 use Domain\Bookshelves\Models\Bookshelf;
 use Domain\Floors\Models\Floor;
+use Domain\Loans\Models\Loan;
 use Domain\Zones\Models\Zone;
 use Spatie\LaravelData\Data;
 
@@ -18,6 +19,9 @@ class BookResource extends Data
         public readonly string $publisher,
         public readonly int $num_pages,
         public readonly string $genres,
+        public readonly bool $available,
+        public readonly int $ISBN_count,
+        public readonly int $ISBN_loan_count,
         public readonly int $bookshelf_id,
         public readonly int $zone_id,
         public readonly string $zone_name,
@@ -30,9 +34,10 @@ class BookResource extends Data
     public static function fromModel(Book $book): self
     {
         $bookshelf = Bookshelf::find($book->bookshelf_id);
+        $ISBN_books = Book::where('ISBN', $book->ISBN)->pluck('id');
+        $loans = Loan::where('borrowed', true)->whereIn('book_id', $ISBN_books);
         $zone = Zone::find($bookshelf->zone_id);
         $floor = Floor::find($zone->floor_id);
-
         return new self(
             id: $book->id,
             ISBN:$book->ISBN,
@@ -41,6 +46,9 @@ class BookResource extends Data
             publisher: $book->publisher,
             num_pages: $book->num_pages,
             genres: $book->genres,
+            available: $book->activeLoan()->first() === null,
+            ISBN_count: $ISBN_books->count(),
+            ISBN_loan_count: $loans->count(),
             bookshelf_id: $bookshelf->number,
             zone_id:$zone->number,
             zone_name:$zone->name,

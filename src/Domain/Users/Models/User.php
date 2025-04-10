@@ -5,7 +5,7 @@ namespace Domain\Users\Models;
 use Domain\Users\Models\UserSetting;
 
 use Database\Factories\UserFactory;
-use Domain\Loan\Models\Loan;
+use Domain\Loans\Models\Loan;
 use Domain\Users\Observers\UserObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;

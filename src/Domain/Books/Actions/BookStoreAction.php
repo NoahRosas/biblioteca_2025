@@ -12,6 +12,7 @@ class BookStoreAction
     {
         $book = Book::create([
             'name' => $data['name'],
+            'ISBN' => $data['ISBN'],
             'author' => $data['author'],
             'publisher' => $data['publisher'],
             'num_pages' => $data['num_pages'],

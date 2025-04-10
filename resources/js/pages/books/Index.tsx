@@ -12,9 +12,9 @@ import { Button } from '@/components/ui/button';
 import { Book, useBooks, useDeleteBook } from '@/hooks/books/useBooks';
 import { useTranslations } from '@/hooks/use-translations';
 import { BookLayout } from '@/layouts/books/BookLayout';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
+import { Handshake, PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -46,6 +46,7 @@ export default function BooksIndex() {
         filters.zone_id ? filters.zone_id : 'null',
         filters.zone_name ? filters.zone_name : 'null',
         filters.floor_id ? filters.floor_id : 'null',
+        filters.is_available ? filters.is_available : 'null',
     ];
 
     const {
@@ -79,6 +80,10 @@ export default function BooksIndex() {
         }
     };
 
+    function handleLoan(book_id : string){
+        return router.get('/loans/create', {book_id});
+    }
+
     const columns = useMemo(
         () =>
             [
@@ -87,10 +92,17 @@ export default function BooksIndex() {
                     header: t('ui.books.columns.name') || 'Name',
                     accessorKey: 'name',
                 }),
-                createTextColumn<Book>({
-                    id: 'ISBN',
+                createActionsColumn<Book>({
+                    id: 'ISBN_count',
                     header: t('ui.books.columns.ISBN') || 'Name',
-                    accessorKey: 'ISBN',
+                    renderActions: ($book) =>{
+                        let $isbn = $book.ISBN;
+                        let $isbn_loan_count = $book.ISBN_loan_count;
+                        let $isbn_count = $book.ISBN_count;
+                        return(
+                            <span>{$isbn} {t('ui.books.columns.available')} {$isbn_loan_count}/{$isbn_count}</span>
+                        )
+                    }
                 }),
                 createTextColumn<Book>({
                     id: 'author',
@@ -131,6 +143,14 @@ export default function BooksIndex() {
                     }
                 }),
                 createTextColumn<Book>({
+                    id: 'available',
+                    header: t('ui.books.columns.is_available') || 'Available',
+                    accessorKey: 'available',
+                    format(value) {
+                       return value ? t(`ui.books.availability.false`) : t(`ui.books.availability.true`)
+                    },
+                }),
+                createTextColumn<Book>({
                     id: 'bookshelf_id',
                     header: t('ui.books.columns.bookshelf_id') || 'Bookshelf number',
                     accessorKey: 'bookshelf_id',
@@ -169,10 +189,15 @@ export default function BooksIndex() {
                     renderActions: (book) => (
                         <>
                             <Link href={`/books/${book.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-                                <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit floot'}>
+                                <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit book'}>
                                     <PencilIcon className="h-4 w-4" />
                                 </Button>
                             </Link>
+                            
+                                <Button variant="outline" size="icon" title={t('ui.loans.buttons.create') || 'Loan this book'} onClick={() => {handleLoan(book.id)}} disabled={book.available ? false : true}>
+                                    <Handshake className="h-4 w-4"/>
+                                </Button>
+                           
                             <DeleteDialog
                                 id={book.id}
                                 onDelete={handleDeleteBook}
@@ -275,6 +300,19 @@ export default function BooksIndex() {
                                         label: t('ui.books.columns.floor_id') || 'Floor name',
                                         type: 'number',
                                         placeholder: t('ui.books.placeholders.floor_id') || 'Floor name...',
+                                    
+                                    },
+                                    {
+                                        id: 'is_available',
+                                        label: t('ui.books.columns.is_available'),
+                                        type: 'select',
+                                        placeholder: t('ui.books.placeholders.is_available'),
+                                        options: [
+                                            {label:t('ui.books.availability.false'), value: 'false'},
+                                            {label:t('ui.books.availability.true'), value: 'true'},
+                                        ]
+                                        
+                                    
                                     },
                                 ] as FilterConfig[]
                             }

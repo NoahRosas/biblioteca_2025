@@ -38,11 +38,13 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
-    const [selectedEndLoan, setSelectEndLoan] = useState(initialData?.end_loan || undefined);
+    const [selectedEndLoan, setSelectEndLoan] = useState(initialData?.end_loan || '');
+    let params = window.location.search;
+    let url = new URLSearchParams(params);
     const form = useForm({
         defaultValues: {
             user_email: initialData?.user_email ?? '',
-            book_id: initialData?.book_id ?? '',
+            book_id: initialData?.id ?? url.get('book_id') ?? '',
             end_loan: initialData?.end_loan ?? '',
         },
         onSubmit: async ({ value }) => {
@@ -68,6 +70,7 @@ export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         event.stopPropagation();
+        form.setFieldValue('end_loan', selectedEndLoan);
         form.handleSubmit();
     };
     return (
@@ -168,19 +171,19 @@ export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
                         <div className="space-y-1">
                             <form.Field
                                 name="end_loan"
-                                validators={{
-                                    onChangeAsync: async ({ value }) => {
-                                        await new Promise((resolve) => setTimeout(resolve, 500));
-                                        return !value
-                                            ? t('ui.validation.required', { attribute: t('ui.loans.fields.end_loan').toLowerCase() })
-                                            : value.length < 1
-                                              ? t('ui.validation.min.string', {
-                                                    attribute: t('ui.loans.fields.end_loan').toLowerCase(),
-                                                    min: '1',
-                                                })
-                                              : undefined;
-                                    },
-                                }}
+                                // validators={{
+                                //     onChangeAsync: async ({ value }) => {
+                                //         await new Promise((resolve) => setTimeout(resolve, 500));
+                                //         return !value
+                                //             ? t('ui.validation.required', { attribute: t('ui.loans.fields.end_loan').toLowerCase() })
+                                //             : value.toLocaleString < new Date()
+                                //               ? t('ui.validation.min.string', {
+                                //                     attribute: t('ui.loans.fields.end_loan').toLowerCase(),
+                                //                     min: '1',
+                                //                 })
+                                //               : undefined;
+                                //     },
+                                // }}
                             >
                                 {(field) => (
                                     <>
@@ -192,12 +195,14 @@ export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
                                         
                                             <DayPicker
                                             animate
+                                            timeZone='Europe/Madrid'
                                             mode='single'
+                                            showOutsideDays
                                             selected={selectedEndLoan}
-                                            disabled={{before: new Date()}}
+                                            // disabled={[{before: new Date()}, new Date()] }
                                             onSelect={setSelectEndLoan}
                                             footer = {
-                                                selectedEndLoan ? `${t('ui.loans.fields.end_loan')}: ${selectedEndLoan.toLocaleDateString()}` : "Pick a day."
+                                                selectedEndLoan ? `${t('ui.loans.fields.end_loan')}: ${selectedEndLoan}` : "Pick a day."
                                             }
                                         />
                                         
@@ -216,7 +221,7 @@ export function LoanForm({ initialData, page, perPage }: LoanFormProps) {
                         // className='flex'
                         type="button"
                         onClick={() => {
-                            let url = '/floors';
+                            let url = '/loans';
                             if (page) {
                                 url += `?page=${page}`;
                                 if (perPage) {

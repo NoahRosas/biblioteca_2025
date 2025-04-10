@@ -342,6 +342,7 @@ return [
         'columns' => [
             'name' => 'Title',
             'author' => 'Author',
+            'ISBN' => 'ISBN',
             'publisher' => 'Publisher',
             'num_pages' => 'Number of pages',
             'genres' => 'Genres',
@@ -349,10 +350,13 @@ return [
             'zone_id' => 'Zone ubication',
             'zone_name'=> 'Zone genre',
             'floor_id' => 'Floor ubication',
+            'is_available' => 'Is available',
+            'available' => 'Copies borrowed: '
         ],
         'fields' => [
             'name' => 'Title',
             'author' => 'Author',
+            'ISBN' => 'ISBN',
             'publisher' => 'Publisher',
             'num_pages' => 'Number of pages',
             'genres' => 'Genres',
@@ -360,10 +364,11 @@ return [
             'zone_id' => 'Zone ubication',
             'zone_name'=> 'Zone genre',
             'floor_id' => 'Floor ubication',
+            'image' => 'Image cover',
         ],
         'placeholders' => [
-            'search' => 'Search book...',
             'name' => 'Book title...',
+            'ISBN' => 'ISBN...',
             'author' => 'Author...',
             'publisher' => 'Publisher...',
             'num_pages' => 'Number of pages...',
@@ -372,9 +377,11 @@ return [
             'zone_id' => 'Zone ubication...',
             'zone_name'=> 'Zone genre...',
             'floor_id' => 'Floor ubication...',
+            'is_available' => 'Is available...',
+
         ],
         'filters' => [
-            'search' => 'Search',
+            'ISBN' => 'ISBN',
             'name' => 'Book title',
             'author' => 'Author',
             'publisher' => 'Publisher',
@@ -384,9 +391,14 @@ return [
             'zone_id' => 'Zone ubication',
             'zone_name'=> 'Zone genre',
             'floor_id' => 'Floor ubication',
+            'is_available' => 'Is available',
         ],
         'deleted_error' => 'Error deleting book',
         'error_loading' => 'Error loading books. Please, try again.',
+        'availability' => [
+            'false' => 'Available',
+            'true' => 'Unavailable'
+        ],
     ],
     'genres' =>[
         'names' => [
@@ -413,7 +425,11 @@ return [
         'edit' => 'Edit loan',
         'description' => 'Manage loans in the system',
         'buttons' =>[
-            'new' => 'Create Loan'
+            'new' => 'Create Loan',
+            'return' =>[
+                'true' => 'Return book',
+                'false' => 'Cancel'
+            ],
         ],
         'extra_info' =>[
             'create' => 'Completa el formulario para crear un nuevo préstamo',
@@ -425,18 +441,21 @@ return [
             'book_ISBN' => 'ISBN',
             'created_at' => 'Expedit date',
             'end_loan' => 'Expiration date',
-            'borrowed' => 'Borrowed now',
+            'borrowed' => 'Borrowed',
             'is_overdue' => 'Overdue',
         ],
         'fields' => [
             'user_email' => 'User email',
             'book_id' => 'Book id',
+            'book_name' => 'Book title',
             'created_at' => 'Expedit date',
             'end_loan' => 'Expiration date',
         ],
         'placeholders' => [
             'user_email' => 'User email...',
+            'ISBN' => 'ISBN...',
             'book_id' => 'Book id...',
+            'book_name' => 'Book title...',
             'created_at' => 'Expedit date...',
             'end_loan' => 'Expiration date...',
         ],
@@ -446,10 +465,25 @@ return [
             'book_ISBN' => 'ISBN',
             'created_at' => 'Expedit date',
             'end_loan' => 'Expiration date',
-            'borrowed' => 'Borrowed now',
+            'borrowed' => 'Borrowed',
             'is_overdue' => 'Overdue',
         ],
         'deleted_error' => 'Error deleting loan',
         'error_loading' => 'Error loading loans. Please, try again.',
+        'return' => [
+            'title'=>'Return this book?',
+            'description'=> 'If you return this book, you will have to make a new loan to have it again.',
+            'end_loan' => 'The date for the loan to expire is: ',
+        ],
+        'response' => [
+            'true' => 'Yes',
+            'false' => 'No',
+            'return' => 'Returned on: ',
+        ],
+        'overdue' => [
+            'one' => 'Day overdued: ',
+            'more' => 'Days overdued: ',
+            'false' => 'On time',
+        ],
     ],
 ];

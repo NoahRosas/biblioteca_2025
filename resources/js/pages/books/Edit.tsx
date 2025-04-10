@@ -14,6 +14,7 @@ import { Genre } from "@/hooks/genres/useGenres";
 interface EditBookProps extends PageProps{
     book: {
         id:string,
+        ISBN: string,
         name: string,
         number: number,
         author: string,

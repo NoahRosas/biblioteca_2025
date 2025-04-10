@@ -9,7 +9,9 @@ export interface Loan {
   book_name:string;
   book_ISBN:string;
   end_loan:string;
+  days_overdued: number;
   borrowed:boolean;
+  return_date:string;
   is_overdue:boolean;
   created_at:string;
 }

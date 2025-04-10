@@ -14,6 +14,8 @@ class LoanIndexAction
         $user_email = $search[0];
         $book_name = $search[1];
         $book_ISBN = $search[2];
+        $created_at = $search[3];
+        $end_loan = $search[4];
 
         $user = User::query()->when($user_email !== 'null', function ($query) use ($user_email){
             $query->where('email', 'ILIKE' , "%{$user_email}%");
@@ -30,6 +32,10 @@ class LoanIndexAction
                 $query->whereIn('user_id', $user);
             })->when($book_name !== 'null' || $book_ISBN !== 'null' , function ($query) use ($books) {
                 $query->whereIn('book_id', $books);
+            })->when($created_at !== 'null', function ($query) use ($created_at){
+                $query->whereDate('created_at', '=', $created_at);
+            })->when($end_loan !== 'null', function ($query) use ($end_loan){
+                $query->whereDate('end_loan', '=', $end_loan);
             })
             ->latest()
             ->paginate($perPage);

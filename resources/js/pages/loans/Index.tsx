@@ -9,14 +9,15 @@ import {
     TableSkeleton,
 } from '@/components/stack-table';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Loan, useDeleteLoan, useLoans } from '@/hooks/loans/useLoans';
 
 import { useTranslations } from '@/hooks/use-translations';
 import { LoanLayout } from '@/layouts/loans/LoanLayout';
 
-import { Link, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { Check, PencilIcon, PlusIcon, TrashIcon, X } from 'lucide-react';
+import { Check, HandHelping, PencilIcon, PlusIcon, TrashIcon, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -41,6 +42,8 @@ export default function BooksIndex() {
         filters.user_email ? filters.user_email : 'null',
         filters.book_name ? filters.book_name : 'null',
         filters.book_ISBN ? filters.book_ISBN : 'null',
+        filters.created_at ? filters.created_at : 'null',
+        filters.end_loan ? filters.end_loan : 'null',
     ];
 
     const {
@@ -73,7 +76,14 @@ export default function BooksIndex() {
             console.error('Error deleting loan:', error);
         }
     };
-
+    function handleReturn(loanId: string) {
+        let borrowed = false;
+        const info = new FormData;
+        info.append('borrowedState', borrowed);
+        info.append('_method', 'PUT');
+        router.post(`/loans/${loanId}`, info);
+        refetch();
+    }
     const columns = useMemo(
         () =>
             [
@@ -102,20 +112,51 @@ export default function BooksIndex() {
                     header: t('ui.loans.columns.end_loan') || 'Publisher',
                     accessorKey: 'end_loan',
                 }),
-                createTextColumn<Loan>({
+                createActionsColumn<Loan>({
                     id: 'borrowed',
                     header: t('ui.loans.columns.borrowed') || 'Bookshelf number',
-                    accessorKey: 'borrowed',
-                    format: (value) =>{
-                        return value ? <Check/> : <X/>
-                    }
+                    renderActions: (loan)=>{
+                        let response;
+                        if(loan.borrowed){
+                            response = t('ui.loans.response.true');
+                        }else{
+                            if (loan.return_date!== 'null') {
+                                response = t('ui.loans.response.return') + loan.return_date;
+                            }else{
+                                response = t('ui.loans.response.false');
+                            }
+                            
+                        }
+                       
+                        return (
+                            <>
+                            <span>{response}</span>
+                            </>
+                        )
+                    },
                 }),
-                createTextColumn<Loan>({
+                createActionsColumn<Loan>({
                     id: 'is_overdue',
                     header: t('ui.loans.columns.is_overdue') || 'Genres',
-                    accessorKey: 'is_overdue',
-                    format: (value) =>{
-                        return value ? <Check/> : <X/>
+                    renderActions: (loan) =>{
+                        let response;
+                        let days_overdued = Math.abs(loan.days_overdued);
+                        if (loan.is_overdue) {
+                            if (days_overdued>1) {
+                                response = t('ui.loans.overdue.more') + ' '+ days_overdued;
+                                
+                            }else{
+                                response = t('ui.loans.overdue.one') + ' '+ days_overdued;
+                            }
+                        }else{
+                            response = t('ui.loans.overdue.false');
+                        }
+
+                        return (
+                            <>
+                            <span>{response}</span>
+                            </>
+                        )
                     }
                 }),
                 
@@ -124,6 +165,28 @@ export default function BooksIndex() {
                     header: t('ui.users.columns.actions') || 'Actions',
                     renderActions: (loan) => (
                         <>
+                            <Dialog>
+                                <DialogTrigger disabled={loan.return_date !== 'null'}>
+                                    <Button variant="outline" size="icon" title={t('ui.loans.buttons.return') || 'Return loan'} disabled={loan.return_date !== 'null'}>
+                                        <HandHelping className="h-4 w-4"/>
+                                    </Button>
+                                    </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                    <DialogTitle>
+                                        {t('ui.loans.return.title')}
+                                    </DialogTitle>
+                                    <DialogDescription>
+                                        {t('ui.loans.return.end_loan')}{loan.end_loan}<br/>
+                                        {t('ui.loans.return.description')}
+                                    </DialogDescription>
+                                    </DialogHeader>
+                                    <DialogFooter>
+                                        <Button onClick={()=>handleReturn(loan.id)}>{t('ui.loans.buttons.return.true')}</Button>
+                                        <Button className='bg-destructive hover:bg-red-500'>{t('ui.loans.buttons.return.false')}</Button>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
                             <Link href={`/loans/${loan.id}/edit?page=${currentPage}&perPage=${perPage}`}>
                                 <Button variant="outline" size="icon" title={t('ui.loans.buttons.edit') || 'Edit loan'}>
                                     <PencilIcon className="h-4 w-4" />
@@ -132,7 +195,7 @@ export default function BooksIndex() {
                             <DeleteDialog
                                 id={loan.id}
                                 onDelete={handleDeleteLoan}
-                                title={t('ui.loans.delete.title') || 'Delete zone'}
+                                title={t('ui.loans.delete.title') || 'Delete loan'}
                                 description={
                                     t('ui.loans.delete.description') || 'Are you sure you want to delete this loan? This action cannot be undone.'
                                 }
@@ -141,7 +204,7 @@ export default function BooksIndex() {
                                         variant="outline"
                                         size="icon"
                                         className="text-destructive hover:text-destructive"
-                                        title={t('ui.users.buttons.delete') || 'Delete zone'}
+                                        title={t('ui.users.buttons.delete') || 'Delete loan'}
                                     >
                                         <TrashIcon className="h-4 w-4" />
                                     </Button>
@@ -188,7 +251,7 @@ export default function BooksIndex() {
                                         id: 'book_ISBN',
                                         label: t('ui.loans.filters.book_ISBN') || 'Author',
                                         type: 'text',
-                                        placeholder: t('ui.loans.placeholders.book_ISBN') || 'Author...',
+                                        placeholder: t('ui.loans.placeholders.ISBN') || 'Author...',
                                     },
                                     {
                                         id: 'created_at',
