@@ -145,7 +145,7 @@ export default function FloorsIndex() {
                                     {
                                         id: 'name',
                                         label: t('ui.floors.filters.name') || 'Nombre',
-                                        type: 'text',
+                                        type: 'number',
                                         placeholder: t('ui.floors.placeholders.name') || 'Nombre...',
                                     },
                                     {

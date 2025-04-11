@@ -51,4 +51,24 @@ return [
             'delete' => 'Error al eliminar el libro',
         ],
     ],
+    'loans' => [
+        'created' => 'Préstamo creado correctamente',
+        'updated' => 'Préstamo actualizado correctamente',
+        'deleted' => 'Préstamo eliminado correctamente',
+        'error' => [
+            'create' => 'Error al crear el préstamo',
+            'update' => 'Error al actualizar el préstamo',
+            'delete' => 'Error al eliminar el préstamo',
+        ],
+    ],
+    'reservations' => [
+        'created' => 'Reserva creada correctamente',
+        'updated' => 'Reserva actualizada correctamente',
+        'deleted' => 'Reserva eliminada correctamente',
+        'error' => [
+            'create' => 'Error al crear la reserva',
+            'update' => 'Error al actualizar la reserva',
+            'delete' => 'Error al eliminar la reserva',
+        ],
+    ],
 ];

@@ -76,16 +76,16 @@ return [
         ],
     ],
     'validation' => [
-            'required' => 'El campo :attribute es obligatorio.',
-            'email' => 'El campo :attribute debe ser una dirección de correo válida.',
-            'min' => [
-                'string' => 'El campo :attribute debe tener al menos :min caracteres.',
-            ],
-            'max' => [
-                'string' => 'El campo :attribute no debe tener más de :max caracteres.',
-            ],
-            'unique' => 'El campo :attribute ya ha sido tomado.',
-            'confirmed' => 'El campo :attribute no coincide.',
+        'required' => 'El campo :attribute es obligatorio.',
+        'email' => 'El campo :attribute debe ser una dirección de correo válida.',
+        'min' => [
+            'string' => 'El campo :attribute debe tener al menos :min caracteres.',
+        ],
+        'max' => [
+            'string' => 'El campo :attribute no debe tener más de :max caracteres.',
+        ],
+        'unique' => 'El campo :attribute ya ha sido tomado.',
+        'confirmed' => 'El campo :attribute no coincide.',
     ],
     'common' => [
         'buttons' => [
@@ -93,7 +93,7 @@ return [
             'delete' => 'Eliminar',
             'close' => 'Cerrar',
         ],
-        'filters'=> [
+        'filters' => [
             'title' => 'Filtros',
             'clear' => 'Limpiar',
         ],
@@ -140,7 +140,7 @@ return [
             'student' => 'Estudiante',
             'view' => 'Solo vista'
         ],
-        'permissions'=>[
+        'permissions' => [
             'users' => [
                 'title' => 'Usuarios',
                 'view' => 'Ver usuarios',
@@ -217,17 +217,17 @@ return [
         'create' => 'Crear Planta',
         'edit' => 'Editar Planta',
         'description' => 'Gestiona las plantas del sistema',
-        'buttons' =>[
+        'buttons' => [
             'new' => 'Crear Planta'
         ],
-        'extra_info'=>[
+        'extra_info' => [
             'create_floor' => 'Introduce la información para crear una nueva planta',
             'edit_floor' => 'Introduce los datos para editar esta zona',
         ],
         'titles' => [
-            'floor' => 'Planta' ,
+            'floor' => 'Planta',
         ],
-        'fields' =>[
+        'fields' => [
             'name' => 'Nombre de la planta',
             'max_zones' => 'Máximo número de zonas',
         ],
@@ -244,87 +244,90 @@ return [
         ],
         'error_loading' => 'Error al cargar las plantas. Inténtalo de nuevo.',
         'deleted_error' => 'Error al eliminar la planta',
+        'no_results' => 'No hay resultados.',
     ],
     'zones' => [
         'title' => 'Zonas',
         'create' => 'Crear zona',
         'edit' => 'Editar zona',
         'description' => 'Gestiona las zonas del sistema',
-        'buttons' =>[
+        'buttons' => [
             'new' => 'Crear Zona'
         ],
-        'extra_info' =>[
+        'extra_info' => [
             'create_zone' => 'Introduce los datos para crear una nueva zona',
             'edit_zone' => 'Introduce los datos para editar esta zona',
         ],
         'columns' => [
             'name' => 'Nombre de la zona',
             'max_bookshelves' => 'Capacidad de estanterías',
-            'floor_name' => 'Planta en la que está ubicada'
+            'floor_name' => 'Planta'
         ],
-        'fields' =>[
+        'fields' => [
             'name' => 'Nombre de la zona',
             'number' => 'Número de la zona',
-            'floor_id' => 'Planta en la que está ubicada',
+            'floor_id' => 'Planta',
             'max_bookshelves' => 'Capacidad de estanterías',
         ],
         'placeholders' => [
             'name' => 'Nombre de la zona...',
             'number' => 'Número de la zona...',
             'max_bookshelves' => 'Capacidad de estanterías...',
-            'floor_id' => 'Planta en la que está ubicada...',
+            'floor_id' => 'Planta...',
         ],
         'filters' => [
             'name' => 'Nombre de la zona',
             'number' => 'Número de la zona',
             'max_bookshelves' => 'Capacidad de estanterías',
-            'floor_id' => 'Planta en la que está ubicada',
+            'floor_id' => 'Planta',
         ],
         'error_loading' => 'Error al cargar las zonas. Inténtalo de nuevo.',
         'deleted_error' => 'Error al eliminar la zona',
+        'no_results' => 'No hay resultados.',
     ],
     'bookshelves' => [
         'title' => 'Estanterías',
         'create' => 'Crear estantería',
         'edit' => 'Editar estantería',
         'description' => 'Gestiona las estanterías del sistema',
-        'buttons' =>[
+        'buttons' => [
             'new' => 'Crear Estantería'
         ],
-        'extra_info' =>[
+        'extra_info' => [
             'create' => 'Completa el formulario para crear una nueva estantería',
             'edit' => 'Introduce los datos para editar esta estantería',
         ],
         'columns' => [
             'number' => 'Número de estantería',
             'max_books' => 'Capacidad de libros',
-            'zone_name'=> 'Género de la zona',
-            'zone_id' => 'Zona en la que está ubicada',
-            'floor_id' => 'Planta en la que está ubicada',
+            'zone_name' => 'Género de la zona',
+            'zone_id' => 'Zona',
+            'floor_id' => 'Planta',
         ],
         'fields' => [
             'number' => 'Número de estantería',
-            'floor_id' => 'Planta en la que está ubicada',
-            'zone_id' => 'Zona en la que está ubicada',
-            'zone_name'=> 'Género de la zona',
+            'floor_id' => 'Planta',
+            'zone_id' => 'Zona',
+            'zone_name' => 'Género de la zona',
             'max_books' => 'Capacidad de libros'
         ],
         'placeholders' => [
             'number' => 'Número de estantería...',
-            'floor_id'=> 'Planta en la que está ubicada...',
-            'zone_id' => 'Zona en la que está ubicada...',
-            'zone_name'=> 'Género de la zona...',
+            'floor_id' => 'Planta...',
+            'zone_id' => 'Zona...',
+            'zone_name' => 'Género de la zona...',
             'max_books' => 'Capacidad de libros...'
         ],
         'filters' => [
             'number' => 'Número de estantería',
-            'floor_id'=> 'Planta en la que está ubicada',
-            'zone_id' => 'Zona en la que está ubicada',
-            'zone_name'=> 'Género de la zona',
+            'floor_id' => 'Planta',
+            'zone_id' => 'Zona',
+            'zone_name' => 'Género de la zona',
             'max_books' => 'Capacidad de libros'
         ],
         'error_loading' => 'Error al cargar las zonas. Inténtalo de nuevo.',
         'deleted_error' => 'Error al eliminar la estantería',
+        'no_results' => 'No hay resultados.',
     ],
     'books' => [
         'title' => 'Libros',
@@ -332,10 +335,10 @@ return [
         'edit' => 'Editar libro',
         'description' => 'Gestiona los libros del sistema',
 
-        'buttons' =>[
+        'buttons' => [
             'new' => 'Crear Libro'
         ],
-        'extra_info' =>[
+        'extra_info' => [
             'create' => 'Completa el formulario para crear un nuevo libro',
             'edit' => 'Introduce los datos para editar este libro',
         ],
@@ -346,10 +349,10 @@ return [
             'publisher' => 'Editorial',
             'num_pages' => 'Número de páginas',
             'genres' => 'Géneros',
-            'bookshelf_id' => 'Número de estantería en el que está',
-            'zone_id' => 'Zona en la que está ubicado',
-            'zone_name' => 'Género de la zona en la que está',
-            'floor_id' => 'Planta en la que está ubicado',
+            'bookshelf_id' => 'Número de estantería',
+            'zone_id' => 'Zona',
+            'zone_name' => 'Género zona',
+            'floor_id' => 'Planta',
             'is_available' => 'Disponible',
             'available' => 'Copias prestadas:'
         ],
@@ -360,9 +363,9 @@ return [
             'publisher' => 'Editorial',
             'num_pages' => 'Número de páginas',
             'genres' => 'Géneros',
-            'bookshelf_id' => 'Número de estantería en el que está',
-            'zone_id' => 'Zona en la que está ubicado',
-            'floor_id' => 'Planta en la que está ubicado',
+            'bookshelf_id' => 'Número de estantería',
+            'zone_id' => 'Zona',
+            'floor_id' => 'Planta',
             'image' => 'Imagen de portada',
         ],
         'placeholders' => [
@@ -372,10 +375,10 @@ return [
             'publisher' => 'Editorial...',
             'num_pages' => 'Número de páginas...',
             'genres' => 'Géneros...',
-            'bookshelf_id' => 'Número de estantería en el que está...',
-            'zone_id' => 'Zona en la que está ubicado...',
-            'zone_name' => 'Género de la zona en la que está...',
-            'floor_id' => 'Planta en la que está ubicada...',
+            'bookshelf_id' => 'Número de estantería...',
+            'zone_id' => 'Zona...',
+            'zone_name' => 'Género zona...',
+            'floor_id' => 'Planta...',
             'is_available' => 'Disponible...',
         ],
         'filters' => [
@@ -385,9 +388,9 @@ return [
             'publisher' => 'Editorial',
             'num_pages' => 'Número de páginas',
             'genres' => 'Géneros',
-            'bookshelf_id' => 'Número de estantería en la que está',
-            'zone_id' => 'Zona en la que está ubicada',
-            'floor_id' => 'Planta en la que está ubicada',
+            'bookshelf_id' => 'Número de estantería',
+            'zone_id' => 'Zona',
+            'floor_id' => 'Planta',
             'is_available' => 'Disponible',
         ],
         'error_loading' => 'Error al cargar los libros. Inténtalo de nuevo.',
@@ -396,8 +399,9 @@ return [
             'false' => 'Disponible',
             'true' => 'No disponible'
         ],
+        'no_results' => 'No hay resultados.',
     ],
-    'genres' =>[
+    'genres' => [
         'names' => [
             'Fantasy' => 'Fantasía',
             'Romantic' => 'Romántica',
@@ -421,14 +425,14 @@ return [
         'create' => 'Crear préstamo',
         'edit' => 'Editar préstamo',
         'description' => 'Gestiona los préstamo del sistema',
-        'buttons' =>[
+        'buttons' => [
             'new' => 'Crear Préstamo',
-            'return' =>[
+            'return' => [
                 'true' => 'Devolver libro',
                 'false' => 'Cancelar'
             ],
         ],
-        'extra_info' =>[
+        'extra_info' => [
             'create' => 'Completa el formulario para crear un nuevo préstamo',
             'edit' => 'Introduce los datos para editar este préstamo',
         ],
@@ -436,7 +440,7 @@ return [
             'user_email' => 'Usuario',
             'book_name' => 'Título del libro',
             'book_ISBN' => 'ISBN',
-            'created_at' => 'Fecha creación',
+            'created_at' => 'Fecha expedición',
             'end_loan' => 'Fecha vencimiento',
             'borrowed' => 'Prestado actualmente',
             'is_overdue' => 'Con retraso',
@@ -457,6 +461,8 @@ return [
             'ISBN' => 'ISBN...',
             'created_at' => 'Fecha expedición...',
             'end_loan' => 'Fecha vencimiento...',
+            'borrowed' => 'Prestado actualmente...',
+            'is_overdue' => 'Con retraso...',
         ],
         'filters' => [
             'user_email' => 'Email de usuario',
@@ -469,12 +475,17 @@ return [
         ],
         'error_loading' => 'Error al cargar los préstamo. Inténtalo de nuevo.',
         'deleted_error' => 'Error al eliminar el préstamo',
+        'date' => 'Escoge una fecha de entrega',
+        'borrowed' => [
+            'true' => 'Prestado',
+            'false' => 'Devuelto',
+        ],
         'return' => [
-            'title'=>'¿Quieres devolver este libro?',
-            'description'=> 'Si devuelves el libro, tendrás que hacer un nuevo préstamo si lo quieres volver a tener.',
+            'title' => '¿Quieres devolver este libro?',
+            'description' => 'Si devuelves el libro, tendrás que hacer un nuevo préstamo si lo quieres volver a tener.',
             'end_loan' => 'La fecha para que se agote el préstamo es: ',
         ],
-        
+
         'response' => [
             'true' => 'Sí',
             'false' => 'No',
@@ -483,7 +494,56 @@ return [
         'overdue' => [
             'one' => 'Día de retraso: ',
             'more' => 'Días de retraso: ',
-            'false' => 'A tiempo'
+            'false' => 'A tiempo',
+            'true' => 'Con retraso',
         ],
+        'no_results' => 'No hay resultados.',
     ],
+    'reservations'=>[
+        'title' => 'Reservas',
+        'create' => 'Crear Reserva',
+        'edit' => 'Editar reserva',
+        'description' => 'Gestiona las reservas del sistema',
+
+        'buttons' => [
+            'new' => 'Crear Reserva'
+        ],
+        'extra_info' => [
+            'create' => 'Completa el formulario para crear una nueva reserva',
+            'edit' => 'Introduce los datos para editar esta reserva',
+        ],
+        'columns' => [
+            'user_email' => 'Usuario',
+            'book_name' => 'Título del libro',
+            'book_ISBN' => 'ISBN',
+            'created_at' => 'Fecha expedición',
+            
+        ],
+        'fields' => [
+            'user_email' => 'Email de usuario',
+            'book_id' => 'Id del libro',
+            'book_ISBN' => 'ISBN',
+            'created_at' => 'Fecha expedición',
+            
+        ],
+        'placeholders' => [
+            'user_email' => 'Email de usuario...',
+            'book_id' => 'Id del libro...',
+            'book_name' => 'Título del libro...',
+            'ISBN' => 'ISBN...',
+            'created_at'=> 'Fecha de expedición...',
+            
+        ],
+        'filters' => [
+            'user_email' => 'Email de usuario',
+            'book_name' => 'Título del libro',
+            'book_ISBN' => 'ISBN',
+            'created_at' => 'Fecha expedición',
+            
+        ],
+        'error_loading' => 'Error al cargar las reservas. Inténtalo de nuevo.',
+        'deleted_error' => 'Error al eliminar la reserva',
+        'no_results' => 'No hay resultados.',
+        
+    ]
 ];

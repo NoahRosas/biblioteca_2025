@@ -192,7 +192,7 @@ export default function BookshelvesIndex() {
                                     {
                                         id: 'floor_id',
                                         label: t('ui.bookshelves.columns.floor_id') || 'Floor name',
-                                        type: 'text',
+                                        type: 'number',
                                         placeholder: t('ui.bookshelves.placeholders.floor_id') || 'Floor name...',
                                     },
                                 ] as FilterConfig[]

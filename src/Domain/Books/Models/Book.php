@@ -6,6 +6,7 @@ use Database\Factories\BookFactory;
 use Domain\Bookshelves\Models\Bookshelf;
 use Domain\Genres\Models\Genre;
 use Domain\Loans\Models\Loan;
+use Domain\Reservations\Models\Reservation;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -70,6 +71,10 @@ class Book extends Model implements HasMedia
     public function loans(): HasMany
     {
         return $this->hasMany(Loan::class);
+    }
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class);
     }
     public function activeLoan(): HasOne
     {

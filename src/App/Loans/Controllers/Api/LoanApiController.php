@@ -3,6 +3,7 @@
 namespace App\Loans\Controllers\Api;
 
 use App\Core\Controllers\Controller;
+use Domain\Loans\Actions\LoanDestroyAction;
 use Domain\Loans\Actions\LoanIndexAction;
 use Domain\Loans\Models\Loan;
 use Illuminate\Http\Request;
@@ -43,12 +44,13 @@ class LoanApiController extends Controller
 
     }
 
-    public function destroy(Loan $loan)
+    public function destroy(Loan $loan, LoanDestroyAction $action)
     {
-        
+        $action($loan);
 
-        return redirect()->route('loans.index')
-            ->with('success', __('messages.loans.deleted'));
+        return response()->json([
+            'message' => __('messages.loans.deleted')
+        ]);
     }
 }
 

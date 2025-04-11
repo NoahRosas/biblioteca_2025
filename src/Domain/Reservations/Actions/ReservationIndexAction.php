@@ -1,13 +1,13 @@
 <?php
 
-namespace Domain\Loans\Actions;
+namespace Domain\Reservations\Actions;
 
 use Domain\Books\Models\Book;
-use Domain\Loans\Data\Resources\LoanResource;
-use Domain\Loans\Models\Loan;
+use Domain\Reservations\Data\Resources\ReservationResource;
+use Domain\Reservations\Models\Reservation;
 use Domain\Users\Models\User;
 
-class LoanIndexAction
+class ReservationIndexAction
 {
     public function __invoke(?array $search = null, int $perPage = 10)
     {
@@ -15,9 +15,6 @@ class LoanIndexAction
         $book_name = $search[1];
         $book_ISBN = $search[2];
         $created_at = $search[3];
-        $end_loan = $search[4];
-        $borrowed = $search[5];
-        $is_overdue = $search[6];
 
         $user = User::query()->when($user_email !== 'null', function ($query) use ($user_email){
             $query->where('email', 'ILIKE' , "%{$user_email}%");
@@ -29,23 +26,17 @@ class LoanIndexAction
             $query->where('ISBN', 'ILIKE', "%{$book_ISBN}%");
         })->pluck('id');
 
-        $loans = Loan::query()
+         $reservations = Reservation::query()
             ->when($user_email !== 'null', function ($query) use ($user) {
                 $query->whereIn('user_id', $user);
             })->when($book_name !== 'null' || $book_ISBN !== 'null' , function ($query) use ($books) {
                 $query->whereIn('book_id', $books);
             })->when($created_at !== 'null', function ($query) use ($created_at){
                 $query->whereDate('created_at', '=', $created_at);
-            })->when($end_loan !== 'null', function ($query) use ($end_loan){
-                $query->whereDate('end_loan', '=', $end_loan);
-            })->when($borrowed !== 'null', function ($query) use ($borrowed){
-                $query->where('borrowed', '=', $borrowed);
-            })->when($is_overdue !== 'null', function ($query) use ($is_overdue){
-                $query->where('is_overdue', '=', $is_overdue);
             })
             ->latest()
             ->paginate($perPage);
 
-        return $loans->through(fn ($loan) => LoanResource::fromModel($loan));
+        return $reservations->through(fn ($reservation) => ReservationResource::fromModel($reservation));
     }
 }

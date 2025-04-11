@@ -7,18 +7,13 @@ import { useTranslations } from '@/hooks/use-translations';
 import { router } from '@inertiajs/react';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
-import { before } from 'lodash';
-import { Save, X } from 'lucide-react';
-import { useState } from 'react';
-import { DayPicker } from 'react-day-picker';
-import "react-day-picker/style.css";
 
+import { Save, X } from 'lucide-react';
 // Tipado de las props
 export interface LoanFormProps {
     initialData?: {
         id: string;
         book_id: string;
-        end_loan: Date;
     };
     user_email?:string;
     page?: string;
@@ -35,23 +30,21 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function LoanForm({ initialData, page, perPage, user_email}: LoanFormProps) {
+export function ReservationForm({ initialData, page, perPage, user_email}: LoanFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
-    const [selectedEndLoan, setSelectEndLoan] = useState(initialData?.end_loan || '');
     let params = window.location.search;
     let url = new URLSearchParams(params);
     const form = useForm({
         defaultValues: {
             user_email: user_email ?? '',
             book_id: initialData?.id ?? url.get('book_id') ?? '',
-            end_loan: initialData?.end_loan ?? '',
         },
         onSubmit: async ({ value }) => {
             const options = {
                 onSuccess: () => {
-                    queryClient.invalidateQueries({ queryKey: ['loans'] });
-                    let url = '/loans';
+                    queryClient.invalidateQueries({ queryKey: ['reservations'] });
+                    let url = '/reservations';
                     if (page) {
                         url += `?page=${page}${perPage ? `&per_page=${perPage}` : ''}`;
                     }
@@ -60,9 +53,9 @@ export function LoanForm({ initialData, page, perPage, user_email}: LoanFormProp
             };
 
             if (initialData) {
-                router.put(`/loans/${initialData.id}`, value, options);
+                router.put(`/reservations/${initialData.id}`, value, options);
             } else {
-                router.post('/loans', value, options);
+                router.post('/reservations', value, options);
             }
         },
     });
@@ -70,7 +63,6 @@ export function LoanForm({ initialData, page, perPage, user_email}: LoanFormProp
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         event.stopPropagation();
-        form.setFieldValue('end_loan', selectedEndLoan);
         form.handleSubmit();
     };
     return (
@@ -86,10 +78,10 @@ export function LoanForm({ initialData, page, perPage, user_email}: LoanFormProp
                                     onChangeAsync: async ({ value }) => {
                                         await new Promise((resolve) => setTimeout(resolve, 500));
                                         return !value
-                                            ? t('ui.validation.required', { attribute: t('ui.loans.fields.user_email').toLowerCase() })
+                                            ? t('ui.validation.required', { attribute: t('ui.reservations.fields.user_email').toLowerCase() })
                                             : value.length < 1
                                               ? t('ui.validation.min.string', {
-                                                    attribute: t('ui.loans.fields.user_email').toLowerCase(),
+                                                    attribute: t('ui.reservations.fields.user_email').toLowerCase(),
                                                     min: '1',
                                                 })
                                               : undefined;
@@ -100,7 +92,7 @@ export function LoanForm({ initialData, page, perPage, user_email}: LoanFormProp
                                     <>
                                         <div className="mb-2 flex">
                                             <Label htmlFor="name" className="mt-1 ml-1">
-                                                {t('ui.loans.fields.user_email')}
+                                                {t('ui.reservations.fields.user_email')}
                                             </Label>
                                         </div>
 
@@ -110,8 +102,8 @@ export function LoanForm({ initialData, page, perPage, user_email}: LoanFormProp
                                             value={field.state.value}
                                             onChange={(e) => field.handleChange(e.target.value)}
                                             onBlur={field.handleBlur}
-                                            placeholder={t('ui.loans.placeholders.user_email')}
-                                            disabled={form.state.isSubmitting || user_email!==undefined}
+                                            placeholder={t('ui.reservations.placeholders.user_email')}
+                                            disabled={form.state.isSubmitting}
                                             required={false}
                                             autoComplete="off"
                                         />
@@ -129,10 +121,10 @@ export function LoanForm({ initialData, page, perPage, user_email}: LoanFormProp
                                     onChangeAsync: async ({ value }) => {
                                         await new Promise((resolve) => setTimeout(resolve, 500));
                                         return !value
-                                            ? t('ui.validation.required', { attribute: t('ui.loans.fields.book_id').toLowerCase() })
+                                            ? t('ui.validation.required', { attribute: t('ui.reservations.fields.book_id').toLowerCase() })
                                             : value.length < 1
                                               ? t('ui.validation.min.string', {
-                                                    attribute: t('ui.loans.fields.book_id').toLowerCase(),
+                                                    attribute: t('ui.reservations.fields.book_id').toLowerCase(),
                                                     min: '1',
                                                 })
                                               : undefined;
@@ -143,7 +135,7 @@ export function LoanForm({ initialData, page, perPage, user_email}: LoanFormProp
                                     <>
                                         <div className="mt-3 mb-2 flex">
                                             <Label htmlFor={field.name} className="mt-0.5 ml-1">
-                                                {t('ui.loans.fields.book_id')}
+                                                {t('ui.reservations.fields.book_id')}
                                             </Label>
                                         </div>
 
@@ -156,7 +148,7 @@ export function LoanForm({ initialData, page, perPage, user_email}: LoanFormProp
                                             onBlur={field.handleBlur}
                                             max={30}
                                             min={1}
-                                            placeholder={t('ui.loans.placeholders.book_id')}
+                                            placeholder={t('ui.reservations.placeholders.book_id')}
                                             disabled={form.state.isSubmitting || url.get('book_id') !== null || initialData !== undefined}
                                             required={true}
                                             autoComplete="off"
@@ -167,50 +159,6 @@ export function LoanForm({ initialData, page, perPage, user_email}: LoanFormProp
                             </form.Field>
                         </div>
 
-                        {/* end loan field */}
-                        <div className="space-y-1">
-                            <form.Field
-                                name="end_loan"
-                                // validators={{
-                                //     onChangeAsync: async ({ value }) => {
-                                //         await new Promise((resolve) => setTimeout(resolve, 500));
-                                //         return !value
-                                //             ? t('ui.validation.required', { attribute: t('ui.loans.fields.end_loan').toLowerCase() })
-                                //             : value.toLocaleString < new Date()
-                                //               ? t('ui.validation.min.string', {
-                                //                     attribute: t('ui.loans.fields.end_loan').toLowerCase(),
-                                //                     min: '1',
-                                //                 })
-                                //               : undefined;
-                                //     },
-                                // }}
-                            >
-                                {(field) => (
-                                    <>
-                                        <div className="mt-3 mb-2 flex">
-                                            <Label htmlFor={field.name} className="mt-0.5 ml-1">
-                                                {t('ui.loans.fields.end_loan')}
-                                            </Label>
-                                        </div>
-                                            <DayPicker
-                                            animate
-                                            timeZone='Europe/Madrid'
-                                            mode='single'
-                                            showOutsideDays
-                                            selected={selectedEndLoan}
-                                            // disabled={[{before: new Date()}, new Date()] }
-                                            onSelect={setSelectEndLoan}
-                                            footer = {
-                                                selectedEndLoan ? `${t('ui.loans.fields.end_loan')}: ${selectedEndLoan}` : t('ui.loans.date')
-                                            }
-                                        />
-                                        
-                                        
-                                        <FieldInfo field={field} />
-                                    </>
-                                )}
-                            </form.Field>
-                        </div>
                     </form>
                 </CardContent>
                 <CardFooter className="flex justify-between">
@@ -220,7 +168,7 @@ export function LoanForm({ initialData, page, perPage, user_email}: LoanFormProp
                         // className='flex'
                         type="button"
                         onClick={() => {
-                            let url = '/loans';
+                            let url = '/reservations';
                             if (page) {
                                 url += `?page=${page}`;
                                 if (perPage) {

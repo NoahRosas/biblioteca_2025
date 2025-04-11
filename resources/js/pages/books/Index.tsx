@@ -14,7 +14,7 @@ import { useTranslations } from '@/hooks/use-translations';
 import { BookLayout } from '@/layouts/books/BookLayout';
 import { Link, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { Handshake, PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
+import { Handshake, PencilIcon, PlusIcon, ScrollText, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -80,8 +80,12 @@ export default function BooksIndex() {
         }
     };
 
-    function handleLoan(book_id : string){
-        return router.get('/loans/create', {book_id});
+    function handleLoan(book_id : string, book_available: boolean){
+        if (!book_available) {
+            return router.get('/reservations/create', {book_id});
+        }else{
+            return router.get('/loans/create', {book_id});
+        }
     }
 
     const columns = useMemo(
@@ -188,29 +192,36 @@ export default function BooksIndex() {
                     header: t('ui.users.columns.actions') || 'Actions',
                     renderActions: (book) => (
                         <>
+                            {book.available ?  
+                            
+                                <Button variant="outline" size="icon" title={t('ui.loans.buttons.create') || 'Loan this book'} onClick={() => {handleLoan(book.id, book.available)}}>
+                                    <Handshake className="h-4 w-4 text-green-400"/>
+                                </Button>
+                                :
+                                <Button variant="outline" size="icon" title={t('ui.reservations.buttons.create') || 'Book this book'} onClick={() => {handleLoan(book.id, book.available)}}>
+                                    <ScrollText className="h-4 w-4 text-yellow-400"/>
+                                </Button>
+                                
+                                }
                             <Link href={`/books/${book.id}/edit?page=${currentPage}&perPage=${perPage}`}>
                                 <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit book'}>
                                     <PencilIcon className="h-4 w-4" />
                                 </Button>
                             </Link>
-                            
-                                <Button variant="outline" size="icon" title={t('ui.loans.buttons.create') || 'Loan this book'} onClick={() => {handleLoan(book.id)}} disabled={book.available ? false : true}>
-                                    <Handshake className="h-4 w-4"/>
-                                </Button>
                            
                             <DeleteDialog
                                 id={book.id}
                                 onDelete={handleDeleteBook}
-                                title={t('ui.users.delete.title') || 'Delete zone'}
+                                title={t('ui.books.delete.title') || 'Delete book'}
                                 description={
-                                    t('ui.users.delete.description') || 'Are you sure you want to delete this zone? This action cannot be undone.'
+                                    t('ui.books.delete.description') || 'Are you sure you want to delete this book? This action cannot be undone.'
                                 }
                                 trigger={
                                     <Button
                                         variant="outline"
                                         size="icon"
                                         className="text-destructive hover:text-destructive"
-                                        title={t('ui.users.buttons.delete') || 'Delete zone'}
+                                        title={t('ui.books.buttons.delete') || 'Delete book'}
                                     >
                                         <TrashIcon className="h-4 w-4" />
                                     </Button>
@@ -351,7 +362,7 @@ export default function BooksIndex() {
                                     onPageChange={handlePageChange}
                                     onPerPageChange={handlePerPageChange}
                                     perPageOptions={[10, 25, 50, 100]}
-                                    noResultsMessage={t('ui.users.no_results') || 'No zones found'}
+                                    noResultsMessage={t('ui.books.no_results') || 'No books found'}
                                 />
                             </div>
                         )}

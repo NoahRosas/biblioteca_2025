@@ -57,9 +57,10 @@ class LoanController extends Controller
     }
 
     public function edit(Request $request, Loan $loan)
-    {   
+    {   $user_email = User::select('email')->where('id', $loan->user_id)->get();
         return Inertia::render('loans/Edit',[
             'loan' => $loan,
+            'user_email' => $user_email[0]->email,
             'page' => $request->query('page'),
             'perPage' => $request->query('perPage'),
         ]);
@@ -69,7 +70,7 @@ class LoanController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'borrowedState'=>[],
-            
+            'end_loan'=>[],
 
         ]);
 
@@ -96,10 +97,10 @@ class LoanController extends Controller
 
     public function destroy(Loan $loan, LoanDestroyAction $action)
     {
-        $action($loan);
+        // $action($loan);
 
-        return redirect()->route('loans.index')
-            ->with('success', __('messages.loans.deleted'));
+        // return redirect()->route('loans.index')
+        //     ->with('success', __('messages.loans.deleted'));
     }
 }
 

@@ -1,18 +1,13 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "../../lib/axios";
 
-export interface Loan {
+export interface Reservation {
   id: string;
   user_id: string;
   user_email: string;
   book_id: string;
   book_name:string;
   book_ISBN:string;
-  end_loan:string;
-  days_overdued: number;
-  borrowed:boolean;
-  return_date:string;
-  is_overdue:boolean;
   created_at:string;
 }
 // Interface representing the actual API response structure
@@ -49,17 +44,17 @@ export interface ApiPaginatedResponse<T> {
     };
   }
   
-  interface UseLoansParams {
+  interface UseReservationsParams {
     search?: any[];
     page?: number;
     perPage?: number;
   }
 
-  export function useLoans({ search, page = 1, perPage = 10 }: UseLoansParams = {}) {
+  export function useReservations({ search, page = 1, perPage = 10 }: UseReservationsParams = {}) {
     return useQuery({
-      queryKey: ["loans", { search, page, perPage }],
+      queryKey: ["reservations", { search, page, perPage }],
       queryFn: async () => {
-        const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Loan>>("/api/loans", {
+        const { data: apiResponse } = await axios.get<ApiPaginatedResponse<Reservation>>("/api/reservations", {
           params: {
             search,
             page,
@@ -82,29 +77,16 @@ export interface ApiPaginatedResponse<T> {
             to: apiResponse.to,
             total: apiResponse.total
           }
-        } as PaginatedResponse<Loan>;
+        } as PaginatedResponse<Reservation>;
       },
     });
   }
 
-  export function useUpdateLoan(loanId: string) {
-    return useMutation({
-      mutationFn: async (data: { end_loan: string; }) => {
-        const response = await axios.put(`/api/loans/${loanId}`, data, {
-          headers: {
-            'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        });
-        return response.data;
-      },
-    });
-  }
 
-  export function useDeleteLoan() {
+  export function useDeleteReservation() {
     return useMutation({
-      mutationFn: async (loanId: string) => {
-        await axios.delete(`/api/loans/${loanId}`, {
+      mutationFn: async (reservationID: string) => {
+        await axios.delete(`/api/reservations/${reservationID}`, {
           headers: {
             'Accept': 'application/json',
             'X-Requested-With': 'XMLHttpRequest'

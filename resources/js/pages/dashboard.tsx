@@ -1,10 +1,9 @@
 import { DashboardCard } from '@/components/dashboard/DashboardCard';
-import { Users, User, Building, Cuboid, Container, BookText, Handshake, Library } from 'lucide-react';
+import { Users, Building, Cuboid, Container, BookText, Handshake, Library, ScrollText } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import CardFlip from "@/components/ui/card-flip";
-import { Icon } from '@/components/icon';
+
 import { useTranslations } from '@/hooks/use-translations';
 
 
@@ -56,6 +55,12 @@ export default function Dashboard() {
                     description={t(`ui.loans.description`)}
                     href="/loans"
                     icon={Handshake}
+                />
+                <DashboardCard
+                    title={t(`ui.reservations.title`)}
+                    description={t(`ui.reservations.description`)}
+                    href="/reservations"
+                    icon={ScrollText}
                 />
 
 

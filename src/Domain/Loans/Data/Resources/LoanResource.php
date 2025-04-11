@@ -30,8 +30,8 @@ class LoanResource extends Data
         $book = Book::withTrashed()->where('id', $loan->book_id)->first();
         $user = User::withTrashed()->where('id', $loan->user_id)->first();
         $return_date = $loan->return_date ? date_create($loan->return_date)->format('d-m-Y') : 'null';
-
-        if ($loan->end_loan < Carbon::now() && $return_date === 'null') {
+        $end_loan = new Carbon($loan->end_loan);
+        if ($end_loan < Carbon::now() && $return_date === 'null') {
             $loan->is_overdue = true;
         }
         $diff_inDays = Carbon::now()->diffInDays($loan->end_loan);

@@ -1,28 +1,22 @@
 import { useTranslations } from "@/hooks/use-translations";
 import { LoanLayout } from "@/layouts/loans/LoanLayout";
-
 import { PageProps } from "@/types";
 import { Handshake } from "lucide-react";
 import { LoanForm } from "./components/LoanForm";
 
-
-
-
-
 interface EditLoansProps extends PageProps{
     loan:{
         id: string;
-        user_email: string;
         book_id: string;
         end_loan: Date;
     }
-
+    user_email:string;
     page?: string;
     perPage?: string;
 
 }
 
-export default function EditLoan({loan}:EditLoansProps) {
+export default function EditLoan({loan, user_email}:EditLoansProps) {
   const { t } = useTranslations();
   return (
         <LoanLayout title={t('ui.loans.edit')}>
@@ -32,7 +26,7 @@ export default function EditLoan({loan}:EditLoansProps) {
                 
             </h3>
             <p className="text-s text-center mb-2 text-muted-foreground">{t('ui.loans.extra_info.edit')}</p>
-            <LoanForm initialData={loan}/>
+            <LoanForm initialData={loan} user_email={user_email}/>
         </LoanLayout>
   );
 }

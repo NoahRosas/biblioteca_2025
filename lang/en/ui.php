@@ -242,7 +242,8 @@ return [
             'max_zones' => 'Zone capacity', 
         ],
         'deleted_error' => 'Error deleting floor',
-        'error_loading' => 'Error loading floors. Please try again.'
+        'error_loading' => 'Error loading floors. Please try again.',
+        'no_results' => 'No results.',
     ],
     'zones' => [
         'title' => 'Zones',
@@ -282,6 +283,7 @@ return [
         ],
         'deleted_error' => 'Error deleting zone',
         'error_loading' => 'Error loading zones. Please try again.',
+        'no_results' => 'No results.',
     ],
     'bookshelves' => [
         'title' => 'Bookshelves',
@@ -326,6 +328,7 @@ return [
         ],
         'deleted_error' => 'Error deleting bookshelf',
         'error_loading' => 'Error loading bookshelves. Please try again.',
+        'no_results' => 'No results.',
     ],
     'books' => [
         'title' => 'Books',
@@ -399,6 +402,7 @@ return [
             'false' => 'Available',
             'true' => 'Unavailable'
         ],
+        'no_results' => 'No results.',
     ],
     'genres' =>[
         'names' => [
@@ -432,8 +436,8 @@ return [
             ],
         ],
         'extra_info' =>[
-            'create' => 'Completa el formulario para crear un nuevo préstamo',
-            'edit' => 'Introduce los datos para editar este préstamo',
+            'create' => 'Fill the fields below to create a new loan',
+            'edit' => 'Fill the fields below to update this loan',
         ],
         'columns' => [
             'user_email' => 'User',
@@ -458,6 +462,8 @@ return [
             'book_name' => 'Book title...',
             'created_at' => 'Expedit date...',
             'end_loan' => 'Expiration date...',
+            'borrowed' => 'Borrowed...',
+            'is_overdue' => 'Overdue...',
         ],
         'filters' => [
             'user_email' => 'User',
@@ -468,6 +474,11 @@ return [
             'borrowed' => 'Borrowed',
             'is_overdue' => 'Overdue',
         ],
+        'borrowed'=>[
+            'true'=>'Borrowed',
+            'false'=>'Returned',
+        ],
+        'date'=> 'Pick expiration date for the loan',
         'deleted_error' => 'Error deleting loan',
         'error_loading' => 'Error loading loans. Please, try again.',
         'return' => [
@@ -484,6 +495,52 @@ return [
             'one' => 'Day overdued: ',
             'more' => 'Days overdued: ',
             'false' => 'On time',
+            'true'=>'Overdue',
         ],
+        'no_results' => 'No results.',
+    ],
+    'reservations'=>[
+        'title' => 'Reservations',
+        'create' => 'Create reservation',
+        'edit' => 'Edit reservation',
+        'description' => 'Manage reservations in the system',
+        'buttons' =>[
+            'new' => 'Create Reservation',
+            'edit' => 'Edit Reservation'
+        ],
+        'extra_info' =>[
+            'create' => 'Fill the fields below to create a new reservation',
+            'edit' => 'Fill the fields below to update this reservation',
+        ],
+        'columns' => [
+            'user_email' => 'User',
+            'book_name' => 'Book title',
+            'book_ISBN' => 'ISBN',
+            'created_at' => 'Expedit date',
+        ],
+        'fields' => [
+            'user_email' => 'User email',
+            'book_id' => 'Book id',
+            'book_name' => 'Book title',
+            'created_at' => 'Expedit date',
+        ],
+        'placeholders' => [
+            'user_email' => 'User email...',
+            'ISBN' => 'ISBN...',
+            'book_id' => 'Book id...',
+            'book_name' => 'Book title...',
+            'created_at' => 'Expedit date...',
+
+        ],
+        'filters' => [
+            'user_email' => 'User',
+            'book_name' => 'Book title',
+            'book_ISBN' => 'ISBN',
+            'created_at' => 'Expedit date',
+ 
+        ],
+        'deleted_error' => 'Error deleting reservation',
+        'error_loading' => 'Error loading reservations. Please, try again.',
+        'no_results' => 'No results.',
     ],
 ];

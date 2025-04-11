@@ -95,7 +95,7 @@ export interface ApiPaginatedResponse<T> {
   export function useUpdateBook(bookId: string) {
     return useMutation({
       mutationFn: async (data: { name: string; author: string; publisher: string; num_pages: number; bookshelf_number: number; zone_name:string; floor_name:string; image_path: string;}) => {
-        const response = await axios.put(`/api/bookshelves/${bookId}`, data, {
+        const response = await axios.put(`/api/books/${bookId}`, data, {
           headers: {
             'Accept': 'application/json',
             'X-Requested-With': 'XMLHttpRequest'

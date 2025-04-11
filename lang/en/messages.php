@@ -51,4 +51,24 @@ return [
             'delete' => 'Error deleting book',
         ],
     ],
+    'loans' => [
+        'created' => 'Loan created successfully',
+        'updated' => 'Loan updated successfully',
+        'deleted' => 'Loan deleted successfully',
+        'error' => [
+            'create' => 'Error creating loan',
+            'update' => 'Error updating loan',
+            'delete' => 'Error deleting loan',
+        ],
+    ],
+    'reservations' => [
+        'created' => 'Reservation created successfully',
+        'updated' => 'Reservation updated successfully',
+        'deleted' => 'Reservation deleted successfully',
+        'error' => [
+            'create' => 'Error creating reservation',
+            'update' => 'Error updating reservation',
+            'delete' => 'Error deleting reservation',
+        ],
+    ],
 ];
