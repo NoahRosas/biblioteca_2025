@@ -36,6 +36,7 @@ dayjs.locale("es"); // Establecer español como idioma predeterminado
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { enUS, es } from "date-fns/locale";
 
 /**
  * Tipos de filtros disponibles
@@ -64,6 +65,8 @@ export interface BaseFilterConfig {
   defaultValue?: any;
   /** Placeholder */
   placeholder?: string;
+
+  lang?:string;
 }
 
 /**
@@ -138,7 +141,12 @@ export interface FiltersTableProps {
   filtersButtonText?: string;
   /** Texto para el botón de limpiar filtros */
   clearFiltersText?: string;
+  lang?:string;
 }
+const langMap = {
+        en: enUS,
+        es: es,
+    };
 
 /**
  * Componente para filtrar datos de una tabla
@@ -151,6 +159,7 @@ export function FiltersTable({
   filtersTitle,
   filtersButtonText,
   clearFiltersText,
+  lang,
 }: FiltersTableProps) {
   const { t } = useTranslations();
   const [open, setOpen] = useState(false);
@@ -158,7 +167,6 @@ export function FiltersTable({
     initialValues || {}
   );
   const debouncedFilterValues = useDebounce(filterValues, debounce);
-
   // Crear un esquema de validación a partir de los filtros
   const formSchema = z.object(
     filters.reduce((acc, filter) => {
@@ -222,6 +230,7 @@ export function FiltersTable({
   const hasActiveFilters = Object.values(filterValues).some(
     (value) => value !== undefined && value !== "" && value !== null
   );
+  
 
   return (
     <div className="w-full">
@@ -240,6 +249,7 @@ export function FiltersTable({
                       {renderFilterInput(
                         filter,
                         field,
+                        lang,
                         (value) => handleFilterChange(filter.id, value)
                       )}
                     </FormControl>
@@ -340,6 +350,7 @@ export function FiltersTable({
 function renderFilterInput(
   filter: FilterConfig,
   field: any,
+  lang:string,
   onChange: (value: any) => void
 ) {
   switch (filter.type) {
@@ -398,6 +409,7 @@ function renderFilterInput(
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0">
             <Calendar
+              locale={langMap[lang]}
               mode="single"
               timeZone="Europe/Madrid"
               selected={field.value}
@@ -405,7 +417,6 @@ function renderFilterInput(
                 field.onChange(date);
                 onChange(date);
               }}
-              initialFocus
             />
           </PopoverContent>
         </Popover>

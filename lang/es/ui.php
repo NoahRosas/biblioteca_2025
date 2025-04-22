@@ -12,6 +12,7 @@ return [
             'bookshelves' => 'Estanterías',
             'books' => 'Libros',
             'loans' => 'Préstamos',
+            'reservations' => 'Reservas',
             'repository' => 'Repositorio',
             'documentation' => 'Documentación',
         ],
@@ -336,7 +337,8 @@ return [
         'description' => 'Gestiona los libros del sistema',
 
         'buttons' => [
-            'new' => 'Crear Libro'
+            'new' => 'Crear Libro',
+            'delete' => 'Eliminar',
         ],
         'extra_info' => [
             'create' => 'Completa el formulario para crear un nuevo libro',
@@ -431,6 +433,7 @@ return [
                 'true' => 'Devolver libro',
                 'false' => 'Cancelar'
             ],
+            'create' => 'Prestar libro',
         ],
         'extra_info' => [
             'create' => 'Completa el formulario para crear un nuevo préstamo',
@@ -463,6 +466,7 @@ return [
             'end_loan' => 'Fecha vencimiento...',
             'borrowed' => 'Prestado actualmente...',
             'is_overdue' => 'Con retraso...',
+            'pick_date' => 'Elige una fecha'
         ],
         'filters' => [
             'user_email' => 'Email de usuario',
@@ -506,7 +510,10 @@ return [
         'description' => 'Gestiona las reservas del sistema',
 
         'buttons' => [
-            'new' => 'Crear Reserva'
+            'new' => 'Crear Reserva',
+            'edit' => 'Editar Reserva',
+            'create' => 'Reservar libro',
+            'delete' => 'Eliminar reserva',
         ],
         'extra_info' => [
             'create' => 'Completa el formulario para crear una nueva reserva',

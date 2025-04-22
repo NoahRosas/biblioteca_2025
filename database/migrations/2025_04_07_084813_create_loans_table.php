@@ -20,6 +20,7 @@ return new class extends Migration
             $table->boolean('borrowed')->default(true);
             $table->boolean('is_overdue')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

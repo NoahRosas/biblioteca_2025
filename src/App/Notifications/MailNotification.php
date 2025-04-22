@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+use Domain\Books\Models\Book;
+use Domain\Users\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -10,13 +12,15 @@ use Illuminate\Notifications\Notification;
 class MailNotification extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    public $book, $user;
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    
+    public function __construct(Book $book, User $user)
     {
-        //
+        $this->book = $book;
+        $this->user = $user;
     }
 
     /**
@@ -32,12 +36,12 @@ class MailNotification extends Notification implements ShouldQueue
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail(object $notifiable): MailMessage
+    public function toMail(): MailMessage
     {
         return (new MailMessage)
-                    ->line('Hola soy Noah')
-                    ->action('visita la biblioteca porfi', url('/'))
-                    ->line(':D!');
+                    ->line('Hola, '.$this->user->name.', el libro que habías reservado ('. $this->book->name .') ya está disponible para prestar.')
+                    ->action('Ir a por el libro', url('/loans'))
+                    ->line('Tiene 7 días para ir a por su reserva.');
     }
 
     /**

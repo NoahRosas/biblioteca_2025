@@ -1,17 +1,21 @@
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useTranslations } from '@/hooks/use-translations';
+import { cn } from '@/lib/utils';
 
 import { router } from '@inertiajs/react';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
-import { before } from 'lodash';
-import { Save, X } from 'lucide-react';
+import { CalendarIcon, Save, X } from 'lucide-react';
 import { useState } from 'react';
-import { DayPicker } from 'react-day-picker';
-import "react-day-picker/style.css";
+import { format } from 'date-fns';
+
+import 'react-day-picker/style.css';
+import { enUS, es } from 'date-fns/locale';
 
 // Tipado de las props
 export interface LoanFormProps {
@@ -20,7 +24,8 @@ export interface LoanFormProps {
         book_id: string;
         end_loan: Date;
     };
-    user_email?:string;
+    lang: string;
+    user_email?: string;
     page?: string;
     perPage?: string;
 }
@@ -35,10 +40,10 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function LoanForm({ initialData, page, perPage, user_email}: LoanFormProps) {
+export function LoanForm({ initialData, page, perPage, user_email, lang }: LoanFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
-    const [selectedEndLoan, setSelectEndLoan] = useState(initialData?.end_loan || '');
+    const [selectedEndLoan, setSelectEndLoan] = useState(initialData?.end_loan || undefined);
     let params = window.location.search;
     let url = new URLSearchParams(params);
     const form = useForm({
@@ -67,10 +72,15 @@ export function LoanForm({ initialData, page, perPage, user_email}: LoanFormProp
         },
     });
 
+    const langMap = {
+        en: enUS,
+        es: es,
+    };
+
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         event.stopPropagation();
-        form.setFieldValue('end_loan', selectedEndLoan);
+        form.setFieldValue('end_loan', selectedEndLoan ? selectedEndLoan : '');
         form.handleSubmit();
     };
     return (
@@ -111,7 +121,7 @@ export function LoanForm({ initialData, page, perPage, user_email}: LoanFormProp
                                             onChange={(e) => field.handleChange(e.target.value)}
                                             onBlur={field.handleBlur}
                                             placeholder={t('ui.loans.placeholders.user_email')}
-                                            disabled={form.state.isSubmitting || user_email!==undefined}
+                                            disabled={form.state.isSubmitting || user_email !== undefined}
                                             required={false}
                                             autoComplete="off"
                                         />
@@ -171,19 +181,6 @@ export function LoanForm({ initialData, page, perPage, user_email}: LoanFormProp
                         <div className="space-y-1">
                             <form.Field
                                 name="end_loan"
-                                // validators={{
-                                //     onChangeAsync: async ({ value }) => {
-                                //         await new Promise((resolve) => setTimeout(resolve, 500));
-                                //         return !value
-                                //             ? t('ui.validation.required', { attribute: t('ui.loans.fields.end_loan').toLowerCase() })
-                                //             : value.toLocaleString < new Date()
-                                //               ? t('ui.validation.min.string', {
-                                //                     attribute: t('ui.loans.fields.end_loan').toLowerCase(),
-                                //                     min: '1',
-                                //                 })
-                                //               : undefined;
-                                //     },
-                                // }}
                             >
                                 {(field) => (
                                     <>
@@ -192,19 +189,37 @@ export function LoanForm({ initialData, page, perPage, user_email}: LoanFormProp
                                                 {t('ui.loans.fields.end_loan')}
                                             </Label>
                                         </div>
-                                            <DayPicker
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                
+                                                    <Button
+                                                        variant={'outline'}
+                                                        className={cn(
+                                                            'w-[240px] pl-3 text-left font-normal',
+                                                            !field.state.value && 'text-muted-foreground',
+                                                        )}
+                                                    >
+                                                        {selectedEndLoan ? format(selectedEndLoan, 'PPP', {locale:langMap[lang]}) : <span>{t('ui.loans.placeholders.pick_date')}</span>}
+                                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                    </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-auto p-0" align="start">
+                                            <Calendar
                                             animate
-                                            timeZone='Europe/Madrid'
-                                            mode='single'
+                                            timeZone="Europe/Madrid"
+                                            locale={langMap[lang]}
+                                            mode="single"
+                                            className="rounded-md border shadow"
+
                                             showOutsideDays
                                             selected={selectedEndLoan}
-                                            // disabled={[{before: new Date()}, new Date()] }
+                                            disabled={[{before: new Date()}, new Date()] }
                                             onSelect={setSelectEndLoan}
-                                            footer = {
-                                                selectedEndLoan ? `${t('ui.loans.fields.end_loan')}: ${selectedEndLoan}` : t('ui.loans.date')
-                                            }
+                                            
                                         />
-                                        
+
+                                            </PopoverContent>
+                                        </Popover>
                                         
                                         <FieldInfo field={field} />
                                     </>

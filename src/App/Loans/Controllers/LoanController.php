@@ -3,28 +3,33 @@
 namespace App\Loans\Controllers;
 
 use App\Core\Controllers\Controller;
+use App\Notifications\MailNotification;
 use Domain\Books\Models\Book;
 use Domain\Loans\Actions\LoanDestroyAction;
 use Domain\Loans\Actions\LoanStoreAction;
 use Domain\Loans\Actions\LoanUpdateAction;
 use Domain\Loans\Models\Loan;
+use Domain\Reservations\Actions\ReservationDestroyAction;
+use Domain\Reservations\Models\Reservation;
 use Domain\Users\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class LoanController extends Controller
 {
     public function index()
     {
-        return Inertia::render('loans/Index');
+        $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
+        return Inertia::render('loans/Index', ['lang' => $lang]);
     }
 
     public function create()
     {
         $books = Book::with('activeLoan');
-        return Inertia::render('loans/Create', ['books' => $books]);
+        $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
+        return Inertia::render('loans/Create', ['books' => $books, 'lang' => $lang]);
     }
 
     public function store(Request $request, LoanStoreAction $action)
@@ -58,15 +63,17 @@ class LoanController extends Controller
 
     public function edit(Request $request, Loan $loan)
     {   $user_email = User::select('email')->where('id', $loan->user_id)->get();
+        $lang = Auth::user()->settings->preferences;
         return Inertia::render('loans/Edit',[
             'loan' => $loan,
+            'lang' => $lang,
             'user_email' => $user_email[0]->email,
             'page' => $request->query('page'),
             'perPage' => $request->query('perPage'),
         ]);
     }
 
-    public function update(Request $request, Loan $loan, LoanUpdateAction $action)
+    public function update(Request $request, Loan $loan, LoanUpdateAction $action, ReservationDestroyAction $destroy_reservation)
     {
         $validator = Validator::make($request->all(), [
             'borrowedState'=>[],
@@ -80,7 +87,17 @@ class LoanController extends Controller
 
         $action($loan, $validator->validated());
 
+        $reservation = Reservation::where('book_id', $loan->book_id)->first();
+        
+        if(isset($reservation)){
+            $user = User::where('id', $reservation->user_id)->first();
+            $book = Book::where('id', $reservation->book_id)->first();
+            $user->notify(new MailNotification($book, $user));
+            $destroy_reservation($reservation);
+        }
+        
         $redirectUrl = route('loans.index');
+
 
         // Añadir parámetros de página a la redirección si existen
         if ($request->has('page')) {

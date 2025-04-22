@@ -11,6 +11,7 @@ return [
             'bookshelves' => 'Bookshelves',
             'books' => 'Books',
             'loans' => 'Loans',
+            'reservations'=>'Reservations',
             'repository' => 'Repository',
             'documentation' => 'Documentation',
         ],
@@ -336,7 +337,8 @@ return [
         'edit' => 'Edit Book',
         'description' => 'Manage books in the system',
         'buttons' =>[
-            'new' => 'Create Book'
+            'new' => 'Create Book',
+            'delete' => 'Delete',
         ],
         'extra_info'=>[
             'create' => 'Fill the fields to create a new book',
@@ -434,6 +436,8 @@ return [
                 'true' => 'Return book',
                 'false' => 'Cancel'
             ],
+            'create' => 'Lend book',
+
         ],
         'extra_info' =>[
             'create' => 'Fill the fields below to create a new loan',
@@ -464,6 +468,7 @@ return [
             'end_loan' => 'Expiration date...',
             'borrowed' => 'Borrowed...',
             'is_overdue' => 'Overdue...',
+            'pick_date' => 'Pick a date'
         ],
         'filters' => [
             'user_email' => 'User',
@@ -506,7 +511,9 @@ return [
         'description' => 'Manage reservations in the system',
         'buttons' =>[
             'new' => 'Create Reservation',
-            'edit' => 'Edit Reservation'
+            'edit' => 'Edit Reservation',
+            'create' => 'Book book',
+            'delete' => 'Delete reservation',
         ],
         'extra_info' =>[
             'create' => 'Fill the fields below to create a new reservation',

@@ -5,6 +5,7 @@ import { Loan, useDeleteLoan, useLoans } from '@/hooks/loans/useLoans';
 
 import { useTranslations } from '@/hooks/use-translations';
 import { LoanLayout } from '@/layouts/loans/LoanLayout';
+import { PageProps } from '@/types';
 
 import { Link, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
@@ -12,7 +13,10 @@ import { HandHelping, PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-export default function BooksIndex() {
+interface IndexLoanProps extends PageProps{
+    lang: string;
+}
+export default function BooksIndex({lang}:IndexLoanProps) {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -37,6 +41,7 @@ export default function BooksIndex() {
         filters.is_overdue ? filters.is_overdue : 'null',
     ];
 
+    console.log(combinedSearch);
     const {
         data: loans,
         isLoading,
@@ -235,6 +240,7 @@ export default function BooksIndex() {
 
                     <div className="space-y-4">
                         <FiltersTable
+                        lang={lang}
                             filters={
                                 [
                                     {
