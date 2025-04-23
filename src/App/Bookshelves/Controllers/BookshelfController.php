@@ -10,6 +10,7 @@ use Domain\Bookshelves\Models\Bookshelf;
 use Domain\Floors\Models\Floor;
 use Domain\Zones\Models\Zone;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -21,8 +22,8 @@ class BookshelfController extends Controller
      */
     public function index()
     {
-
-        return Inertia::render('bookshelves/Index');
+        $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
+        return Inertia::render('bookshelves/Index', ['lang' => $lang]);
     }
 
     /**

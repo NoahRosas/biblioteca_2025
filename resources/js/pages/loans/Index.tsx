@@ -138,15 +138,29 @@ export default function BooksIndex({lang}:IndexLoanProps) {
                     renderActions: (loan) => {
                         let response;
                         let days_overdued = Math.abs(loan.days_overdued);
-                        if (loan.is_overdue) {
-                            if (days_overdued > 1) {
-                                response = t('ui.loans.overdue.more') + ' ' + days_overdued;
+                        let days_overdued_returned = Math.abs(loan.days_overdued_returned);
+                        if (loan.return_date == 'null') {
+                            if (loan.is_overdue) {
+                                if (days_overdued > 1) {
+                                    response = t('ui.loans.overdue.more') + ' ' + days_overdued;
+                                } else {
+                                    response = t('ui.loans.overdue.one') + ' ' + days_overdued;
+                                }
                             } else {
-                                response = t('ui.loans.overdue.one') + ' ' + days_overdued;
+                                response = t('ui.loans.overdue.false');
                             }
-                        } else {
-                            response = t('ui.loans.overdue.false');
+                        }else{
+                            if (loan.is_overdue) {
+                                if (days_overdued_returned > 1) {
+                                    response = t('ui.loans.overdue.more') + ' ' + days_overdued_returned;
+                                } else {
+                                    response = t('ui.loans.overdue.one') + ' ' + days_overdued_returned;
+                                }
+                            } else {
+                                response = t('ui.loans.overdue.false');
+                            }
                         }
+                        
 
                         return (
                             <>

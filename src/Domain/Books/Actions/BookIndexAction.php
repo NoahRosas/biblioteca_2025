@@ -26,6 +26,7 @@ class BookIndexAction
         $zone_name = $search[8];
         $floor = $search[9];
         $is_available = $search[10];
+        $created_at = $search[11];
 
 
         $floor_id = Floor::query()->when($floor !== 'null', function ($query) use ($floor){
@@ -58,21 +59,41 @@ class BookIndexAction
 
         $books = Book::query()
             ->when($name !== 'null', function ($query) use ($name) {
+
                 $query->where('name', 'ILIKE', "%".$name."%");
+
             })->when($ISBN !== 'null', function ($query) use ($ISBN) {
+
                 $query->where('ISBN', 'ILIKE', "%".$ISBN."%");
-            })->when($author !== 'null', function ($query) use ($author) {
+
+            })->when($author !== 'null', function ($query) use ($author) { 
+
                 $query->where('author', 'ILIKE', "%".$author."%");
+
             })->when($publisher !== 'null', function ($query) use ($publisher) {
+
                 $query->where('publisher', 'ILIKE', "%".$publisher."%");
+
             })->when($num_pages!== 'null', function ($query) use ($num_pages) {
+
                 $query->where('num_pages', '=', $num_pages);
+
             })->when($genres!== 'null', function ($query) use ($genres) {
+
                 $query->where('genres', 'ILIKE', "%".$genres."%");
+
             })->when($bookshelves !== 'null', function ($query) use ($bookshelves) {
+
                 $query->whereIn('bookshelf_id',$bookshelves);
+
             })->when($is_available !== 'null', function ($query) use ($loans) {
+
                 $query->whereIn('id',$loans);
+                
+            })->when($created_at !== 'null', function ($query) use ($created_at) {
+
+                $query->whereDate('created_at', '=', $created_at);
+                
             })
             ->latest()
             ->paginate($perPage);

@@ -12,7 +12,7 @@ import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
 import { CalendarIcon, Save, X } from 'lucide-react';
 import { useState } from 'react';
-import { format } from 'date-fns';
+import { format, isSunday, isWeekend, lastDayOfWeek } from 'date-fns';
 
 import 'react-day-picker/style.css';
 import { enUS, es } from 'date-fns/locale';
@@ -210,10 +210,10 @@ export function LoanForm({ initialData, page, perPage, user_email, lang }: LoanF
                                             locale={langMap[lang]}
                                             mode="single"
                                             className="rounded-md border shadow"
-
+                                            
                                             showOutsideDays
                                             selected={selectedEndLoan}
-                                            disabled={[{before: new Date()}, new Date()] }
+                                            disabled={[{before: new Date()}, new Date(), isSunday] }
                                             onSelect={setSelectEndLoan}
                                             
                                         />

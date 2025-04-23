@@ -9,6 +9,7 @@ use Domain\Floors\Actions\FloorUpdateAction;
 use Domain\Floors\Models\Floor;
 use Domain\Genres\Models\Genre;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -20,6 +21,7 @@ class FloorController extends Controller
      */
     public function index()
     {
+        $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
 
         $floors = Floor::with(['zones'])
             ->withCount('zones')
@@ -37,6 +39,7 @@ class FloorController extends Controller
 
         return Inertia::render('floors/Index', [
             'floors' => $floors,
+            'lang' => $lang,
 
         ]);
     }
@@ -46,7 +49,9 @@ class FloorController extends Controller
      */
     public function create()
     {
-        return Inertia::render('floors/Create');
+        $floors = Floor::all()->pluck('name')->toArray();
+        
+        return Inertia::render('floors/Create', ['floors' => $floors]);
     }
 
     /**
@@ -85,7 +90,9 @@ class FloorController extends Controller
      */
     public function edit(Request $request, Floor $floor)
     {
+        $floors = Floor::all()->pluck('name')->toArray();
         return Inertia::render('floors/Edit', [
+            'floors'=> $floors,
             'floor' => $floor,
             'page' => $request->query('page'),
             'perPage' => $request->query('perPage')

@@ -12,13 +12,17 @@ import { Button } from '@/components/ui/button';
 import { useTranslations } from '@/hooks/use-translations';
 import { User, useDeleteUser, useUsers } from '@/hooks/users/useUsers';
 import { UserLayout } from '@/layouts/users/UserLayout';
+import { PageProps } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-export default function UsersIndex() {
+interface IndexUserProps extends PageProps{
+    lang: string;
+}
+export default function UsersIndex({lang}:IndexUserProps) {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -32,7 +36,11 @@ export default function UsersIndex() {
     const [perPage, setPerPage] = useState(perPageParam ? parseInt(perPageParam) : 10);
     const [filters, setFilters] = useState<Record<string, any>>({});
     // Combine name and email filters into a single search string if they exist
-    const combinedSearch = [filters.name ? filters.name : 'null', filters.email ? filters.email : 'null'];
+    const combinedSearch = [
+        filters.name ? filters.name : 'null',
+        filters.email ? filters.email : 'null',
+        filters.created_at ? filters.created_at : 'null',
+    ];
 
     const {
         data: users,
@@ -134,6 +142,7 @@ export default function UsersIndex() {
 
                     <div className="space-y-4">
                         <FiltersTable
+                        lang={lang}
                             filters={
                                 [
                                     {
@@ -147,6 +156,12 @@ export default function UsersIndex() {
                                         label: t('ui.users.filters.email') || 'Email',
                                         type: 'text',
                                         placeholder: t('ui.users.filters.email') || 'Email...',
+                                    },
+                                    {
+                                        id: 'created_at',
+                                        label: t('ui.users.filters.created_at') || 'Creation date',
+                                        type: 'date',
+                                        placeholder: t('ui.users.filters.created_at') || 'Creation date...',
                                     },
                                 ] as FilterConfig[]
                             }

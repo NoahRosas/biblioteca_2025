@@ -76,6 +76,7 @@ return [
         ],
     ],
     'validation' => [
+        'distinct' => 'The :attribute field has a duplicate value.',
            'required' => 'The :attribute field is required.',
             'email' => 'The :attribute field must be a valid email address.',
             'min' => [
@@ -177,6 +178,7 @@ return [
             'search' => 'Search',
             'name' => 'User name',
             'email' => 'User email',
+            'created_at' => 'Creation date',
         ],
         'placeholders' => [
             'name' => 'User full name',
@@ -237,10 +239,12 @@ return [
         'placeholders' => [
             'name' => 'Floor name...',
             'max_zones' => 'Zone capacity...',
+            'created_at' => 'Creation date...',
         ],
         'filters' => [
             'name' => 'Floor name',
-            'max_zones' => 'Zone capacity', 
+            'max_zones' => 'Zone capacity',
+            'created_at' => 'Creation date',
         ],
         'deleted_error' => 'Error deleting floor',
         'error_loading' => 'Error loading floors. Please try again.',
@@ -275,12 +279,14 @@ return [
             'number' => 'Zone number...',
             'max_bookshelves' => 'Bookshelves capacity...',
             'floor_id' => 'Floor ubication...',
+            'created_at' => 'Creation date...',
         ],
         'filters' => [
             'number' => 'Zone number',
             'name' => 'Zone name',
             'max_bookshelves' => 'Bookshelves capacity...',
             'floor_id' => 'Floor ubication',
+            'created_at' => 'Creation date',
         ],
         'deleted_error' => 'Error deleting zone',
         'error_loading' => 'Error loading zones. Please try again.',
@@ -318,6 +324,7 @@ return [
             'floor_id'=> 'Floor ubication...',
             'zone_id' => 'Zone ubication...',
             'zone_name'=> 'Zone genre...',
+            'created_at' => 'Creation date...',
         ],
         'filters' => [
             'number' => 'Bookshelf number',
@@ -325,6 +332,7 @@ return [
             'floor_id'=> 'Floor ubication',
             'zone_id' => 'Zone ubication',
             'zone_name'=> 'Zone genre',
+            'created_at' => 'Creation date',
 
         ],
         'deleted_error' => 'Error deleting bookshelf',
@@ -383,6 +391,7 @@ return [
             'zone_name'=> 'Zone genre...',
             'floor_id' => 'Floor ubication...',
             'is_available' => 'Is available...',
+            'created_at' => 'Creation date...',
 
         ],
         'filters' => [
@@ -397,6 +406,7 @@ return [
             'zone_name'=> 'Zone genre',
             'floor_id' => 'Floor ubication',
             'is_available' => 'Is available',
+            'created_at' => 'Creation date',
         ],
         'deleted_error' => 'Error deleting book',
         'error_loading' => 'Error loading books. Please, try again.',

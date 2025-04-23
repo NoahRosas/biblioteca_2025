@@ -14,11 +14,12 @@ interface EditFloorProps extends PageProps {
 
   };
 
+  floors:string[];
   page?: string;
   perPage?: string;
 }
 
-export default function EditFloor({ floor, page, perPage}: EditFloorProps) {
+export default function EditFloor({ floor, page, perPage, floors}: EditFloorProps) {
   const { t } = useTranslations();
 
   return (
@@ -27,7 +28,7 @@ export default function EditFloor({ floor, page, perPage}: EditFloorProps) {
         <Building className="mr-2" />
         {t('ui.floors.edit')}
     </h3>
-    <FloorForm initialData={floor} page={page} perPage={perPage} />
+    <FloorForm initialData={floor} page={page} perPage={perPage} floors={floors}/>
 </FloorLayout>
   );
 }

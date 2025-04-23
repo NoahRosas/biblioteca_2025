@@ -19,6 +19,7 @@ class LoanResource extends Data
         public readonly string $book_ISBN,
         public readonly string $end_loan,
         public readonly int $days_overdued,
+        public readonly int $days_overdued_returned,
         public readonly bool $borrowed,
         public readonly string $return_date,
         public readonly bool $is_overdue,
@@ -29,12 +30,16 @@ class LoanResource extends Data
     public static function fromModel(Loan $loan): self{
         $book = Book::withTrashed()->where('id', $loan->book_id)->first();
         $user = User::withTrashed()->where('id', $loan->user_id)->first();
+
         $return_date = $loan->return_date ? date_create($loan->return_date)->format('d-m-Y') : 'null';
         $end_loan = new Carbon($loan->end_loan);
         if ($end_loan < Carbon::now() && $return_date === 'null') {
             $loan->is_overdue = true;
         }
-        $diff_inDays = Carbon::now()->diffInDays($loan->end_loan);
+        $diff_inDays = (int)Carbon::now()->diffInDays($loan->end_loan);
+        $diff_2 = new Carbon($loan->return_date);
+        $diff_2 = (int)$diff_2->diffInDays($loan->end_loan);
+        // dd($diff_2);
         return new self (
             id: $loan->id,
             user_id: $loan->user_id,
@@ -44,6 +49,7 @@ class LoanResource extends Data
             book_ISBN: $book->ISBN,
             end_loan: date_create($loan->end_loan)->format('d-m-Y'),
             days_overdued:$diff_inDays,
+            days_overdued_returned:$diff_2,
             borrowed: $loan->borrowed,
             return_date: $return_date,
             is_overdue: $loan->is_overdue ,

@@ -309,6 +309,7 @@ export function FiltersTable({
                             {renderFilterInput(
                               filter,
                               field,
+                              lang,
                               (value) => handleFilterChange(filter.id, value)
                             )}
                           </FormControl>

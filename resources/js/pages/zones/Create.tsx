@@ -16,9 +16,10 @@ interface CreateZoneProps extends PageProps{
         id:string,
         name:string
     }[];
+    zones: any[];
 }
 
-export default function CreateFloor({floors, genres}:CreateZoneProps) {
+export default function CreateFloor({floors, genres, zones}:CreateZoneProps) {
   const { t } = useTranslations();
   return (
         <ZoneLayout title={t('ui.zones.create')}>
@@ -28,7 +29,7 @@ export default function CreateFloor({floors, genres}:CreateZoneProps) {
                 
             </h3>
             <p className="text-s text-center mb-2 text-muted-foreground">{t('ui.zones.extra_info.create')}</p>
-            <ZoneForm floors={floors} genres={genres} />
+            <ZoneForm floors={floors} genres={genres} zones={zones}/>
         </ZoneLayout>
   );
 }

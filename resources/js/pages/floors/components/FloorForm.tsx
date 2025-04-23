@@ -16,6 +16,7 @@ export interface FloorFormProps {
         name: string;
         max_zones: number;
     };
+    floors: string[];
     page?: string;
     perPage?: string;
 }
@@ -30,7 +31,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function FloorForm({ initialData, page, perPage }: FloorFormProps) {
+export function FloorForm({ initialData, page, perPage, floors}: FloorFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
 
@@ -83,6 +84,8 @@ export function FloorForm({ initialData, page, perPage }: FloorFormProps) {
                                                     attribute: t('ui.floors.fields.name').toLowerCase(),
                                                     min: '1',
                                                 })
+                                              : floors.includes(value)
+                                              ? t('ui.validation.distinct', { attribute: t('ui.floors.fields.name').toLowerCase() })
                                               : undefined;
                                     },
                                 }}
@@ -98,6 +101,7 @@ export function FloorForm({ initialData, page, perPage }: FloorFormProps) {
                                         <Input
                                             id={field.name}
                                             name={field.name}
+                                            type="number"
                                             value={field.state.value}
                                             onChange={(e) => field.handleChange(e.target.value)}
                                             onBlur={field.handleBlur}

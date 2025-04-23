@@ -77,6 +77,7 @@ return [
         ],
     ],
     'validation' => [
+        'distinct' => 'El campo :attribute tiene un valor duplicado.',
         'required' => 'El campo :attribute es obligatorio.',
         'email' => 'El campo :attribute debe ser una dirección de correo válida.',
         'min' => [
@@ -178,6 +179,7 @@ return [
             'search' => 'Buscar',
             'name' => 'Nombre del usuario',
             'email' => 'Email del usuario',
+            'created_at' => 'Fecha de creación',
         ],
         'placeholders' => [
             'name' => 'Nombre completo del usuario',
@@ -238,10 +240,12 @@ return [
         'placeholders' => [
             'name' => 'Nombre de la planta...',
             'max_zones' => 'Máximo número de zonas...',
+            'created_at' => 'Fecha de creación...'
         ],
         'filters' => [
             'name' => 'Nombre de la planta',
             'max_zones' => 'Máximo número de zonas',
+            'created_at' => 'Fecha de creación',
         ],
         'error_loading' => 'Error al cargar las plantas. Inténtalo de nuevo.',
         'deleted_error' => 'Error al eliminar la planta',
@@ -256,8 +260,8 @@ return [
             'new' => 'Crear Zona'
         ],
         'extra_info' => [
-            'create_zone' => 'Introduce los datos para crear una nueva zona',
-            'edit_zone' => 'Introduce los datos para editar esta zona',
+            'create' => 'Introduce los datos para crear una nueva zona',
+            'edit' => 'Introduce los datos para editar esta zona',
         ],
         'columns' => [
             'name' => 'Nombre de la zona',
@@ -275,12 +279,14 @@ return [
             'number' => 'Número de la zona...',
             'max_bookshelves' => 'Capacidad de estanterías...',
             'floor_id' => 'Planta...',
+            'created_at' => 'Fecha de creación...'
         ],
         'filters' => [
             'name' => 'Nombre de la zona',
             'number' => 'Número de la zona',
             'max_bookshelves' => 'Capacidad de estanterías',
             'floor_id' => 'Planta',
+            'created_at' => 'Fecha de creación'
         ],
         'error_loading' => 'Error al cargar las zonas. Inténtalo de nuevo.',
         'deleted_error' => 'Error al eliminar la zona',
@@ -317,14 +323,16 @@ return [
             'floor_id' => 'Planta...',
             'zone_id' => 'Zona...',
             'zone_name' => 'Género de la zona...',
-            'max_books' => 'Capacidad de libros...'
+            'max_books' => 'Capacidad de libros...',
+            'created_at' => 'Fecha de creación...',
         ],
         'filters' => [
             'number' => 'Número de estantería',
             'floor_id' => 'Planta',
             'zone_id' => 'Zona',
             'zone_name' => 'Género de la zona',
-            'max_books' => 'Capacidad de libros'
+            'max_books' => 'Capacidad de libros',
+            'created_at' => 'Fecha de creación',
         ],
         'error_loading' => 'Error al cargar las zonas. Inténtalo de nuevo.',
         'deleted_error' => 'Error al eliminar la estantería',
@@ -382,6 +390,7 @@ return [
             'zone_name' => 'Género zona...',
             'floor_id' => 'Planta...',
             'is_available' => 'Disponible...',
+            'created_at' => 'Fecha de creación...',
         ],
         'filters' => [
             'name' => 'Nombre del libro',
@@ -394,6 +403,7 @@ return [
             'zone_id' => 'Zona',
             'floor_id' => 'Planta',
             'is_available' => 'Disponible',
+            'created_at' => 'Fecha de creación',
         ],
         'error_loading' => 'Error al cargar los libros. Inténtalo de nuevo.',
         'deleted_error' => 'Error al eliminar el libro',

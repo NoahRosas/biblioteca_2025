@@ -7,6 +7,7 @@ use Domain\Reservations\Actions\ReservationUpdateAction;
 use Domain\Reservations\Models\Reservation;
 use Domain\Users\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -17,7 +18,8 @@ class ReservationController
      */
     public function index()
     {
-        return Inertia::render('reservations/Index');
+        $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
+        return Inertia::render('reservations/Index', ['lang' => $lang]);
     }
 
     /**

@@ -13,6 +13,7 @@ import { Bookshelf, useBookshelves, useDeleteBookshelf } from '@/hooks/bookshelv
 import { useTranslations } from '@/hooks/use-translations';
 
 import { BookshelfLayout } from '@/layouts/bookshelves/BookshelfLayout';
+import { PageProps } from '@/types';
 
 import { Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
@@ -20,9 +21,11 @@ import { PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
+interface IndexBookshelvesProps extends PageProps{
+    lang: string;
+}
 
-
-export default function BookshelvesIndex() {
+export default function BookshelvesIndex({lang}:IndexBookshelvesProps) {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -42,7 +45,9 @@ export default function BookshelvesIndex() {
         filters.max_books? filters.max_books : 'null',
         filters.zone_id ? filters.zone_id : 'null',
         filters.zone_name? filters.zone_name : 'null',
-        filters.floor_id ? filters.floor_id : 'null'];
+        filters.floor_id ? filters.floor_id : 'null',
+        filters.created_at ? filters.created_at : 'null'
+    ];
 
     const {
         data: bookshelves,
@@ -163,6 +168,7 @@ export default function BookshelvesIndex() {
 
                     <div className="space-y-4">
                         <FiltersTable
+                        lang={lang}
                             filters={
                                 [
                                     {
@@ -194,6 +200,12 @@ export default function BookshelvesIndex() {
                                         label: t('ui.bookshelves.columns.floor_id') || 'Floor name',
                                         type: 'number',
                                         placeholder: t('ui.bookshelves.placeholders.floor_id') || 'Floor name...',
+                                    },
+                                    {
+                                        id: 'created_at',
+                                        label: t('ui.bookshelves.filters.created_at') || 'Creation date',
+                                        type: 'date',
+                                        placeholder: t('ui.bookshelves.placeholders.created_at') || 'Creation date...',
                                     },
                                 ] as FilterConfig[]
                             }

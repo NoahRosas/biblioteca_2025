@@ -12,15 +12,18 @@ import { Button } from '@/components/ui/button';
 import { Book, useBooks, useDeleteBook } from '@/hooks/books/useBooks';
 import { useTranslations } from '@/hooks/use-translations';
 import { BookLayout } from '@/layouts/books/BookLayout';
+import { PageProps } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Handshake, PencilIcon, PlusIcon, ScrollText, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
+interface IndexBooksProps extends PageProps{
+    lang: string;
+}
 
-
-export default function BooksIndex() {
+export default function BooksIndex({lang}:IndexBooksProps) {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -47,6 +50,7 @@ export default function BooksIndex() {
         filters.zone_name ? filters.zone_name : 'null',
         filters.floor_id ? filters.floor_id : 'null',
         filters.is_available ? filters.is_available : 'null',
+        filters.created_at ? filters.created_at : 'null'
     ];
 
     const {
@@ -250,6 +254,7 @@ export default function BooksIndex() {
 
                     <div className="space-y-4">
                         <FiltersTable
+                        lang={lang}
                             filters={
                                 [
                                     {
@@ -322,8 +327,12 @@ export default function BooksIndex() {
                                             {label:t('ui.books.availability.false'), value: 'false'},
                                             {label:t('ui.books.availability.true'), value: 'true'},
                                         ]
-                                        
-                                    
+                                    },
+                                    {
+                                        id: 'created_at',
+                                        label: t('ui.books.filters.created_at') || 'Creation date',
+                                        type: 'date',
+                                        placeholder: t('ui.books.placeholders.created_at') || 'Creation date...',
                                     },
                                 ] as FilterConfig[]
                             }

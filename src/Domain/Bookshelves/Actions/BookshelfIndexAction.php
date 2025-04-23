@@ -16,6 +16,7 @@ class BookshelfIndexAction
         $zone = $search[2];
         $zone_name = $search[3];
         $floor = $search[4];
+        $created_at = $search [5];
 
         $floor_id = Floor::query()->when($floor !== 'null', function ($query) use ($floor) {
             $query->where('name', 'like', $floor);
@@ -49,6 +50,10 @@ class BookshelfIndexAction
             ->when($zones !== "null", function ($query) use ($zones) {
 
                 $query->whereIn('zone_id', $zones);
+            })->when($created_at !== 'null', function ($query) use ($created_at) {
+
+                $query->whereDate('created_at', '=', $created_at);
+                
             })
             ->latest()
             ->paginate($perPage);

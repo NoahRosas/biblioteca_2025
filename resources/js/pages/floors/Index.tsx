@@ -12,15 +12,18 @@ import { Button } from '@/components/ui/button';
 import { Floor, useDeleteFloor, useFloors } from '@/hooks/floors/useFloors';
 import { useTranslations } from '@/hooks/use-translations';
 import { FloorLayout } from '@/layouts/floors/FloorLayout';
+import { PageProps } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
+interface IndexFloorProps extends PageProps{
+    lang: string;
+}
 
-
-export default function FloorsIndex() {
+export default function FloorsIndex({lang}:IndexFloorProps) {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -36,7 +39,9 @@ export default function FloorsIndex() {
     // Combine name and email filters into a single search string if they exist
     const combinedSearch = [
         filters.name ? filters.name : 'null',
-        filters.max_zones ? filters.max_zones : 'null'];
+        filters.max_zones ? filters.max_zones : 'null',
+        filters.created_at ? filters.created_at : 'null',
+    ];
     
 
     const {
@@ -140,6 +145,7 @@ export default function FloorsIndex() {
 
                     <div className="space-y-4">
                         <FiltersTable
+                        lang={lang}
                             filters={
                                 [
                                     {
@@ -154,6 +160,12 @@ export default function FloorsIndex() {
                                         type: 'number',
                                         placeholder: t('ui.floors.placeholders.max_zones') || 'Max zones...',
                                     },
+                                    {
+                                        id: 'created_at',
+                                        label: t('ui.floors.filters.created_at') || 'Creation date',
+                                        type: 'date',
+                                        placeholder: t('ui.floors.placeholders.created_at') || 'Creation date...',
+                                    }
                                 ] as FilterConfig[]
                             }
                             onFilterChange={setFilters}

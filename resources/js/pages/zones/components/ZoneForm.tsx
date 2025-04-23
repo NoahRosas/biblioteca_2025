@@ -8,6 +8,7 @@ import { router } from '@inertiajs/react';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
 import { Save, X } from 'lucide-react';
+import { useState } from 'react';
 
 // Tipado de las props
 export interface ZoneFormProps {
@@ -30,6 +31,7 @@ export interface ZoneFormProps {
         id:string,
         name:string
     }[];
+    zones: any[];
 }
  
 function FieldInfo({ field }: { field: AnyFieldApi }) {
@@ -42,10 +44,10 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function ZoneForm({ initialData, page, perPage, floors, genres }: ZoneFormProps) {
-    console.log(initialData);
+export function ZoneForm({ initialData, page, perPage, floors, genres, zones}: ZoneFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
+    const [selectedFloor, setSelectedFloor] = useState<string>('');
     const form = useForm({
         defaultValues: {
             name: initialData?.name ?? '',
@@ -126,8 +128,53 @@ export function ZoneForm({ initialData, page, perPage, floors, genres }: ZoneFor
                             </form.Field>
                         </div>
                         
-                        {/* Number field */}
+                       
+
+                        {/* Floor name field */}
                         <div className="space-y-1">
+                            <form.Field
+                                name="floor_id"
+                                validators={{
+                                    onChangeAsync: async ({ value }) => {
+                                        await new Promise((resolve) => setTimeout(resolve, 500));
+                                        return !value
+                                            ? t('ui.validation.required', { attribute: t('ui.zones.fields.floor_name').toLowerCase() })
+                                            : null;
+                                    },
+                                }}
+                            >
+                                {(field) => (
+                                    <>
+                                        <div className="mt-3 mb-2 flex">
+                                            <Label htmlFor={field.name} className="mt-0.5 ml-1">
+                                                {t('ui.zones.fields.floor_id')}
+                                            </Label>
+                                        </div>
+
+                                        <Select name={field.name} value={field.state.value} onValueChange={(value) => {
+                                            field.handleChange(value);
+                                            setSelectedFloor(value);
+                                            console.log(value);
+                                            }}>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder={t('ui.zones.placeholders.floor_id')} />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {floors?.map((floor) => (
+                                                    <SelectItem key={floor.id} value={floor.id} disabled={floor.zones_count>=floor.max_zones}>
+                                                        {t(`ui.floors.titles.floor`)} {floor.name} - {floor.zones_count}/{floor.max_zones}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        <FieldInfo field={field} />
+                                    </>
+                                )}
+                            </form.Field>
+                        </div>
+                        
+                         {/* Number field */}
+                         <div className="space-y-1">
                             <form.Field
                                 name="number"
                                 validators={{
@@ -135,10 +182,15 @@ export function ZoneForm({ initialData, page, perPage, floors, genres }: ZoneFor
                                         await new Promise((resolve) => setTimeout(resolve, 500));
                                         const numValue = Number(value);
                                         return !numValue
-                                            ? t('ui.validation.required', { attribute: t('ui.zones.fields.max_bookshelves').toLowerCase() })
-                                            : numValue < 0
-                                              ? t('ui.validation.required', { attribute: t('ui.zones.fields.max_bookshelves').toLowerCase() })
-                                              : undefined;
+                                            ? t('ui.validation.required', { attribute: t('ui.zones.fields.number').toLowerCase() })
+                                            : numValue < 1
+                                            ? t('ui.validation.required', { attribute: t('ui.zones.fields.number').toLowerCase() })
+                                            : zones.filter((zone)=>zone.floor_id == selectedFloor).map((zone)=>{ 
+                                                console.log('numero zona: '+zone.number +'   valor: '+value );
+                                                value === zone.number
+                                            })
+                                            ? 'no'
+                                            : undefined;
                                     },
                                 }}
                             >
@@ -164,48 +216,6 @@ export function ZoneForm({ initialData, page, perPage, floors, genres }: ZoneFor
                                             required={true}
                                             autoComplete="off"
                                         />
-                                        <FieldInfo field={field} />
-                                    </>
-                                )}
-                            </form.Field>
-                        </div>
-
-                        {/* Floor name field */}
-                        <div className="space-y-1">
-                            <form.Field
-                                name="floor_id"
-                                validators={{
-                                    onChangeAsync: async ({ value }) => {
-                                        await new Promise((resolve) => setTimeout(resolve, 500));
-                                        return !value
-                                            ? t('ui.validation.required', { attribute: t('ui.zones.fields.floor_name').toLowerCase() })
-                                            : null;
-                                    },
-                                }}
-                            >
-                                {(field) => (
-                                    <>
-                                        <div className="mt-3 mb-2 flex">
-                                            <Label htmlFor={field.name} className="mt-0.5 ml-1">
-                                                {t('ui.zones.fields.floor_id')}
-                                            </Label>
-                                        </div>
-
-                                        <Select name={field.name} value={field.state.value} onValueChange={(value) => {
-                                            field.handleChange(value);
-                                            console.log(value);
-                                            }}>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder={t('ui.zones.placeholders.floor_id')} />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {floors?.map((floor) => (
-                                                    <SelectItem key={floor.id} value={floor.id} disabled={floor.zones_count>=floor.max_zones}>
-                                                        {t(`ui.floors.titles.floor`)} {floor.name} - {floor.zones_count}/{floor.max_zones}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
                                         <FieldInfo field={field} />
                                     </>
                                 )}

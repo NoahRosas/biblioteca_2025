@@ -12,6 +12,7 @@ class FloorIndexAction
        
         $name = $search[0];
         $max_zones = $search[1];
+        $created_at = $search[2];
 
         $floors = Floor::query()
             ->when($name !== "null", function ($query) use ($name) {
@@ -20,6 +21,11 @@ class FloorIndexAction
             })
             ->when($max_zones !== "null", function ($query) use ($max_zones) {
                 $query->where('max_zones', '=', $max_zones);
+
+            })->when($created_at !== 'null', function ($query) use ($created_at) {
+
+                $query->whereDate('created_at', '=', $created_at);
+                
             })
             ->latest()
             ->paginate($perPage);

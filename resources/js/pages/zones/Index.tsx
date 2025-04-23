@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { useTranslations } from '@/hooks/use-translations';
 import { useDeleteZone, useZones, Zone } from '@/hooks/zones/useZones';
 import { ZoneLayout } from '@/layouts/zones/ZoneLayout';
+import { PageProps } from '@/types';
 
 import { Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
@@ -19,9 +20,11 @@ import { PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
+interface IndexZoneProps extends PageProps{
+    lang: string;
+}
 
-
-export default function ZonesIndex() {
+export default function ZonesIndex({lang}:IndexZoneProps) {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -41,6 +44,7 @@ export default function ZonesIndex() {
         filters.number ? filters.number : 'null',
         filters.max_bookshelves ? filters.max_bookshelves : 'null',
         filters.floor_id ? filters.floor_id : 'null',
+        filters.created_at ? filters.created_at : 'null',
     ];
 
     const {
@@ -156,6 +160,7 @@ export default function ZonesIndex() {
 
                     <div className="space-y-4">
                         <FiltersTable
+                        lang={lang}
                             filters={
                                 [
                                     {
@@ -184,6 +189,13 @@ export default function ZonesIndex() {
                                         type: 'number',
                                         placeholder: t('ui.zones.placeholders.floor_id') || 'Floor Ubication...',
                                     },
+                                    {
+                                        id: 'created_at',
+                                        label: t('ui.zones.filters.created_at') || 'Creation date',
+                                        type: 'date',
+                                        placeholder: t('ui.zones.placeholders.created_at') || 'Creation date...',
+                                    }
+
                                 ] as FilterConfig[]
                             }
                             onFilterChange={setFilters}

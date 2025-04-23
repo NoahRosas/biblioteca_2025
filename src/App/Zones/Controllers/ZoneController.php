@@ -10,6 +10,7 @@ use Domain\Zones\Actions\ZoneStoreAction;
 use Domain\Zones\Actions\ZoneUpdateAction;
 use Domain\Zones\Models\Zone;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -21,8 +22,9 @@ class ZoneController extends Controller
      */
     public function index()
     {
+        $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
 
-        return Inertia::render('zones/Index');
+        return Inertia::render('zones/Index', ['lang' => $lang]);
     }
 
     /**
@@ -32,8 +34,8 @@ class ZoneController extends Controller
     {
         $genres = Genre::select('id', 'name')->get()->toArray();
         $floors = Floor::withCount('zones')->get()->toArray();
-        
-        return Inertia::render('zones/Create', ['floors' => $floors, 'genres' => $genres]);
+        $zones = Zone::all()->toArray();
+        return Inertia::render('zones/Create', ['floors' => $floors, 'genres' => $genres, 'zones' => $zones]);
     }
 
     /**

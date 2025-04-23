@@ -1,20 +1,25 @@
 import { createActionsColumn, createTextColumn, DeleteDialog, FilterConfig, FiltersTable, Table, TableSkeleton } from '@/components/stack-table';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Reservation, useDeleteReservation, useReservations } from '@/hooks/reservations/useReservations';
 
 
 import { useTranslations } from '@/hooks/use-translations';
 import { ReservationLayout } from '@/layouts/reservations/ReservationLayout';
+import { PageProps } from '@/types';
 
 
-import { Link, router, usePage } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { HandHelping, PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
+import {PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-export default function ReservationsIndex() {
+
+interface IndexReservationsProps extends PageProps{
+    lang: string;
+}
+
+export default function ReservationsIndex({lang}:IndexReservationsProps) {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -145,6 +150,7 @@ export default function ReservationsIndex() {
 
                     <div className="space-y-4">
                         <FiltersTable
+                        lang={lang}
                             filters={
                                 [
                                     {

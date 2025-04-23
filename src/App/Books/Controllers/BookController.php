@@ -11,6 +11,7 @@ use Domain\Floors\Models\Floor;
 use Domain\Genres\Models\Genre;
 use Domain\Zones\Models\Zone;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -21,8 +22,8 @@ class BookController extends Controller
      */
     public function index()
     {
-
-        return Inertia::render('books/Index');
+        $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
+        return Inertia::render('books/Index', ['lang' => $lang]);
     }
 
     /**

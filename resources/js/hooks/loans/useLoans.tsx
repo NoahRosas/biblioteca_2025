@@ -10,6 +10,7 @@ export interface Loan {
   book_ISBN:string;
   end_loan:string;
   days_overdued: number;
+  days_overdued_returned: number;
   borrowed:boolean;
   return_date:string;
   is_overdue:boolean;

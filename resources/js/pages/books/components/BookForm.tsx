@@ -34,7 +34,7 @@ export interface BookFormProps {
     }[];
     image_path?: string;
     zones: Zone[];
-    bookshelves: Bookshelf[];
+    bookshelves: any[];
     genres: Genre[];
 }
 
@@ -51,9 +51,8 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 export function BookForm({ initialData, page, perPage, floors, zones, bookshelves, genres, image_path }: BookFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
-    let zoneNow: string | undefined = undefined,
-        floorNow = undefined;
-
+    let zoneNow: string | undefined = undefined, floorNow = undefined;
+   
     if (initialData) {
         zoneNow = bookshelves.filter((bookshelf) => bookshelf.id === initialData?.bookshelf_id)[0].zone_id;
         floorNow = zones.filter((zone) => zone.id === zoneNow)[0].floor_id;
@@ -480,10 +479,11 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                     >
                                         <SelectTrigger>
                                             <SelectValue placeholder={t('ui.books.placeholders.bookshelf_id')} />
+                                            
                                         </SelectTrigger>
                                         <SelectContent>
                                             {bookshelves
-                                                .filter((bookshelf) => bookshelf.zone_name === selectedZone)
+                                                .filter((bookshelf) => bookshelf.zone_id === selectedZone)
                                                 .map((bookshelf) => (
                                                     <SelectItem
                                                         key={bookshelf.id}
