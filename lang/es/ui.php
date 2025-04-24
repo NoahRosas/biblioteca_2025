@@ -265,8 +265,9 @@ return [
         ],
         'columns' => [
             'name' => 'Nombre de la zona',
+            'number'=>'Número de la zona',
             'max_bookshelves' => 'Capacidad de estanterías',
-            'floor_name' => 'Planta'
+            'floor_id' => 'Planta'
         ],
         'fields' => [
             'name' => 'Nombre de la zona',

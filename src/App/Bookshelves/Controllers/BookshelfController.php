@@ -33,8 +33,9 @@ class BookshelfController extends Controller
     {
         $floors = Floor::select('id', 'name')->get()->toArray();
         $zones = Zone::withCount('bookshelves')->get()->toArray();
+        $bookshelves = Bookshelf::all()->toArray();
         
-        return Inertia::render('bookshelves/Create', ['floors' => $floors, 'zones' => $zones]);
+        return Inertia::render('bookshelves/Create', ['floors' => $floors, 'zones' => $zones, 'bookshelves'=>$bookshelves]);
     }
 
     /**
@@ -73,8 +74,10 @@ class BookshelfController extends Controller
     public function edit(Request $request, Bookshelf $bookshelf)
     {
         $floors = Floor::select('id', 'name')->get()->toArray();
-        $zones = Zone::withCount('bookshelves')->get()->toArray();        
+        $zones = Zone::withCount('bookshelves')->get()->toArray(); 
+        $bookshelves = Bookshelf::all()->toArray();   
         return Inertia::render('bookshelves/Edit', [
+            'bookshelves' => $bookshelves,
             'bookshelf' => $bookshelf,
             'floors' => $floors,
             'zones' => $zones,

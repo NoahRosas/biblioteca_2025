@@ -56,6 +56,15 @@ export default function FloorsIndex({lang}:IndexFloorProps) {
     });
     const deleteFloorMutation = useDeleteFloor();
 
+    const handleFilterChange = (newFilters: Record<string, any>) => {
+        const filtersChanged = newFilters!==filters;
+
+        if (filtersChanged) {
+            setCurrentPage(1);
+        }
+        setFilters(newFilters);
+    };
+
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
@@ -168,7 +177,7 @@ export default function FloorsIndex({lang}:IndexFloorProps) {
                                     }
                                 ] as FilterConfig[]
                             }
-                            onFilterChange={setFilters}
+                            onFilterChange={handleFilterChange}
                             initialValues={filters}
                         />
                     </div>

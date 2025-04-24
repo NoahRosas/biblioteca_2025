@@ -54,6 +54,16 @@ export default function UsersIndex({lang}:IndexUserProps) {
     });
     const deleteUserMutation = useDeleteUser();
 
+
+    const handleFilterChange = (newFilters: Record<string, any>) => {
+        const filtersChanged = newFilters!==filters;
+
+        if (filtersChanged) {
+            setCurrentPage(1);
+        }
+        setFilters(newFilters);
+    };
+        
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
@@ -165,7 +175,7 @@ export default function UsersIndex({lang}:IndexUserProps) {
                                     },
                                 ] as FilterConfig[]
                             }
-                            onFilterChange={setFilters}
+                            onFilterChange={handleFilterChange}
                             initialValues={filters}
                         />
                     </div>

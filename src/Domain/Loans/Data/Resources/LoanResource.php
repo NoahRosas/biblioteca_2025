@@ -38,7 +38,7 @@ class LoanResource extends Data
         }
         $diff_inDays = (int)Carbon::now()->diffInDays($loan->end_loan);
         $diff_2 = new Carbon($loan->return_date);
-        $diff_2 = (int)$diff_2->diffInDays($loan->end_loan);
+        $diff_2 = (int)$end_loan->diffInDays($diff_2);
         // dd($diff_2);
         return new self (
             id: $loan->id,

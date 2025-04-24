@@ -47,7 +47,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 export function ZoneForm({ initialData, page, perPage, floors, genres, zones}: ZoneFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
-    const [selectedFloor, setSelectedFloor] = useState<string>('');
+    const [selectedFloor, setSelectedFloor] = useState<string>(initialData?.floor_id || '');
     const form = useForm({
         defaultValues: {
             name: initialData?.name ?? '',
@@ -183,16 +183,14 @@ export function ZoneForm({ initialData, page, perPage, floors, genres, zones}: Z
                                         const numValue = Number(value);
                                         return !numValue
                                             ? t('ui.validation.required', { attribute: t('ui.zones.fields.number').toLowerCase() })
-                                            : numValue < 1
-                                            ? t('ui.validation.required', { attribute: t('ui.zones.fields.number').toLowerCase() })
-                                            : zones.filter((zone)=>zone.floor_id == selectedFloor).map((zone)=>{ 
-                                                console.log('numero zona: '+zone.number +'   valor: '+value );
-                                                value === zone.number
-                                            })
-                                            ? 'no'
-                                            : undefined;
+                                            : numValue < 0
+                                              ? t('ui.validation.required', { attribute: t('ui.zones.fields.number').toLowerCase() })
+                                              : zones.filter(zone => zone.floor_id === selectedFloor).find(zone => zone.number === numValue)
+                                              ? t('ui.validation.distinct', { attribute: t('ui.zones.fields.number').toLowerCase() })
+                                              : undefined;
                                     },
                                 }}
+                                  
                             >
                                 {(field) => (
                                     <>
@@ -212,7 +210,7 @@ export function ZoneForm({ initialData, page, perPage, floors, genres, zones}: Z
                                             max={30}
                                             min={1}
                                             placeholder={t('ui.zones.placeholders.number')}
-                                            disabled={form.state.isSubmitting}
+                                            disabled={selectedFloor==='' || form.state.isSubmitting}
                                             required={true}
                                             autoComplete="off"
                                         />

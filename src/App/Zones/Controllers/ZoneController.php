@@ -77,7 +77,9 @@ class ZoneController extends Controller
     { 
         $genres = Genre::select('id', 'name')->get()->toArray();
         $floors = Floor::withCount('zones')->get()->toArray();
+        $zones = Zone::all()->toArray();
         return Inertia::render('zones/Edit', [
+            'zones' => $zones,
             'zone' => $zone,
             'genres' => $genres,
             'floors' => $floors,
@@ -91,10 +93,14 @@ class ZoneController extends Controller
      */
     public function update(Request $request, Zone $zone, ZoneUpdateAction $action)
     {
+        // dd($request);
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255', Rule::unique('zones', 'number')->where(fn($query) => $query->where('floor_id', $request->floor_id))->ignore($request->id)],
-            'max_bookshelves' => ['required'],
-            'floor_id' => ['required'],
+            
+            'number' => ['required', Rule::unique('zones', 'number')->where(fn($query) => $query->where('floor_id', $request->floor_id))->ignore($request->id)],
+            'floor_id' => ['required', 'string'],
+            'name' => ['required', 'string'],
+            'max_bookshelves' => ['required', 'integer'],
+            
             
         ]);
 

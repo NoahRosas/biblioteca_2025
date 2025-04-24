@@ -21,10 +21,11 @@ interface EditBookshelfProps extends PageProps{
         name:string
     }[];
     zones: Zone[];
+    bookshelves : any[];
 
 }
 
-export default function EditBookshelf({bookshelf, page, perPage, floors, zones}:EditBookshelfProps) {
+export default function EditBookshelf({bookshelf, page, perPage, floors, zones, bookshelves}:EditBookshelfProps) {
   const { t } = useTranslations();
   return (
         <BookshelfLayout title={t('ui.bookshelves.edit')}>
@@ -34,7 +35,7 @@ export default function EditBookshelf({bookshelf, page, perPage, floors, zones}:
                 
             </h3>
             <p className="text-s text-center mb-2 text-muted-foreground">{t('ui.bookshelves.extra_info.edit')}</p>
-            <BookshelfForm initialData={bookshelf} page={page} perPage={perPage} floors={floors} zones={zones} />
+            <BookshelfForm initialData={bookshelf} page={page} perPage={perPage} floors={floors} zones={zones} bookshelves={bookshelves}/>
         </BookshelfLayout>
   );
 }

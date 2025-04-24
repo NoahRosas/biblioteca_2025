@@ -26,6 +26,7 @@ export interface BookshelfFormProps {
         name: string;
     }[];
     zones: Zone[];
+    bookshelves: any[];
 }
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
@@ -38,7 +39,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function BookshelfForm({ initialData, page, perPage, floors, zones }: BookshelfFormProps) {
+export function BookshelfForm({ initialData, page, perPage, floors, zones, bookshelves}: BookshelfFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
     let floorNow = undefined;
@@ -47,8 +48,9 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones }: Boo
         floorNow = zones.filter((zone) => zone.id === initialData?.zone_id)[0].floor_id;
     }
 
-    console.log(floorNow);
+   
     const [selectedFloor, setSelectedFloor] = useState<string | undefined>(floorNow ?? undefined);
+    const [selectedZone, setSelectedZone] = useState<string | undefined>(initialData?.zone_id ?? undefined);
     const form = useForm({
         defaultValues: {
             number: initialData?.number ?? '',
@@ -95,49 +97,7 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones }: Boo
             <Card className="w-[600px]">
                 <CardContent>
                     <form onSubmit={form.handleSubmit} noValidate>
-                        {/* number field */}
-                        <div className="space-y-1">
-                            <form.Field
-                                name="number"
-                                validators={{
-                                    onChangeAsync: async ({ value }) => {
-                                        await new Promise((resolve) => setTimeout(resolve, 500));
-                                        const numValue = Number(value);
-                                        return !numValue
-                                            ? t('ui.validation.required', { attribute: t('ui.bookshelves.fields.number').toLowerCase() })
-                                            : numValue < 0
-                                              ? t('ui.validation.required', { attribute: t('ui.bookshelves.fields.number').toLowerCase() })
-                                              : undefined;
-                                    },
-                                }}
-                            >
-                                {(field) => (
-                                    <>
-                                        <div className="mt-3 mb-2 flex">
-                                            <Label htmlFor={field.name} className="mt-0.5 ml-1">
-                                                {t('ui.bookshelves.fields.number')}
-                                            </Label>
-                                        </div>
-
-                                        <Input
-                                            id={field.name}
-                                            name={field.name}
-                                            type="number"
-                                            value={Number(field.state.value)}
-                                            onChange={(e) => field.handleChange(e.target.value)}
-                                            onBlur={field.handleBlur}
-                                            max={30}
-                                            min={1}
-                                            placeholder={t('ui.bookshelves.placeholders.number')}
-                                            disabled={form.state.isSubmitting}
-                                            required={true}
-                                            autoComplete="off"
-                                        />
-                                        <FieldInfo field={field} />
-                                    </>
-                                )}
-                            </form.Field>
-                        </div>
+                        
 
                         {/* Floor id field */}
                         <div className="space-y-1">
@@ -149,7 +109,7 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones }: Boo
                                 value={selectedFloor}
                                 onValueChange={(value) => {
                                     setSelectedFloor(value);
-                                    console.log(value);
+                                    
                                 }}
                             >
                                 <SelectTrigger>
@@ -183,7 +143,8 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones }: Boo
                                         value={field.state.value}
                                         onValueChange={(value) => {
                                             field.handleChange(value);
-                                            console.log(value);
+                                            setSelectedZone(value);
+                                            
                                         }}
                                         required={true}
                                         disabled={checkFloor()}
@@ -196,11 +157,57 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones }: Boo
                                                 .filter((zone) => zone.floor_id === selectedFloor)
                                                 .map((zone) => (
                                                     <SelectItem key={zone.id} value={zone.id} disabled={zone.bookshelves_count>=zone.max_bookshelves}>
-                                                        {zone.number}-{t(`ui.genres.names.${zone.name}`)} -- {zone.bookshelves_count}/{zone.max_bookshelves}
+                                                        {zone.number} - {t(`ui.genres.names.${zone.name}`)} ({zone.bookshelves_count}/{zone.max_bookshelves})
                                                     </SelectItem>
                                                 ))}
                                         </SelectContent>
                                     </Select>
+                                )}
+                            </form.Field>
+                        </div>
+                        
+                        {/* number field */}
+                        <div className="space-y-1">
+                            <form.Field
+                                name="number"
+                                validators={{
+                                    onChangeAsync: async ({ value }) => {
+                                        await new Promise((resolve) => setTimeout(resolve, 500));
+                                        const numValue = Number(value);
+                                        return !numValue
+                                            ? t('ui.validation.required', { attribute: t('ui.bookshelves.fields.number').toLowerCase() })
+                                            : numValue < 0
+                                              ? t('ui.validation.required', { attribute: t('ui.bookshelves.fields.number').toLowerCase() })
+                                              : bookshelves.filter(bookshelf => bookshelf.zone_id === selectedZone).find(bookshelf => bookshelf.number === numValue)
+                                              ? t('ui.validation.distinct', { attribute: t('ui.bookshelves.fields.number').toLowerCase() })
+                                              : undefined;
+                                    },
+                                }}
+                            >
+                                {(field) => (
+                                    <>
+                                        <div className="mt-3 mb-2 flex">
+                                            <Label htmlFor={field.name} className="mt-0.5 ml-1">
+                                                {t('ui.bookshelves.fields.number')}
+                                            </Label>
+                                        </div>
+
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            type="number"
+                                            value={Number(field.state.value)}
+                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            onBlur={field.handleBlur}
+                                            max={30}
+                                            min={1}
+                                            placeholder={t('ui.bookshelves.placeholders.number')}
+                                            disabled={selectedZone === undefined || form.state.isSubmitting}
+                                            required={true}
+                                            autoComplete="off"
+                                        />
+                                        <FieldInfo field={field} />
+                                    </>
                                 )}
                             </form.Field>
                         </div>

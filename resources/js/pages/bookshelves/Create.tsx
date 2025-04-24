@@ -13,10 +13,11 @@ interface CreateBookshelfProps extends PageProps{
         name:string
     }[];
     zones: Zone[];
+    bookshelves: any[];
     
 }
 
-export default function CreateBookshelf({floors, zones}:CreateBookshelfProps) {
+export default function CreateBookshelf({floors, zones, bookshelves}:CreateBookshelfProps) {
   const { t } = useTranslations();
   return (
         <BookshelfLayout title={t('ui.bookshelves.create')}>
@@ -26,7 +27,7 @@ export default function CreateBookshelf({floors, zones}:CreateBookshelfProps) {
                 
             </h3>
             <p className="text-s text-center mb-2 text-muted-foreground">{t('ui.bookshelves.extra_info.create')}</p>
-            <BookshelfForm floors={floors} zones={zones}/>
+            <BookshelfForm floors={floors} zones={zones} bookshelves={bookshelves}/>
         </BookshelfLayout>
   );
 }

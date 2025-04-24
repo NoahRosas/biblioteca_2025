@@ -25,9 +25,10 @@ interface EditZoneProps extends PageProps{
         id:string,
         name:string
     }[];
+    zones: any[];
 }
 
-export default function EditZone({zone, page, perPage, floors, genres}:EditZoneProps) {
+export default function EditZone({zone, page, perPage, floors, genres, zones}:EditZoneProps) {
   const { t } = useTranslations();
   return (
         <ZoneLayout title={t('ui.zones.edit')}>
@@ -37,7 +38,7 @@ export default function EditZone({zone, page, perPage, floors, genres}:EditZoneP
                 
             </h3>
             <p className="text-s text-center mb-2 text-muted-foreground">{t('ui.zones.extra_info.edit')}</p>
-            <ZoneForm initialData={zone} page={page} perPage={perPage} floors={floors} genres={genres} />
+            <ZoneForm initialData={zone} page={page} perPage={perPage} floors={floors} genres={genres} zones={zones}/>
         </ZoneLayout>
   );
 }

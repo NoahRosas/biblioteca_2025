@@ -41,7 +41,7 @@ export default function BooksIndex({lang}:IndexLoanProps) {
         filters.is_overdue ? filters.is_overdue : 'null',
     ];
 
-    console.log(combinedSearch);
+   
     const {
         data: loans,
         isLoading,
@@ -53,6 +53,15 @@ export default function BooksIndex({lang}:IndexLoanProps) {
         perPage: perPage,
     });
     const deleteLoanMutation = useDeleteLoan();
+
+    const handleFilterChange = (newFilters: Record<string, any>) => {
+        const filtersChanged = newFilters!==filters;
+
+        if (filtersChanged) {
+            setCurrentPage(1);
+        }
+        setFilters(newFilters);
+        };
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -309,7 +318,7 @@ export default function BooksIndex({lang}:IndexLoanProps) {
                                     },
                                 ] as FilterConfig[]
                             }
-                            onFilterChange={setFilters}
+                            onFilterChange={handleFilterChange}
                             initialValues={filters}
                         />
                     </div>

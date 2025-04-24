@@ -61,6 +61,15 @@ export default function BookshelvesIndex({lang}:IndexBookshelvesProps) {
     });
     const deleteBookshelfMutation = useDeleteBookshelf();
 
+    const handleFilterChange = (newFilters: Record<string, any>) => {
+        const filtersChanged = newFilters!==filters;
+
+        if (filtersChanged) {
+            setCurrentPage(1);
+        }
+        setFilters(newFilters);
+    };
+    
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
@@ -209,7 +218,7 @@ export default function BookshelvesIndex({lang}:IndexBookshelvesProps) {
                                     },
                                 ] as FilterConfig[]
                             }
-                            onFilterChange={setFilters}
+                            onFilterChange={handleFilterChange}
                             initialValues={filters}
                         />
                     </div>
