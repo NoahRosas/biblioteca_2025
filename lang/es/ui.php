@@ -98,6 +98,7 @@ return [
         'filters' => [
             'title' => 'Filtros',
             'clear' => 'Limpiar',
+            'results' => ':attribute resultados encontrados'
         ],
         'delete_dialog' => [
             'success' => 'Usuario eliminado correctamente',
@@ -445,6 +446,7 @@ return [
                 'false' => 'Cancelar'
             ],
             'create' => 'Prestar libro',
+            'edit' => 'Cambiar fecha de vencimiento',
         ],
         'extra_info' => [
             'create' => 'Completa el formulario para crear un nuevo préstamo',

@@ -50,13 +50,13 @@ class BookController extends Controller
     {
     //    dd($request);
         $validator = Validator::make($request->all(), [
-            'name' => ['required'],
-            'ISBN' => ['required',],
-            'author' => ['required'],
-            'publisher' => ['required'],
-            'num_pages' => ['required'],
-            'bookshelf_id' => ['required'],
-            'genres' => ['required'],
+            'name' => ['required', 'string', 'max:255'],
+            'ISBN' => ['required', 'string', 'max:255'],
+            'author' => ['required', 'string', 'max:255'],
+            'publisher' => ['required', 'string', 'max:255'],
+            'num_pages' => ['required', 'integer', 'min:1', 'max:9999'],
+            'bookshelf_id' => ['required', 'string', 'max:255'],
+            'genres' => ['required', 'string'],
         ]);
 
         if ($validator->fails()) {
@@ -116,12 +116,13 @@ class BookController extends Controller
     {
         // dd($request);
         $validator = Validator::make($request->all(), [
-            'name' => ['required'],
-            'author' => ['required'],
-            'publisher' => ['required'],
-            'num_pages' => ['required'],
-            'bookshelf_id' => ['required'],
-            'genres' => ['required'],
+            'name' => ['required', 'string', 'max:255'],
+            'ISBN' => ['required', 'string', 'max:255'],
+            'author' => ['required', 'string', 'max:255'],
+            'publisher' => ['required', 'string', 'max:255'],
+            'num_pages' => ['required', 'integer', 'min:1', 'max:9999'],
+            'bookshelf_id' => ['required', 'string', 'max:255'],
+            'genres' => ['required', 'string']
         ]);
 
         if ($validator->fails()) {

@@ -251,7 +251,7 @@ export function ZoneForm({ initialData, page, perPage, floors, genres, zones}: Z
                                             value={Number(field.state.value)}
                                             onChange={(e) => field.handleChange(e.target.value)}
                                             onBlur={field.handleBlur}
-                                            max={30}
+                                            max={100}
                                             min={1}
                                             placeholder={t('ui.zones.placeholders.max_bookshelves')}
                                             disabled={form.state.isSubmitting}

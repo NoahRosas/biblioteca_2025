@@ -213,6 +213,8 @@ export default function ZonesIndex({lang}:IndexZoneProps) {
                     </div>
 
                     <div className="w-full overflow-hidden">
+                    {zones?.meta.total !== undefined && <h2>{t('ui.common.filters.results', {attribute: zones?.meta.total.toString()})}</h2>}
+
                         {isLoading ? (
                             <TableSkeleton columns={4} rows={10} />
                         ) : isError ? (

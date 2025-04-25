@@ -45,8 +45,8 @@ class BookshelfController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'number' => ['required', Rule::unique('bookshelves', 'number')->where(fn($query) => $query->where('zone_id', $request->zone_id))],
-            'zone_id' => ['required'],
-            'max_books' => ['required'],
+            'zone_id' => ['required', 'string', 'max:255'],
+            'max_books' => ['required', 'integer', 'min:1', 'max:100'],
         ]);
 
         if ($validator->fails()) {
@@ -92,8 +92,8 @@ class BookshelfController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'number' => ['required', Rule::unique('bookshelves', 'number')->where(fn($query) => $query->where('zone_id', $request->zone_id))->ignore($request->id)],
-            'max_books' => ['required'],
-            'zone_id' => ['required'],
+            'max_books' => ['required', 'integer', 'min:1', 'max:100'],
+            'zone_id' => ['required', 'string', 'max:255'],
         ]);
 
         if ($validator->fails()) {

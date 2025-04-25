@@ -181,6 +181,8 @@ export default function UsersIndex({lang}:IndexUserProps) {
                     </div>
 
                     <div className="w-full overflow-hidden">
+                    {users?.meta.total !== undefined && <h2>{t('ui.common.filters.results', {attribute: users?.meta.total.toString()})}</h2>}
+
                         {isLoading ? (
                             <TableSkeleton columns={4} rows={10} />
                         ) : isError ? (

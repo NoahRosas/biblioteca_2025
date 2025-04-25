@@ -37,7 +37,7 @@ class LoanController extends Controller
         // dd(request()->all());
         $validator = Validator::make($request->all(), [
             'user_email' => ['required', 'string', 'max:255'],
-            'book_id' => ['required'],
+            'book_id' => ['required', 'string', 'max:255'],
             'end_loan' => ['required'],
         ]);
 
@@ -77,7 +77,7 @@ class LoanController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'borrowedState'=>[],
-            'end_loan'=>[],
+            'end_loan'=>['required'],
 
         ]);
 

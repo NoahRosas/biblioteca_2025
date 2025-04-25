@@ -38,7 +38,7 @@ class ReservationController
         // dd(request()->all());
         $validator = Validator::make($request->all(), [
             'user_email' => ['required', 'string', 'max:255'],
-            'book_id' => ['required'],
+            'book_id' => ['required', 'string', 'max:255'],
         ]);
 
         if ($validator->fails()) {
@@ -81,7 +81,7 @@ class ReservationController
     {
         $validator = Validator::make($request->all(), [
             'user_email' => ['required', 'string', 'max:255'],
-            'book_id' => ['required'],
+            'book_id' => ['required', 'string', 'max:255'],
         ]);
 
         if ($validator->fails()) {

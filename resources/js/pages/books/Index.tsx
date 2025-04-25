@@ -351,6 +351,8 @@ export default function BooksIndex({lang}:IndexBooksProps) {
                     </div>
 
                     <div className="w-full overflow-hidden">
+                    {books?.meta.total !== undefined && <h2>{t('ui.common.filters.results', {attribute: books?.meta.total.toString()})}</h2>}
+
                         {isLoading ? (
                             <TableSkeleton columns={4} rows={10} />
                         ) : isError ? (

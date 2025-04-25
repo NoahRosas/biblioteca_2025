@@ -5,7 +5,6 @@ namespace Domain\Reservations\Data\Resources;
 use Domain\Books\Models\Book;
 use Domain\Reservations\Models\Reservation;
 use Domain\Users\Models\User;
-use Illuminate\Http\Request;
 use Spatie\LaravelData\Data;
 
 class ReservationResource extends Data {

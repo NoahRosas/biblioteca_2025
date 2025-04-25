@@ -47,7 +47,7 @@ class ZoneController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'number' => ['integer', 'min:1', Rule::unique('zones', 'number')->where(fn($query) => $query->where('floor_id', $request->floor_id)) ],
-            'max_bookshelves' => ['required'],
+            'max_bookshelves' => ['required', 'integer', 'min:1', 'max:100'],
             'floor_id' => ['required'],
         ]);
 
@@ -98,8 +98,8 @@ class ZoneController extends Controller
             
             'number' => ['required', Rule::unique('zones', 'number')->where(fn($query) => $query->where('floor_id', $request->floor_id))->ignore($request->id)],
             'floor_id' => ['required', 'string'],
-            'name' => ['required', 'string'],
-            'max_bookshelves' => ['required', 'integer'],
+            'name' => ['required', 'string', 'max:255'],
+            'max_bookshelves' => ['required', 'integer', 'min:1', 'max:100'],
             
             
         ]);

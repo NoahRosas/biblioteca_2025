@@ -97,6 +97,7 @@ return [
         'filters'=> [
             'title' => 'Filters',
             'clear' => 'Clear',
+            'results' => ':attribute results found'
         ],
         'delete_dialog' => [
             'success' => 'User deleted successfully',
@@ -447,6 +448,7 @@ return [
                 'false' => 'Cancel'
             ],
             'create' => 'Lend book',
+            'edit'=> 'Edit due date'
 
         ],
         'extra_info' =>[
