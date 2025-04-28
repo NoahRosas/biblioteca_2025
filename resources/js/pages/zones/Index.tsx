@@ -9,6 +9,7 @@ import {
     TableSkeleton,
 } from '@/components/stack-table';
 import { Button } from '@/components/ui/button';
+import { Genre } from '@/hooks/genres/useGenres';
 import { useTranslations } from '@/hooks/use-translations';
 import { useDeleteZone, useZones, Zone } from '@/hooks/zones/useZones';
 import { ZoneLayout } from '@/layouts/zones/ZoneLayout';
@@ -22,9 +23,10 @@ import { toast } from 'sonner';
 
 interface IndexZoneProps extends PageProps{
     lang: string;
+    genres: Genre[];
 }
 
-export default function ZonesIndex({lang}:IndexZoneProps) {
+export default function ZonesIndex({lang, genres}:IndexZoneProps) {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -86,6 +88,11 @@ export default function ZonesIndex({lang}:IndexZoneProps) {
             console.error('Error deleting user:', error);
         }
     };
+
+    const genreOptions = genres.map((genre: Genre) => ({
+        label: t(`ui.genres.names.${genre.value}`),
+        value: genre.value,
+    })).sort((a, b) => a.label.localeCompare(b.label));
 
     const columns = useMemo(
         () =>
@@ -175,8 +182,9 @@ export default function ZonesIndex({lang}:IndexZoneProps) {
                                     {
                                         id: 'name',
                                         label: t('ui.zones.filters.name') || 'Nombre',
-                                        type: 'text',
+                                        type: 'select',
                                         placeholder: t('ui.zones.placeholders.name') || 'Nombre...',
+                                        options: genreOptions
                                     },
                                     {
                                         id: 'number',

@@ -8,6 +8,7 @@ use Domain\Bookshelves\Actions\BookshelfStoreAction;
 use Domain\Bookshelves\Actions\BookshelfUpdateAction;
 use Domain\Bookshelves\Models\Bookshelf;
 use Domain\Floors\Models\Floor;
+use Domain\Genres\Models\Genre;
 use Domain\Zones\Models\Zone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,12 @@ class BookshelfController extends Controller
     public function index()
     {
         $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
-        return Inertia::render('bookshelves/Index', ['lang' => $lang]);
+        $genres = Genre::select('name')->get()->map(function ($genre) {
+            return [
+                'value' => $genre->name
+            ];
+        });
+        return Inertia::render('bookshelves/Index', ['lang' => $lang, 'genres'=>$genres]);
     }
 
     /**

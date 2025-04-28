@@ -10,6 +10,7 @@ import {
 } from '@/components/stack-table';
 import { Button } from '@/components/ui/button';
 import { Bookshelf, useBookshelves, useDeleteBookshelf } from '@/hooks/bookshelves/useBookshelves';
+import { Genre } from '@/hooks/genres/useGenres';
 import { useTranslations } from '@/hooks/use-translations';
 
 import { BookshelfLayout } from '@/layouts/bookshelves/BookshelfLayout';
@@ -23,9 +24,10 @@ import { toast } from 'sonner';
 
 interface IndexBookshelvesProps extends PageProps{
     lang: string;
+    genres:Genre[];
 }
 
-export default function BookshelvesIndex({lang}:IndexBookshelvesProps) {
+export default function BookshelvesIndex({lang, genres}:IndexBookshelvesProps) {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -89,6 +91,11 @@ export default function BookshelvesIndex({lang}:IndexBookshelvesProps) {
         }
     };
 
+    const genreOptions = genres.map((genre: Genre) => ({
+            label: t(`ui.genres.names.${genre.value}`),
+            value: genre.value,
+        })).sort((a, b) => a.label.localeCompare(b.label));
+        
     const columns = useMemo(
         () =>
             [
@@ -201,8 +208,9 @@ export default function BookshelvesIndex({lang}:IndexBookshelvesProps) {
                                     {
                                         id: 'zone_name',
                                         label: t('ui.bookshelves.columns.zone_name') || 'Zone number',
-                                        type: 'text',
+                                        type: 'select',
                                         placeholder: t('ui.bookshelves.placeholders.zone_name') || 'Zone number...',
+                                        options:genreOptions
                                     },
                                     {
                                         id: 'floor_id',

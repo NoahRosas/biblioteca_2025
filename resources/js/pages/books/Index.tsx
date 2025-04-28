@@ -10,6 +10,7 @@ import {
 } from '@/components/stack-table';
 import { Button } from '@/components/ui/button';
 import { Book, useBooks, useDeleteBook } from '@/hooks/books/useBooks';
+import { Genre } from '@/hooks/genres/useGenres';
 import { useTranslations } from '@/hooks/use-translations';
 import { BookLayout } from '@/layouts/books/BookLayout';
 import { PageProps } from '@/types';
@@ -21,9 +22,10 @@ import { toast } from 'sonner';
 
 interface IndexBooksProps extends PageProps{
     lang: string;
+    genres: Genre[];
 }
 
-export default function BooksIndex({lang}:IndexBooksProps) {
+export default function BooksIndex({lang, genres}:IndexBooksProps) {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -100,6 +102,11 @@ export default function BooksIndex({lang}:IndexBooksProps) {
             return router.get('/loans/create', {book_id});
         }
     }
+
+    const genreOptions = genres.map((genre: Genre) => ({
+        label: t(`ui.genres.names.${genre.value}`),
+        value: genre.value,
+    })).sort((a, b) => a.label.localeCompare(b.label));
 
     const columns = useMemo(
         () =>
@@ -299,8 +306,9 @@ export default function BooksIndex({lang}:IndexBooksProps) {
                                     {
                                         id: 'genres',
                                         label: t('ui.books.filters.genres') || 'Genres',
-                                        type: 'text',
+                                        type: 'select',
                                         placeholder: t('ui.books.placeholders.genres') || 'Genres...',
+                                        options:genreOptions
                                     },
                                     {
                                         id: 'bookshelf_id',
@@ -317,8 +325,9 @@ export default function BooksIndex({lang}:IndexBooksProps) {
                                     {
                                         id: 'zone_name',
                                         label: t('ui.books.columns.zone_name') || 'Zone name',
-                                        type: 'text',
+                                        type: 'select',
                                         placeholder: t('ui.books.placeholders.zone_name') || 'Zone name...',
+                                        options: genreOptions
                                     },
                                     {
                                         id: 'floor_id',

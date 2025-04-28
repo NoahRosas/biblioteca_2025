@@ -23,7 +23,13 @@ class BookController extends Controller
     public function index()
     {
         $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
-        return Inertia::render('books/Index', ['lang' => $lang]);
+        $genres = Genre::select('name')->get()->map(function ($genre) {
+            return [
+                'value' => $genre->name
+            ];
+        });
+        
+        return Inertia::render('books/Index', ['lang' => $lang, 'genres' => $genres]);
     }
 
     /**
