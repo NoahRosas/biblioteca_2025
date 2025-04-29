@@ -77,7 +77,7 @@ class LoanController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'borrowedState'=>[],
-            'end_loan'=>['required'],
+            'end_loan'=>[],
 
         ]);
 
