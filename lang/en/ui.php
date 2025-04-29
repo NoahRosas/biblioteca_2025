@@ -46,6 +46,7 @@ return [
             'verification_sent' => 'A new verification link has been sent to your email address.',
             'save_button' => 'Save',
             'saved_message' => 'Saved',
+            'loan_history' => 'Loan history',
         ],
         'password' => [
             'title' => 'Password settings',
@@ -438,6 +439,7 @@ return [
 
     'loans' => [
         'title' => 'Loans',
+        'title_s' => 'Loan',
         'create' => 'Create loan',
         'edit' => 'Edit loan',
         'description' => 'Manage loans in the system',
@@ -461,6 +463,7 @@ return [
             'book_ISBN' => 'ISBN',
             'created_at' => 'Expedit date',
             'end_loan' => 'Expiration date',
+            'return_date' => 'Return date',
             'borrowed' => 'Borrowed',
             'is_overdue' => 'Overdue',
         ],

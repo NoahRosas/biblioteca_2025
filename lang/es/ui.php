@@ -47,6 +47,7 @@ return [
             'verification_sent' => 'Se ha enviado un nuevo enlace de verificación a tu dirección de correo.',
             'save_button' => 'Guardar',
             'saved_message' => 'Guardado',
+            'loan_history' => 'Historial de préstamos',
         ],
         'password' => [
             'title' => 'Configuración de contraseña',
@@ -436,6 +437,7 @@ return [
 
     'loans' => [
         'title' => 'Préstamos',
+        'title_s' => 'Préstamo',
         'create' => 'Crear préstamo',
         'edit' => 'Editar préstamo',
         'description' => 'Gestiona los préstamo del sistema',
@@ -456,8 +458,9 @@ return [
             'user_email' => 'Usuario',
             'book_name' => 'Título del libro',
             'book_ISBN' => 'ISBN',
-            'created_at' => 'Fecha expedición',
-            'end_loan' => 'Fecha vencimiento',
+            'created_at' => 'Fecha de expedición',
+            'end_loan' => 'Fecha de vencimiento',
+            'return_date' => 'Fecha de devolución',
             'borrowed' => 'Prestado actualmente',
             'is_overdue' => 'Con retraso',
         ],

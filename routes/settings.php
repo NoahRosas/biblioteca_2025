@@ -5,7 +5,6 @@ use App\Settings\Controllers\LanguageController;
 use App\Settings\Controllers\PasswordController;
 use App\Settings\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::middleware('auth')->group(function () {
     Route::redirect('settings', 'settings/password');
