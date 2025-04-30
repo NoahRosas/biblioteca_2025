@@ -21,19 +21,38 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
-        $user_loans = Loan::where('user_id', $request->user()->id)->orderBy('created_at')->get()->map(function ($loan) {
+        $user_loans = Loan::where('user_id', $request->user()->id)
+        ->withTrashed()
+        ->with('book')
+        ->orderBy('created_at', 'desc')
+        ->get()
+        ->map(function ($loan) {
             $loan->expedit = $loan->created_at ? Carbon::parse($loan->created_at)->format('d-m-Y') : null;
             $loan->return = $loan->return_date ? Carbon::parse($loan->return_date)->format('d-m-Y') : null;
+            $loan->end = $loan->end_loan ? Carbon::parse($loan->end_loan)->format('d-m-Y') : null;
+            $loan->overdue = (Carbon::now() > $loan->end_loan && $loan->return_date === null || $loan->return_date > $loan->end_loan) || false;
+            // dd($loan->overdue);
+            if ($loan->overdue) {
+                if ($loan->return_date === null) {
+                    $loan->days_overdue = (int) Carbon::now()->diffInDays($loan->end_loan);
+                } else {
+                    $loan->end_loan = new Carbon($loan->end_loan);
+                    $loan->days_overdue = (int) $loan->end_loan->diffInDays($loan->return_date);
+                }
+            } else {
+                $loan->days_overdue = null;
+            }
+            $loan->img = $loan->book->getFirstMediaUrl('images', 'preview');
             return $loan;
-        })->toArray();
-        $books = Book::all()->toArray();
+        })
+        ->toArray();
+ 
 
         // dd($user_loans);
         return Inertia::render('settings/profile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
             'user_loans'=>$user_loans,
-            'books' => $books,
         ]);
     }
 

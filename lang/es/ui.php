@@ -48,6 +48,7 @@ return [
             'save_button' => 'Guardar',
             'saved_message' => 'Guardado',
             'loan_history' => 'Historial de préstamos',
+            'loan_history_description' => 'Aquí podrás ver tu historial de préstamos',
         ],
         'password' => [
             'title' => 'Configuración de contraseña',

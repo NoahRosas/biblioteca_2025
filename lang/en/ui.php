@@ -47,6 +47,7 @@ return [
             'save_button' => 'Save',
             'saved_message' => 'Saved',
             'loan_history' => 'Loan history',
+            'loan_history_description' => 'Here, you can see your loan history',
         ],
         'password' => [
             'title' => 'Password settings',
