@@ -14,7 +14,6 @@ interface UserSettingsProps extends PageProps {
 export default function Profile({ user_loans }: UserSettingsProps) {
     const { t } = useTranslations();
     const page = usePage<SharedData>();
-    const { auth } = page.props;
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -40,10 +39,16 @@ export default function Profile({ user_loans }: UserSettingsProps) {
                     {user_loans.map(loan =>{
                         return <VerticalTimelineElement 
                         className="vertical-timeline-element"
-                        contentStyle={loan.overdue ?{  background: 'rgb(201, 40, 12)', color: '#fff'} : {  background: '#05DF72', color: '#fff'}}
-                        contentArrowStyle={loan.overdue ?{  borderRight: 'rgb(201, 40, 12)', color: '#fff'} : {  borderRight: '#05DF72', color: '#fff'}}
+                        contentStyle={loan.overdue ?
+                            {  background: 'rgb(201, 40, 12)', color: '#fff'}
+                            : {  background: 'rgb(26, 163, 14)', color: '#fff'}}
+                        contentArrowStyle={loan.overdue ?
+                            {  borderRight: 'rgb(201, 40, 12)', color: '#fff'}
+                            : {  borderRight: 'rgb(26, 163, 14)', color: '#fff'}}
                         
-                        iconStyle={loan.overdue ?{  background: 'rgb(201, 40, 12)', color: '#fff'} : {  background: '#05DF72', color: '#fff'}}
+                        iconStyle={loan.overdue ?
+                            {  background: 'rgb(201, 40, 12)', color: '#fff'}
+                            : {  background: 'rgb(26, 163, 14)', color: '#fff'}}
                         icon={< Handshake/>}>
                             <h3 className="vertical-timeline-element-title font-bold text-2xl">{loan.book.name}</h3>
                         <h4 className="vertical-timeline-element-subtitle font-semibold text-xl">{loan.book.author}</h4>

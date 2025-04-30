@@ -7,6 +7,7 @@ use App\Http\Requests\Settings\ProfileUpdateRequest;
 use Carbon\Carbon;
 use Domain\Books\Models\Book;
 use Domain\Loans\Models\Loan;
+use Domain\Reservations\Models\Reservation;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -31,7 +32,6 @@ class ProfileController extends Controller
             $loan->return = $loan->return_date ? Carbon::parse($loan->return_date)->format('d-m-Y') : null;
             $loan->end = $loan->end_loan ? Carbon::parse($loan->end_loan)->format('d-m-Y') : null;
             $loan->overdue = (Carbon::now() > $loan->end_loan && $loan->return_date === null || $loan->return_date > $loan->end_loan) || false;
-            // dd($loan->overdue);
             if ($loan->overdue) {
                 if ($loan->return_date === null) {
                     $loan->days_overdue = (int) Carbon::now()->diffInDays($loan->end_loan);
@@ -46,7 +46,45 @@ class ProfileController extends Controller
             return $loan;
         })
         ->toArray();
- 
+        
+        // $user_loans = Loan::where('user_id', $request->user()->id)
+        // ->withTrashed()
+        // ->with('book')
+        // ->get()
+        // ->map(function ($loan) {
+        //         $loan->type = 'loan';
+        //         $loan->expedit = $loan->created_at ? Carbon::parse($loan->created_at)->format('d-m-Y') : null;
+        //         $loan->return = $loan->return_date ? Carbon::parse($loan->return_date)->format('d-m-Y') : null;
+        //         $loan->end = $loan->end_loan ? Carbon::parse($loan->end_loan)->format('d-m-Y') : null;
+        //         $loan->overdue = (Carbon::now() > $loan->end_loan && $loan->return_date === null || $loan->return_date > $loan->end_loan) || false;
+        //         if ($loan->overdue) {
+        //             if ($loan->return_date === null) {
+        //                 $loan->days_overdue = (int) Carbon::now()->diffInDays($loan->end_loan);
+        //             } else {
+        //                 $loan->end_loan = new Carbon($loan->end_loan);
+        //                 $loan->days_overdue = (int) $loan->end_loan->diffInDays($loan->return_date);
+        //             }
+        //         } else {
+        //             $loan->days_overdue = null;
+        //         }
+        //         $loan->img = $loan->book->getFirstMediaUrl('images', 'preview');
+        //         return $loan;
+        //     })
+        //     ->toArray();
+
+        // $user_reservations = Reservation::where('user_id', $request->user()->id)
+        // ->withTrashed()
+        // ->with('book')
+        // ->get()
+        // ->map(function ($reservation){
+        //     $reservation->type = 'reservation';
+        //     return $reservation;
+        // })
+        // ->toArray();
+
+        // $all = array_merge($user_loans, $user_reservations);
+
+        // $all->orderBy('created_at');
 
         // dd($user_loans);
         return Inertia::render('settings/profile', [
