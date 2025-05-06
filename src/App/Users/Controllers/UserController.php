@@ -29,8 +29,6 @@ class UserController extends Controller
 
     public function show(User $user, ActivityShowAction $action)
     {
-
-
         $activities = $action($user->id);
 
         return Inertia::render('users/history', [

@@ -62,34 +62,6 @@ export default function Dashboard() {
                     href="/reservations"
                     icon={ScrollText}
                 />
-
-
-                {/* <CardFlip
-                    contentFront={
-                        <div className="flex items-center gap-4">
-                            <div className="rounded-lg bg-primary/10 p-2">
-                                <Icon iconNode={User} className="h-6 w-6 text-primary" />
-                            </div>
-                            <div>
-                                <h3 className="font-semibold">Usuario 1</h3>
-                                <p className="text-sm text-muted-foreground">descripcion de usuario</p>
-                            </div>
-                        </div>
-                    }
-                    contentBack={
-                        <div className="flex w-full h-full items-center gap-4">
-                            <div className="rounded-lg bg-primary/10 p-2">
-                                <Icon iconNode={User} className="h-6 w-6 text-primary" />
-                            </div>
-                            <div>
-                                <h3 className="font-semibold">cliente 2</h3>
-                                <p className="text-sm text-muted-foreground">descripcion de cliente</p>
-
-                            </div>
-                        </div>
-                    }
-                /> */}
-
             </div>
         </AppLayout>
     );

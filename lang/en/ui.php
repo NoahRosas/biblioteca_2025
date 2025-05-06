@@ -571,4 +571,7 @@ return [
         'error_loading' => 'Error loading reservations. Please, try again.',
         'no_results' => 'No results.',
     ],
+    'graphs'=>[
+        'title' => 'Statistics'
+    ],
 ];

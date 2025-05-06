@@ -574,5 +574,8 @@ return [
         'deleted_error' => 'Error al eliminar la reserva',
         'no_results' => 'No hay resultados.',
         
-    ]
+    ],
+    'graphs'=>[
+        'title' => 'Estadísticas'
+    ],
 ];
