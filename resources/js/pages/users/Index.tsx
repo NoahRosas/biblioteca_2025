@@ -10,19 +10,19 @@ import {
 } from '@/components/stack-table';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from '@/hooks/use-translations';
-import { User, useDeleteUser, useUsers } from '@/hooks/users/useUsers';
+import { useDeleteUser, User, useUsers } from '@/hooks/users/useUsers';
 import { UserLayout } from '@/layouts/users/UserLayout';
 import { PageProps } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
+import { History, PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-interface IndexUserProps extends PageProps{
+interface IndexUserProps extends PageProps {
     lang: string;
 }
-export default function UsersIndex({lang}:IndexUserProps) {
+export default function UsersIndex({ lang }: IndexUserProps) {
     const { t } = useTranslations();
     const { url } = usePage();
 
@@ -54,16 +54,15 @@ export default function UsersIndex({lang}:IndexUserProps) {
     });
     const deleteUserMutation = useDeleteUser();
 
-
     const handleFilterChange = (newFilters: Record<string, any>) => {
-        const filtersChanged = newFilters!==filters;
+        const filtersChanged = newFilters !== filters;
 
         if (filtersChanged) {
             setCurrentPage(1);
         }
         setFilters(newFilters);
     };
-        
+
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
@@ -106,6 +105,12 @@ export default function UsersIndex({lang}:IndexUserProps) {
                     header: t('ui.users.columns.actions') || 'Actions',
                     renderActions: (user) => (
                         <>
+                            <Link href={`/users/${user.id}`}>
+                                <Button variant="outline" size="icon" title={t('ui.users.buttons.activity') || 'Activity history'}>
+                                    <History className="h-4 w-4" />
+                                </Button>
+                            </Link>
+
                             <Link href={`/users/${user.id}/edit?page=${currentPage}&perPage=${perPage}`}>
                                 <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit user'}>
                                     <PencilIcon className="h-4 w-4" />
@@ -152,7 +157,7 @@ export default function UsersIndex({lang}:IndexUserProps) {
 
                     <div className="space-y-4">
                         <FiltersTable
-                        lang={lang}
+                            lang={lang}
                             filters={
                                 [
                                     {
@@ -181,7 +186,7 @@ export default function UsersIndex({lang}:IndexUserProps) {
                     </div>
 
                     <div className="w-full overflow-hidden">
-                    {users?.meta.total !== undefined && <h2>{t('ui.common.filters.results', {attribute: users?.meta.total.toString()})}</h2>}
+                        {users?.meta.total !== undefined && <h2>{t('ui.common.filters.results', { attribute: users?.meta.total.toString() })}</h2>}
 
                         {isLoading ? (
                             <TableSkeleton columns={4} rows={10} />

@@ -47,8 +47,8 @@ return [
             'verification_sent' => 'Se ha enviado un nuevo enlace de verificación a tu dirección de correo.',
             'save_button' => 'Guardar',
             'saved_message' => 'Guardado',
-            'loan_history' => 'Historial de préstamos',
-            'loan_history_description' => 'Aquí podrás ver tu historial de préstamos',
+            'history' => 'Historial de actividad',
+            'history_description' => 'Aquí podrás ver tu historial de actividad',
         ],
         'password' => [
             'title' => 'Configuración de contraseña',
@@ -119,6 +119,10 @@ return [
         'title' => 'Usuarios',
         'create' => 'Crear Usuario',
         'edit' => 'Editar Usuario',
+        'history' => [
+            'title' => 'Historial de usuario',
+            'no_results' => 'Nada por aquí, ve a leer algún libro o algo',
+        ],
         'description' => 'Gestiona los usuarios del sistema',
         'fields' => [
             'name' => 'Nombre',
@@ -192,6 +196,7 @@ return [
         'buttons' => [
             'new' => 'Nuevo Usuario',
             'edit' => 'Editar',
+            'activity' => 'Historial de actividad',
             'save' => 'Guardar',
             'update' => 'Actualizar',
             'cancel' => 'Cancelar',

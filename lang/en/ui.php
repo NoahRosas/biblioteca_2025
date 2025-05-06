@@ -46,8 +46,8 @@ return [
             'verification_sent' => 'A new verification link has been sent to your email address.',
             'save_button' => 'Save',
             'saved_message' => 'Saved',
-            'loan_history' => 'Loan history',
-            'loan_history_description' => 'Here, you can see your loan history',
+            'history' => 'Activity history',
+            'history_description' => 'Here, you can see your activity history',
         ],
         'password' => [
             'title' => 'Password settings',
@@ -118,6 +118,10 @@ return [
         'title' => 'Users',
         'create' => 'Create User',
         'edit' => 'Edit User',
+        'history' => [
+            'title' => 'User history',
+            'no_results' => 'Nothing to see here, read a book or something',
+        ],
         'description' => 'Manage users in the system',
         'fields' => [
             'name' => 'Name',
@@ -192,6 +196,7 @@ return [
             'new' => 'New User',
             'edit' => 'Edit',
             'save' => 'Save',
+            'activity' => 'Activity history',
             'update' => 'Update',
             'cancel' => 'Cancel',
             'delete' => 'Delete',

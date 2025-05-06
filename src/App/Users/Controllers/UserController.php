@@ -4,6 +4,7 @@ namespace App\Users\Controllers;
 
 use App\Core\Controllers\Controller;
 use Domain\Roles\Models\Role as ModelsRole;
+use Domain\Users\Actions\ActivityShowAction;
 use Domain\Users\Actions\UserDestroyAction;
 use Domain\Users\Actions\UserIndexAction;
 use Domain\Users\Actions\UserStoreAction;
@@ -26,26 +27,34 @@ class UserController extends Controller
         return Inertia::render('users/Index', ['lang' => $lang]);
     }
 
+    public function show(User $user, ActivityShowAction $action)
+    {
+
+
+        $activities = $action($user->id);
+
+        return Inertia::render('users/history', [
+            'user_activities' => $activities,
+        ]);
+    }
     public function create()
     {
         $permisos = [];
         $roles = [];
-        
+
 
         foreach (Permission::all() as $value) {
             $category = explode('.', $value->name)[0];
             $action = explode('.', $value->name)[1];
             array_push($permisos, [$category, $action]);
         }
-        
+
         foreach (ModelsRole::all() as $rol) {
-            foreach ($rol -> permissions as $value ) {
+            foreach ($rol->permissions as $value) {
                 array_push($roles, [$rol->name, $value->name]);
-                
             }
-            
         }
-        
+
         return Inertia::render('users/Create', [
             'permisos' => $permisos,
             'roles' => $roles
@@ -78,7 +87,7 @@ class UserController extends Controller
         $roles = [];
         $userPermits = [];
         $userPermitsCollection = $user->permissions->pluck('name');
-        foreach ($userPermitsCollection as $key ) {
+        foreach ($userPermitsCollection as $key) {
             array_push($userPermits, $key);
         }
 
@@ -89,16 +98,14 @@ class UserController extends Controller
         }
 
         foreach (ModelsRole::all() as $rol) {
-            foreach ($rol -> permissions as $value ) {
+            foreach ($rol->permissions as $value) {
                 array_push($roles, [$rol->name, $value->name]);
-                
             }
-            
         }
 
-        
 
-        foreach($userPermits as $permit){
+
+        foreach ($userPermits as $permit) {
             $category = explode('.', $permit)[0];
             $action = explode('.', $permit)[1];
         }
@@ -135,7 +142,7 @@ class UserController extends Controller
         $action($user, $validator->validated(), $request->permits);
 
         $redirectUrl = route('users.index');
-        
+
         // Añadir parámetros de página a la redirección si existen
         if ($request->has('page')) {
             $redirectUrl .= "?page=" . $request->query('page');
