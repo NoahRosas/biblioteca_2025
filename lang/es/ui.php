@@ -13,6 +13,7 @@ return [
             'books' => 'Libros',
             'loans' => 'Préstamos',
             'reservations' => 'Reservas',
+            'graphs' => 'Estadísticas',
             'repository' => 'Repositorio',
             'documentation' => 'Documentación',
         ],
@@ -273,7 +274,7 @@ return [
         ],
         'columns' => [
             'name' => 'Nombre de la zona',
-            'number'=>'Número de la zona',
+            'number' => 'Número de la zona',
             'max_bookshelves' => 'Capacidad de estanterías',
             'floor_id' => 'Planta'
         ],
@@ -525,7 +526,7 @@ return [
         ],
         'no_results' => 'No hay resultados.',
     ],
-    'reservations'=>[
+    'reservations' => [
         'title' => 'Reservas',
         'create' => 'Crear Reserva',
         'edit' => 'Editar reserva',
@@ -546,36 +547,42 @@ return [
             'book_name' => 'Título del libro',
             'book_ISBN' => 'ISBN',
             'created_at' => 'Fecha expedición',
-            
+
         ],
         'fields' => [
             'user_email' => 'Email de usuario',
             'book_id' => 'Id del libro',
             'book_ISBN' => 'ISBN',
             'created_at' => 'Fecha expedición',
-            
+
         ],
         'placeholders' => [
             'user_email' => 'Email de usuario...',
             'book_id' => 'Id del libro...',
             'book_name' => 'Título del libro...',
             'ISBN' => 'ISBN...',
-            'created_at'=> 'Fecha de expedición...',
-            
+            'created_at' => 'Fecha de expedición...',
+
         ],
         'filters' => [
             'user_email' => 'Email de usuario',
             'book_name' => 'Título del libro',
             'book_ISBN' => 'ISBN',
             'created_at' => 'Fecha expedición',
-            
+
         ],
         'error_loading' => 'Error al cargar las reservas. Inténtalo de nuevo.',
         'deleted_error' => 'Error al eliminar la reserva',
         'no_results' => 'No hay resultados.',
-        
+
     ],
-    'graphs'=>[
-        'title' => 'Estadísticas'
+    'graphs' => [
+        'title' => 'Estadísticas',
+        'description' => 'Mira las estadísticas de la aplicación',
+        'section' => [
+            'books' => 'Libros más leídos',
+            'users' => 'Usuarios más activos',
+            'zones' => 'Zonas con más actividad',
+        ],
     ],
 ];

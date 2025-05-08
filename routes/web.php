@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -12,10 +11,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    Route::get('graphs', function () {
-        return  Inertia::render('graphs');
-    })->name('graphs');
-
     Route::resource('users', App\Users\Controllers\UserController::class);
     Route::resource('floors', App\Floors\Controllers\FloorController::class);
     Route::resource('zones', App\Zones\Controllers\ZoneController::class);
@@ -23,6 +18,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('books', App\Books\Controllers\BookController::class);
     Route::resource('loans', App\Loans\Controllers\LoanController::class);
     Route::resource('reservations', App\Reservations\Controllers\ReservationController::class);
+    Route::resource('graphs', App\Graphs\Controllers\GraphController::class);
 });
 
 

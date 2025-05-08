@@ -11,7 +11,8 @@ return [
             'bookshelves' => 'Bookshelves',
             'books' => 'Books',
             'loans' => 'Loans',
-            'reservations'=>'Reservations',
+            'reservations' => 'Reservations',
+            'graphs' => 'Statistics',
             'repository' => 'Repository',
             'documentation' => 'Documentation',
         ],
@@ -79,16 +80,16 @@ return [
     ],
     'validation' => [
         'distinct' => 'The :attribute field has a duplicate value.',
-           'required' => 'The :attribute field is required.',
-            'email' => 'The :attribute field must be a valid email address.',
-            'min' => [
-                'string' => 'The :attribute field must be at least :min characters.',
-            ],
-            'max' => [
-                'string' => 'The :attribute field must not be greater than :max characters.',
-            ],
-            'unique' => 'The :attribute has already been taken.',
-            'confirmed' => 'The :attribute confirmation does not match.',
+        'required' => 'The :attribute field is required.',
+        'email' => 'The :attribute field must be a valid email address.',
+        'min' => [
+            'string' => 'The :attribute field must be at least :min characters.',
+        ],
+        'max' => [
+            'string' => 'The :attribute field must not be greater than :max characters.',
+        ],
+        'unique' => 'The :attribute has already been taken.',
+        'confirmed' => 'The :attribute confirmation does not match.',
     ],
     'common' => [
         'buttons' => [
@@ -96,7 +97,7 @@ return [
             'delete' => 'Delete',
             'close' => 'Close',
         ],
-        'filters'=> [
+        'filters' => [
             'title' => 'Filters',
             'clear' => 'Clear',
             'results' => ':attribute results found'
@@ -142,13 +143,13 @@ return [
             'create' => 'Complete the fields below to create a new user',
             'role' => 'The role determines the level of access of the user',
         ],
-        'roles' =>[ 
+        'roles' => [
             'admin' => 'Administrator',
             'employee' => 'Employee',
             'student' => 'Student',
             'view' => 'Only View'
         ],
-        'permissions'=>[
+        'permissions' => [
             'users' => [
                 'title' => 'Users',
                 'view' => 'View users',
@@ -227,17 +228,17 @@ return [
         'create' => 'Create Floor',
         'edit' => 'Edit Floor',
         'description' => 'Manage floors in the system',
-        'buttons' =>[
+        'buttons' => [
             'new' => 'Create Floor'
         ],
         'titles' => [
-            'floor' => 'Floor' ,
+            'floor' => 'Floor',
         ],
-        'extra_info'=>[
+        'extra_info' => [
             'create' => 'Fill the fields to make a new floor',
             'edit' => 'Fill the fields to edit this floor'
         ],
-        'fields' =>[
+        'fields' => [
             'name' => 'Floor name',
             'max_zones' => 'Zone capacity',
         ],
@@ -263,10 +264,10 @@ return [
         'create' => 'Create Zone',
         'edit' => 'Edit Zone',
         'description' => 'Manage zones in the system',
-        'buttons' =>[
+        'buttons' => [
             'new' => 'Create Zone'
         ],
-        'extra_info' =>[
+        'extra_info' => [
             'create' => 'Fill the fields to create a new zone',
             'edit' => 'Update the fields to edit this zone ',
         ],
@@ -276,7 +277,7 @@ return [
             'max_bookshelves' => 'Bookshelves capacity',
             'floor_id' => 'Floor ubication',
         ],
-        'fields' =>[
+        'fields' => [
             'name' => 'Zone name',
             'number' => 'Zone number',
             'floor_id' => 'Floor ubication',
@@ -305,10 +306,10 @@ return [
         'create' => 'Create Bookshelf',
         'edit' => 'Edit Bookshelf',
         'description' => 'Manage bookshelves in the system',
-        'buttons' =>[
+        'buttons' => [
             'new' => 'Create Bookshelf'
         ],
-        'extra_info' =>[
+        'extra_info' => [
             'create' => 'Fill the fields to create a new bookshelf',
             'edit' => 'Update the fields to edit this bookshelf'
         ],
@@ -316,30 +317,30 @@ return [
             'number' => 'Bookshelf number',
             'max_books' => 'Books capacity',
             'zone_id' => 'Zone ubication',
-            'zone_name'=> 'Zone genre',
+            'zone_name' => 'Zone genre',
             'floor_id' => 'Floor ubication',
         ],
         'fields' => [
             'number' => 'Bookshelf number',
             'floor_id' => 'Floor ubication',
             'zone_id' => 'Zone ubication',
-            'zone_name'=> 'Zone genre',
+            'zone_name' => 'Zone genre',
             'max_books' => 'Books capacity'
         ],
         'placeholders' => [
             'number' => 'Bookshelf number...',
             'max_books' => 'Books capacity...',
-            'floor_id'=> 'Floor ubication...',
+            'floor_id' => 'Floor ubication...',
             'zone_id' => 'Zone ubication...',
-            'zone_name'=> 'Zone genre...',
+            'zone_name' => 'Zone genre...',
             'created_at' => 'Creation date...',
         ],
         'filters' => [
             'number' => 'Bookshelf number',
             'max_books' => 'Books capacity',
-            'floor_id'=> 'Floor ubication',
+            'floor_id' => 'Floor ubication',
             'zone_id' => 'Zone ubication',
-            'zone_name'=> 'Zone genre',
+            'zone_name' => 'Zone genre',
             'created_at' => 'Creation date',
 
         ],
@@ -352,11 +353,11 @@ return [
         'create' => 'Create Book',
         'edit' => 'Edit Book',
         'description' => 'Manage books in the system',
-        'buttons' =>[
+        'buttons' => [
             'new' => 'Create Book',
             'delete' => 'Delete',
         ],
-        'extra_info'=>[
+        'extra_info' => [
             'create' => 'Fill the fields to create a new book',
             'edit' => 'Update the fields to edit this book'
         ],
@@ -369,7 +370,7 @@ return [
             'genres' => 'Genres',
             'bookshelf_id' => 'Bookshelf number',
             'zone_id' => 'Zone ubication',
-            'zone_name'=> 'Zone genre',
+            'zone_name' => 'Zone genre',
             'floor_id' => 'Floor ubication',
             'is_available' => 'Is available',
             'available' => 'Copies borrowed: '
@@ -383,7 +384,7 @@ return [
             'genres' => 'Genres',
             'bookshelf_id' => 'Bookshelf number',
             'zone_id' => 'Zone ubication',
-            'zone_name'=> 'Zone genre',
+            'zone_name' => 'Zone genre',
             'floor_id' => 'Floor ubication',
             'image' => 'Image cover',
         ],
@@ -396,7 +397,7 @@ return [
             'genres' => 'Genres...',
             'bookshelf_id' => 'Bookshelf number...',
             'zone_id' => 'Zone ubication...',
-            'zone_name'=> 'Zone genre...',
+            'zone_name' => 'Zone genre...',
             'floor_id' => 'Floor ubication...',
             'is_available' => 'Is available...',
             'created_at' => 'Creation date...',
@@ -411,7 +412,7 @@ return [
             'genres' => 'Genres',
             'bookshelf_id' => 'Bookshelf number',
             'zone_id' => 'Zone ubication',
-            'zone_name'=> 'Zone genre',
+            'zone_name' => 'Zone genre',
             'floor_id' => 'Floor ubication',
             'is_available' => 'Is available',
             'created_at' => 'Creation date',
@@ -424,7 +425,7 @@ return [
         ],
         'no_results' => 'No results.',
     ],
-    'genres' =>[
+    'genres' => [
         'names' => [
             'Fantasy' => 'Fantasy',
             'Romantic' => 'Romantic',
@@ -449,17 +450,17 @@ return [
         'create' => 'Create loan',
         'edit' => 'Edit loan',
         'description' => 'Manage loans in the system',
-        'buttons' =>[
+        'buttons' => [
             'new' => 'Create Loan',
-            'return' =>[
+            'return' => [
                 'true' => 'Return book',
                 'false' => 'Cancel'
             ],
             'create' => 'Lend book',
-            'edit'=> 'Edit due date'
+            'edit' => 'Edit due date'
 
         ],
-        'extra_info' =>[
+        'extra_info' => [
             'create' => 'Fill the fields below to create a new loan',
             'edit' => 'Fill the fields below to update this loan',
         ],
@@ -500,16 +501,16 @@ return [
             'borrowed' => 'Borrowed',
             'is_overdue' => 'Overdue',
         ],
-        'borrowed'=>[
-            'true'=>'Borrowed',
-            'false'=>'Returned',
+        'borrowed' => [
+            'true' => 'Borrowed',
+            'false' => 'Returned',
         ],
-        'date'=> 'Pick expiration date for the loan',
+        'date' => 'Pick expiration date for the loan',
         'deleted_error' => 'Error deleting loan',
         'error_loading' => 'Error loading loans. Please, try again.',
         'return' => [
-            'title'=>'Return this book?',
-            'description'=> 'If you return this book, you will have to make a new loan to have it again.',
+            'title' => 'Return this book?',
+            'description' => 'If you return this book, you will have to make a new loan to have it again.',
             'end_loan' => 'The date for the loan to expire is: ',
         ],
         'response' => [
@@ -521,22 +522,22 @@ return [
             'one' => 'Day overdued: ',
             'more' => 'Days overdued: ',
             'false' => 'On time',
-            'true'=>'Overdue',
+            'true' => 'Overdue',
         ],
         'no_results' => 'No results.',
     ],
-    'reservations'=>[
+    'reservations' => [
         'title' => 'Reservations',
         'create' => 'Create reservation',
         'edit' => 'Edit reservation',
         'description' => 'Manage reservations in the system',
-        'buttons' =>[
+        'buttons' => [
             'new' => 'Create Reservation',
             'edit' => 'Edit Reservation',
             'create' => 'Book book',
             'delete' => 'Delete reservation',
         ],
-        'extra_info' =>[
+        'extra_info' => [
             'create' => 'Fill the fields below to create a new reservation',
             'edit' => 'Fill the fields below to update this reservation',
         ],
@@ -565,13 +566,19 @@ return [
             'book_name' => 'Book title',
             'book_ISBN' => 'ISBN',
             'created_at' => 'Expedit date',
- 
+
         ],
         'deleted_error' => 'Error deleting reservation',
         'error_loading' => 'Error loading reservations. Please, try again.',
         'no_results' => 'No results.',
     ],
-    'graphs'=>[
-        'title' => 'Statistics'
+    'graphs' => [
+        'title' => 'Statistics',
+        'description' => 'Look up the statistics of the app',
+        'section' => [
+            'books' => 'Most read books',
+            'users' => 'Most active users',
+            'zones' => 'Most active zones',
+        ],
     ],
 ];
