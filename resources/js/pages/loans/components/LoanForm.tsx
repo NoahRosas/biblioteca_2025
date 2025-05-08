@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useTranslations } from '@/hooks/use-translations';
 import { cn } from '@/lib/utils';
-
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { router } from '@inertiajs/react';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
@@ -16,6 +16,7 @@ import { format, isSunday, isWeekend, lastDayOfWeek } from 'date-fns';
 
 import 'react-day-picker/style.css';
 import { enUS, es } from 'date-fns/locale';
+
 
 // Tipado de las props
 export interface LoanFormProps {
@@ -28,6 +29,7 @@ export interface LoanFormProps {
     user_email?: string;
     page?: string;
     perPage?: string;
+    user_emails: any [];
 }
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
@@ -40,10 +42,11 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function LoanForm({ initialData, page, perPage, user_email, lang }: LoanFormProps) {
+export function LoanForm({ initialData, page, perPage, user_email, lang, user_emails}: LoanFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
     const [selectedEndLoan, setSelectEndLoan] = useState(initialData?.end_loan || undefined);
+    const [selectedEmail, setSelectedEmail] = useState<string>();
     let params = window.location.search;
     let url = new URLSearchParams(params);
     const form = useForm({
@@ -76,7 +79,7 @@ export function LoanForm({ initialData, page, perPage, user_email, lang }: LoanF
         en: enUS,
         es: es,
     };
-
+    console.log(user_emails);
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         event.stopPropagation();
@@ -114,7 +117,7 @@ export function LoanForm({ initialData, page, perPage, user_email, lang }: LoanF
                                             </Label>
                                         </div>
 
-                                        <Input
+                                        {/* <Input
                                             id={field.name}
                                             name={field.name}
                                             value={field.state.value}
@@ -124,7 +127,24 @@ export function LoanForm({ initialData, page, perPage, user_email, lang }: LoanF
                                             disabled={form.state.isSubmitting || user_email !== undefined}
                                             required={false}
                                             autoComplete="off"
-                                        />
+                                        /> */}
+                                        <Select name={field.name} value={field.state.value} onValueChange={(value) => {
+                                            field.handleChange(value);
+                                            setSelectedEmail(value);
+                                            console.log(value);
+                                            }}>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder={t('ui.loans.placeholders.user_email')} />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {user_emails?.map((email) => (
+                                                    <SelectItem key={email} value={email} >
+                                                        {email}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        <FieldInfo field={field} />
                                         <FieldInfo field={field} />
                                     </>
                                 )}

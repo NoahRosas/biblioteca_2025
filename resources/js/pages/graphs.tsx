@@ -13,20 +13,21 @@ interface GraphDataProps extends PageProps {
 export default function Graphs({ books, users, zones }: GraphDataProps) {
     const { t } = useTranslations();
 
-    const CustomTooltip = ({ active, payload, label }) => {
+    const CustomTooltip = ({ active, payload}) => {
         if (active && payload && payload.length) {
             const data = payload[0].payload;
             return (
                 <div className="custom-tooltip bg-primary text-primary-foreground flex flex-col items-center rounded-md p-2">
                     <h4 className="text-xl">{data.number ? `${data.number} - ${t(`ui.genres.names.${data.name}`)}` : `${data.name}`}</h4>
                     {data.floor_id ? (
-                        <p className="label mt-2">{`${t('ui.zones.columns.floor_id')} : ${data.floor_name}`}</p>
+                        <p className="label mt-2">{`${t('ui.zones.columns.floor_id')}  ${data.floor_name}`}</p>
                     ) : data.author ? (
-                        <p className="label mt-2"> {data.author}</p>
+                        <p className="label mt-2">{t('ui.books.by')} {data.author}</p>
                     ) : data.email ? (
                         <p className="label mt-2"> {data.email}</p>
                     ) : null}
-                    <p className="label mt-1" style={{ color: payload[1].fill }}>{`${t('ui.reservations.title')} : ${data.reservations_count}`}</p>
+                    {data.ISBN ? <p className="label mt-1">{`${t('ui.books.columns.ISBN')} : ${data.ISBN}`}</p> : null}
+                    <p className="label mt-2" style={{ color: payload[1].fill }}>{`${t('ui.reservations.title')} : ${data.reservations_count}`}</p>
                     <p className="label mt-1" style={{ color: payload[0].fill }}>{`${t('ui.loans.title')} : ${data.loans_count}`}</p>
                 </div>
             );

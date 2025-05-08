@@ -422,6 +422,7 @@ return [
             'true' => 'No disponible'
         ],
         'no_results' => 'No hay resultados.',
+        'by' => 'escrito por',
     ],
     'genres' => [
         'names' => [
@@ -440,6 +441,8 @@ return [
             'Philosophy' => 'Filosofía',
             'Robotics' => 'Robótica',
         ],
+        'search'=>'Buscar género...',
+        'select_all' => 'Todos los géneros',
     ],
 
     'loans' => [

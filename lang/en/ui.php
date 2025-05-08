@@ -424,6 +424,7 @@ return [
             'true' => 'Unavailable'
         ],
         'no_results' => 'No results.',
+        'by' => 'by',
     ],
     'genres' => [
         'names' => [
@@ -442,6 +443,8 @@ return [
             'Philosophy' => 'Philosophy',
             'Robotics' => 'Robotics',
         ],
+        'search'=>'Search genre...',
+        'select_all' => 'All genres',
     ],
 
     'loans' => [

@@ -27,14 +27,16 @@ class LoanController extends Controller
 
     public function create()
     {
+        $user_emails = User::select('email')->get()->toArray();
         $books = Book::with('activeLoan');
         $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
-        return Inertia::render('loans/Create', ['books' => $books, 'lang' => $lang]);
+        // dd($user_emails);
+        return Inertia::render('loans/Create', ['user_emails'=> $user_emails,'books' => $books, 'lang' => $lang]);
     }
 
     public function store(Request $request, LoanStoreAction $action)
     {   
-        // dd(request()->all());
+
         $validator = Validator::make($request->all(), [
             'user_email' => ['required', 'string', 'max:255'],
             'book_id' => ['required', 'string', 'max:255'],

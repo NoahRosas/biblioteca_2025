@@ -4,7 +4,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { MultiSelect } from '@/components/ui/multi-select';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Bookshelf } from '@/hooks/bookshelves/useBookshelves';
 import { Genre } from '@/hooks/genres/useGenres';
 import { useTranslations } from '@/hooks/use-translations';
 import { Zone } from '@/hooks/zones/useZones';
@@ -12,7 +11,7 @@ import { router } from '@inertiajs/react';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
 import { Save, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 // Tipado de las props
 export interface BookFormProps {
@@ -51,8 +50,9 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 export function BookForm({ initialData, page, perPage, floors, zones, bookshelves, genres, image_path }: BookFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
-    let zoneNow: string | undefined = undefined, floorNow = undefined;
-   
+    let zoneNow: string | undefined = undefined,
+        floorNow = undefined;
+
     if (initialData) {
         zoneNow = bookshelves.filter((bookshelf) => bookshelf.id === initialData?.bookshelf_id)[0].zone_id;
         floorNow = zones.filter((zone) => zone.id === zoneNow)[0].floor_id;
@@ -74,16 +74,16 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
         },
 
         onSubmit: async ({ value }) => {
-            const formData = new FormData;
-                formData.append('name', value.name);
-                formData.append('ISBN', value.ISBN);
-                formData.append('author', value.author);
-                formData.append('publisher', value.publisher);
-                formData.append('num_pages', value.num_pages);
-                formData.append('bookshelf_id', value.bookshelf_id);
-                formData.append('image', selectedImage);
-                formData.append('_method', 'PUT');
-                formData.append('genres', selectedGenres.join(', '));
+            const formData = new FormData();
+            formData.append('name', value.name);
+            formData.append('ISBN', value.ISBN);
+            formData.append('author', value.author);
+            formData.append('publisher', value.publisher);
+            formData.append('num_pages', value.num_pages);
+            formData.append('bookshelf_id', value.bookshelf_id);
+            formData.append('image', selectedImage);
+            formData.append('_method', 'PUT');
+            formData.append('genres', selectedGenres.join(', '));
             const options = {
                 onSuccess: () => {
                     queryClient.invalidateQueries({ queryKey: ['books'] });
@@ -107,14 +107,14 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
         let check;
         if (selectedGenres.length == 0) {
             check = true;
-        }else{
+        } else {
             if (selectedFloor == undefined) {
                 check = true;
             } else {
                 check = false;
             }
         }
-        
+
         return check;
     }
 
@@ -122,14 +122,14 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
         let check;
         if (selectedGenres.length == 0) {
             check = true;
-        }else{
+        } else {
             if (selectedZone == undefined) {
                 check = true;
             } else {
                 check = false;
             }
         }
-        
+
         return check;
     }
 
@@ -140,9 +140,9 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
             label: t(`ui.genres.names.${genre.value}`),
         }));
     };
-    
+
     const transformedGenres = transformGenres(genres);
-    
+
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         event.stopPropagation();
@@ -199,7 +199,7 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                 )}
                             </form.Field>
                         </div>
-                        
+
                         {/* ISBN field */}
                         <div className="space-y-1">
                             <form.Field
@@ -214,12 +214,12 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                                     attribute: t('ui.books.fields.ISBN').toLowerCase(),
                                                     min: '13',
                                                 })
-                                              : value.length>13 
-                                              ? t('ui.validation.max.string', {
-                                                attribute: t('ui.books.fields.ISBN').toLowerCase(),
-                                                max: '13',
-                                            }) : undefined
-                                            ;
+                                              : value.length > 13
+                                                ? t('ui.validation.max.string', {
+                                                      attribute: t('ui.books.fields.ISBN').toLowerCase(),
+                                                      max: '13',
+                                                  })
+                                                : undefined;
                                     },
                                 }}
                             >
@@ -250,7 +250,6 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                 )}
                             </form.Field>
                         </div>
-
 
                         {/* Author field */}
                         <div className="space-y-1">
@@ -401,7 +400,6 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                 variant="inverted"
                                 animation={2}
                                 maxCount={5}
-                                
                             />
                         </div>
                         {/* Bookshelf id field */}
@@ -421,7 +419,7 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                     <SelectValue placeholder={t('ui.books.placeholders.floor_id')} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    { floors?.map((floor) => (
+                                    {floors?.map((floor) => (
                                         <SelectItem key={floor.id} value={floor.id}>
                                             {t(`ui.floors.titles.floor`)} {floor.name}
                                         </SelectItem>
@@ -448,7 +446,7 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                         .filter((zone) => selectedGenres.includes(zone.name))
                                         .map((zone) => (
                                             <SelectItem key={zone.id} value={zone.id}>
-                                                {t(`ui.genres.names.${zone.name}`)}
+                                                {zone.number} - {t(`ui.genres.names.${zone.name}`)}
                                             </SelectItem>
                                         ))}
                                 </SelectContent>
@@ -479,7 +477,6 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                     >
                                         <SelectTrigger>
                                             <SelectValue placeholder={t('ui.books.placeholders.bookshelf_id')} />
-                                            
                                         </SelectTrigger>
                                         <SelectContent>
                                             {bookshelves
@@ -504,10 +501,11 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                             <form.Field
                                 name="image"
                                 validators={{
-                                    onChangeAsync: async ({ value }) => {
+                                    onChangeAsync: async (value) => {
                                         await new Promise((resolve) => setTimeout(resolve, 500));
-                                        return !selectedImage && !image_path ?
-                                        t('ui.validation.required', { attribute: t('ui.books.fields.image').toLowerCase() }) : null;
+                                        return !value && !image_path
+                                            ? t('ui.validation.required', { attribute: t('ui.books.fields.image').toLowerCase() })
+                                            : null;
                                     },
                                 }}
                             >
@@ -525,8 +523,9 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                             type="file"
                                             // value={field.state.value}
                                             onChange={(e) => {
-                                                field.handleChange(e.target.files[0]);
-                                                setSelectedImage(e.target.files[0]);
+                                                const file = e.target.files[0];
+                                                setSelectedImage(file);
+                                                field.handleChange(file);
                                             }}
                                             onBlur={field.handleBlur}
                                             placeholder={t('ui.books.placeholders.img_path')}
