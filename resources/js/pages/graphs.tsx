@@ -26,15 +26,15 @@ export default function Graphs({ books, users, zones }: GraphDataProps) {
                     ) : data.email ? (
                         <p className="label mt-2"> {data.email}</p>
                     ) : null}
-                    <p className="label mt-1" style={{ color: payload[0].fill }}>{`${t('ui.loans.title')} : ${data.loans_count}`}</p>
                     <p className="label mt-1" style={{ color: payload[1].fill }}>{`${t('ui.reservations.title')} : ${data.reservations_count}`}</p>
+                    <p className="label mt-1" style={{ color: payload[0].fill }}>{`${t('ui.loans.title')} : ${data.loans_count}`}</p>
                 </div>
             );
         }
 
         return null;
     };
-    // console.log(books);
+    
     return (
         <GraphLayout title={t('ui.graphs.title')}>
             <div className="flex min-h-screen flex-col items-center">
@@ -57,7 +57,7 @@ export default function Graphs({ books, users, zones }: GraphDataProps) {
                                     bottom: 5,
                                 }}
                             >
-                                <XAxis dataKey="index" height={100} />
+                                <XAxis dataKey="index" height={100}/>
                                 <YAxis allowDecimals={false} />
                                 <Tooltip
                                     contentStyle={{
