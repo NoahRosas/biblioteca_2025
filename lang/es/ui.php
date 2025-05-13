@@ -443,6 +443,7 @@ return [
         ],
         'search'=>'Buscar género...',
         'select_all' => 'Todos los géneros',
+        'close' => 'Cerrar',
     ],
 
     'loans' => [
@@ -492,7 +493,8 @@ return [
             'end_loan' => 'Fecha vencimiento...',
             'borrowed' => 'Prestado actualmente...',
             'is_overdue' => 'Con retraso...',
-            'pick_date' => 'Elige una fecha'
+            'pick_date' => 'Elige una fecha',
+            'search' => 'Buscar usuario...',
         ],
         'filters' => [
             'user_email' => 'Email de usuario',

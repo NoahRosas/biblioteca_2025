@@ -7,9 +7,10 @@ import { PageProps } from "@/types";
 
 interface CreateLoanProps extends PageProps{
   lang: string;
+  user_emails: any[];
 }
 
-export default function CreateLoan({lang}:CreateLoanProps) {
+export default function CreateLoan({lang, user_emails}:CreateLoanProps) {
   const { t } = useTranslations();
   return (
         <LoanLayout title={t('ui.loans.create')}>
@@ -19,7 +20,7 @@ export default function CreateLoan({lang}:CreateLoanProps) {
                 
             </h3>
             <p className="text-s text-center mb-2 text-muted-foreground">{t('ui.loans.extra_info.create')}</p>
-            <LoanForm lang={lang}/>
+            <LoanForm lang={lang} user_emails={user_emails}/>
         </LoanLayout>
   );
 }

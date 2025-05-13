@@ -63,13 +63,15 @@ class LoanController extends Controller
         //
     }
 
-    public function edit(Request $request, Loan $loan)
-    {   $user_email = User::select('email')->where('id', $loan->user_id)->get();
+    public function edit(Request $request, Loan $loan){
+        $user_email = User::select('email')->where('id', $loan->user_id)->get();
+        $user_emails = User::select('email')->get()->toArray();
         $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
         return Inertia::render('loans/Edit',[
             'loan' => $loan,
             'lang' => $lang,
             'user_email' => $user_email[0]->email,
+            'user_emails' => $user_emails,
             'page' => $request->query('page'),
             'perPage' => $request->query('perPage'),
         ]);

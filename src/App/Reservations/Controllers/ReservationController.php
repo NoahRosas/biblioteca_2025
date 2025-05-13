@@ -27,7 +27,8 @@ class ReservationController
      */
     public function create()
     {
-        return Inertia::render('reservations/Create');
+        $user_emails = User::select('email')->get()->toArray();
+        return Inertia::render('reservations/Create', ['user_emails' => $user_emails]);
     }
 
     /**
@@ -65,9 +66,11 @@ class ReservationController
      */
     public function edit(Request $request, Reservation $reservation)
     {
+        $user_emails = User::select('email')->get()->toArray();
         $user_email = User::select('email')->where('id', $reservation->user_id)->get();
         return Inertia::render('reservations/Edit', [
             'reservation' => $reservation,
+            'user_emails' => $user_emails,
             'user_email' => $user_email[0]->email,
             'page' => $request->query('page'),
             'perPage' => $request->query('perPage'),

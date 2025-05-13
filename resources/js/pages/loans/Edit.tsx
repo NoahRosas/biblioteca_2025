@@ -12,12 +12,15 @@ interface EditLoansProps extends PageProps{
     }
     lang: string
     user_email:string;
+    user_emails:{
+        email: string;
+    }[];
     page?: string;
     perPage?: string;
 
 }
 
-export default function EditLoan({loan, user_email, lang}:EditLoansProps) {
+export default function EditLoan({loan, user_email, lang, user_emails}:EditLoansProps) {
   const { t } = useTranslations();
   return (
         <LoanLayout title={t('ui.loans.edit')}>
@@ -27,7 +30,7 @@ export default function EditLoan({loan, user_email, lang}:EditLoansProps) {
                 
             </h3>
             <p className="text-s text-center mb-2 text-muted-foreground">{t('ui.loans.extra_info.edit')}</p>
-            <LoanForm initialData={loan} user_email={user_email} lang={lang}/>
+            <LoanForm initialData={loan} user_email={user_email} lang={lang} user_emails={user_emails}/>
         </LoanLayout>
   );
 }

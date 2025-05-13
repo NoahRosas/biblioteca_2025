@@ -12,12 +12,15 @@ interface EditReservationProps extends PageProps{
         book_id: string;
     }
     user_email:string;
+    user_emails:{
+        email:string;
+    }[];
     page?: string;
     perPage?: string;
 
 }
 
-export default function EditLoan({reservation, user_email}:EditReservationProps) {
+export default function EditLoan({reservation, user_email, user_emails}:EditReservationProps) {
   const { t } = useTranslations();
   return (
         <ReservationLayout title={t('ui.reservations.edit')}>
@@ -27,7 +30,7 @@ export default function EditLoan({reservation, user_email}:EditReservationProps)
                 
             </h3>
             <p className="text-s text-center mb-2 text-muted-foreground">{t('ui.reservations.extra_info.edit')}</p>
-            <ReservationForm initialData={reservation} user_email={user_email}/>
+            <ReservationForm initialData={reservation} user_email={user_email} user_emails={user_emails}/>
         </ReservationLayout>
   );
 }

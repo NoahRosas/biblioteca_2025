@@ -445,6 +445,7 @@ return [
         ],
         'search'=>'Search genre...',
         'select_all' => 'All genres',
+        'close' => 'Close',
     ],
 
     'loans' => [
@@ -493,7 +494,8 @@ return [
             'end_loan' => 'Expiration date...',
             'borrowed' => 'Borrowed...',
             'is_overdue' => 'Overdue...',
-            'pick_date' => 'Pick a date'
+            'pick_date' => 'Pick a date',
+            'search' => 'Search user...',
         ],
         'filters' => [
             'user_email' => 'User',

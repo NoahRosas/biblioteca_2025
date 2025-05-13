@@ -1,22 +1,21 @@
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useTranslations } from '@/hooks/use-translations';
 import { cn } from '@/lib/utils';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { router } from '@inertiajs/react';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
-import { CalendarIcon, Save, X } from 'lucide-react';
+import { format, isSunday } from 'date-fns';
+import { CalendarIcon, Check, ChevronsUpDown, Save, X } from 'lucide-react';
 import { useState } from 'react';
-import { format, isSunday, isWeekend, lastDayOfWeek } from 'date-fns';
 
-import 'react-day-picker/style.css';
 import { enUS, es } from 'date-fns/locale';
-
+import 'react-day-picker/style.css';
 
 // Tipado de las props
 export interface LoanFormProps {
@@ -29,7 +28,9 @@ export interface LoanFormProps {
     user_email?: string;
     page?: string;
     perPage?: string;
-    user_emails: any [];
+    user_emails:{
+        email:string;
+    }[];
 }
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
@@ -42,11 +43,12 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function LoanForm({ initialData, page, perPage, user_email, lang, user_emails}: LoanFormProps) {
+export function LoanForm({ initialData, page, perPage, user_email, lang, user_emails }: LoanFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
     const [selectedEndLoan, setSelectEndLoan] = useState(initialData?.end_loan || undefined);
-    const [selectedEmail, setSelectedEmail] = useState<string>();
+    const [selectedEmail, setSelectedEmail] = useState<string>(user_email || '' );
+    const [open, setOpen] = useState(false);
     let params = window.location.search;
     let url = new URLSearchParams(params);
     const form = useForm({
@@ -79,7 +81,7 @@ export function LoanForm({ initialData, page, perPage, user_email, lang, user_em
         en: enUS,
         es: es,
     };
-    console.log(user_emails);
+
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         event.stopPropagation();
@@ -112,39 +114,42 @@ export function LoanForm({ initialData, page, perPage, user_email, lang, user_em
                                 {(field) => (
                                     <>
                                         <div className="mb-2 flex">
-                                            <Label htmlFor="name" className="mt-1 ml-1">
+                                            <Label htmlFor={field.name} className="mt-1 ml-1">
                                                 {t('ui.loans.fields.user_email')}
                                             </Label>
                                         </div>
-
-                                        {/* <Input
-                                            id={field.name}
-                                            name={field.name}
-                                            value={field.state.value}
-                                            onChange={(e) => field.handleChange(e.target.value)}
-                                            onBlur={field.handleBlur}
-                                            placeholder={t('ui.loans.placeholders.user_email')}
-                                            disabled={form.state.isSubmitting || user_email !== undefined}
-                                            required={false}
-                                            autoComplete="off"
-                                        /> */}
-                                        <Select name={field.name} value={field.state.value} onValueChange={(value) => {
-                                            field.handleChange(value);
-                                            setSelectedEmail(value);
-                                            console.log(value);
-                                            }}>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder={t('ui.loans.placeholders.user_email')} />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {user_emails?.map((email) => (
-                                                    <SelectItem key={email} value={email} >
-                                                        {email}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        <FieldInfo field={field} />
+                                        
+                                        <Popover open={open} onOpenChange={setOpen}>
+                                            <PopoverTrigger asChild disabled={user_email ? true : false}>
+                                                <Button variant="outline" role="combobox" aria-expanded={open} className="w-[550px] justify-between">
+                                                    {selectedEmail ? selectedEmail : t('ui.loans.placeholders.user_email')}
+                                                    <ChevronsUpDown className="opacity-50" />
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-[550px] p-0">
+                                                <Command>
+                                                    <CommandInput placeholder={t('ui.loans.placeholders.search')} className="h-9" />
+                                                    <CommandList>
+                                                        <CommandEmpty>{t('ui.users.no_results')}</CommandEmpty>
+                                                        <CommandGroup>
+                                                            {user_emails.map((user) => (
+                                                                <CommandItem
+                                                                    key={user.email}
+                                                                    value={user.email}
+                                                                    onSelect={(currentValue) => {
+                                                                        field.handleChange(currentValue);
+                                                                        setSelectedEmail(currentValue);
+                                                                        setOpen(false);
+                                                                    }}
+                                                                >
+                                                                    {user.email}
+                                                                </CommandItem>
+                                                            ))}
+                                                        </CommandGroup>
+                                                    </CommandList>
+                                                </Command>
+                                            </PopoverContent>
+                                        </Popover>
                                         <FieldInfo field={field} />
                                     </>
                                 )}
@@ -199,9 +204,7 @@ export function LoanForm({ initialData, page, perPage, user_email, lang, user_em
 
                         {/* end loan field */}
                         <div className="space-y-1">
-                            <form.Field
-                                name="end_loan"
-                            >
+                            <form.Field name="end_loan">
                                 {(field) => (
                                     <>
                                         <div className="mt-3 mb-2 flex">
@@ -211,36 +214,36 @@ export function LoanForm({ initialData, page, perPage, user_email, lang, user_em
                                         </div>
                                         <Popover>
                                             <PopoverTrigger asChild>
-                                                
-                                                    <Button
-                                                        variant={'outline'}
-                                                        className={cn(
-                                                            'w-[240px] pl-3 text-left font-normal',
-                                                            !field.state.value && 'text-muted-foreground',
-                                                        )}
-                                                    >
-                                                        {selectedEndLoan ? format(selectedEndLoan, 'PPP', {locale:langMap[lang]}) : <span>{t('ui.loans.placeholders.pick_date')}</span>}
-                                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                                    </Button>
+                                                <Button
+                                                    variant={'outline'}
+                                                    className={cn(
+                                                        'w-[550px] pl-3 text-left font-normal',
+                                                        !field.state.value && 'text-muted-foreground',
+                                                    )}
+                                                >
+                                                    {selectedEndLoan ? (
+                                                        format(selectedEndLoan, 'PPP', { locale: langMap[lang] })
+                                                    ) : (
+                                                        <span>{t('ui.loans.placeholders.pick_date')}</span>
+                                                    )}
+                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-auto p-0" align="start">
-                                            <Calendar
-                                            animate
-                                            timeZone="Europe/Madrid"
-                                            locale={langMap[lang]}
-                                            mode="single"
-                                            className="rounded-md border shadow"
-                                            
-                                            showOutsideDays
-                                            selected={selectedEndLoan}
-                                            disabled={[{before: new Date()}, new Date(), isSunday] }
-                                            onSelect={setSelectEndLoan}
-                                            
-                                        />
-
+                                                <Calendar
+                                                    animate
+                                                    timeZone="Europe/Madrid"
+                                                    locale={langMap[lang]}
+                                                    mode="single"
+                                                    className="rounded-md border shadow"
+                                                    showOutsideDays
+                                                    selected={selectedEndLoan}
+                                                    disabled={[{ before: new Date() }, new Date(), isSunday]}
+                                                    onSelect={setSelectEndLoan}
+                                                />
                                             </PopoverContent>
                                         </Popover>
-                                        
+
                                         <FieldInfo field={field} />
                                     </>
                                 )}

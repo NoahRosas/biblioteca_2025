@@ -3,12 +3,14 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useTranslations } from '@/hooks/use-translations';
-
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { router } from '@inertiajs/react';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { Save, X } from 'lucide-react';
+import { ChevronsUpDown, Save, X } from 'lucide-react';
+import { useState } from 'react';
 // Tipado de las props
 export interface LoanFormProps {
     initialData?: {
@@ -16,6 +18,9 @@ export interface LoanFormProps {
         book_id: string;
     };
     user_email?:string;
+    user_emails:{
+        email:string;
+    }[];
     page?: string;
     perPage?: string;
 }
@@ -30,8 +35,10 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function ReservationForm({ initialData, page, perPage, user_email}: LoanFormProps) {
+export function ReservationForm({ initialData, page, perPage, user_email, user_emails}: LoanFormProps) {
     const { t } = useTranslations();
+    const [selectedEmail, setSelectedEmail] = useState<string>(user_email || '' );
+    const [open, setOpen] = useState(false);
     const queryClient = useQueryClient();
     let params = window.location.search;
     let url = new URLSearchParams(params);
@@ -96,7 +103,7 @@ export function ReservationForm({ initialData, page, perPage, user_email}: LoanF
                                             </Label>
                                         </div>
 
-                                        <Input
+                                        {/* <Input
                                             id={field.name}
                                             name={field.name}
                                             value={field.state.value}
@@ -106,7 +113,40 @@ export function ReservationForm({ initialData, page, perPage, user_email}: LoanF
                                             disabled={form.state.isSubmitting}
                                             required={false}
                                             autoComplete="off"
-                                        />
+                                        /> */}
+
+                                        <Popover open={open} onOpenChange={setOpen}>
+                                            <PopoverTrigger asChild>
+                                                <Button variant="outline" role="combobox" aria-expanded={open} className="w-[550px] justify-between">
+                                                    {selectedEmail ? selectedEmail : t('ui.loans.placeholders.user_email')}
+                                                    <ChevronsUpDown className="opacity-50" />
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-[550px] p-0">
+                                                <Command>
+                                                    <CommandInput placeholder={t('ui.loans.placeholders.search')} className="h-9" />
+                                                    <CommandList>
+                                                        <CommandEmpty>{t('ui.users.no_results')}</CommandEmpty>
+                                                        <CommandGroup>
+                                                            {user_emails.map((user) => (
+                                                                <CommandItem
+                                                                    key={user.email}
+                                                                    value={user.email}
+                                                                    onSelect={(currentValue) => {
+                                                                        field.handleChange(currentValue);
+                                                                        setSelectedEmail(currentValue);
+                                                                        setOpen(false);
+                                                                    }}
+                                                                >
+                                                                    {user.email}
+                                                                </CommandItem>
+                                                            ))}
+                                                        </CommandGroup>
+                                                    </CommandList>
+                                                </Command>
+                                            </PopoverContent>
+                                        </Popover>
+
                                         <FieldInfo field={field} />
                                     </>
                                 )}
