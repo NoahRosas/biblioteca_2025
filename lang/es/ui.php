@@ -444,6 +444,7 @@ return [
         'search'=>'Buscar género...',
         'select_all' => 'Todos los géneros',
         'close' => 'Cerrar',
+        'clear' => 'Limpiar',
     ],
 
     'loans' => [

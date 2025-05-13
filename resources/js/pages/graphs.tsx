@@ -69,8 +69,8 @@ export default function Graphs({ books, users, zones }: GraphDataProps) {
                                     content={CustomTooltip}
                                 />
                                 <Legend />
-                                <Bar dataKey="loans_count" barSize={50} stackId="a" fill="#4984d8" name={t('ui.loans.title')} />
-                                <Bar dataKey="reservations_count" barSize={50} fill="#fcba03" stackId="a" name={t('ui.reservations.title')} />
+                                <Bar dataKey="loans_count" barSize={50} stackId="a" fill="#4984d8" name={t('ui.loans.title')} animationDuration={1000} />
+                                <Bar dataKey="reservations_count" barSize={50} fill="#fcba03" stackId="a" name={t('ui.reservations.title')} animationDuration={1000} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>

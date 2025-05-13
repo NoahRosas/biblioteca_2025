@@ -28,6 +28,7 @@ class BookIndexAction
         $is_available = $search[10];
         $created_at = $search[11];
 
+        
 
         $floor_id = Floor::query()->when($floor !== 'null', function ($query) use ($floor){
             $query->where('name', 'like', $floor);
@@ -53,9 +54,7 @@ class BookIndexAction
             $query->where('number', '=', $bookshelf_number);
         })->pluck('id');
 
-        $loans = Loan::query()->when($is_available !== 'null', function ($query) use ($is_available){
-            $query->where('borrowed', '=', $is_available);
-        })->pluck('book_id');
+        $loans = Loan::where('borrowed', 'like', 'true')->pluck('book_id');
 
         $books = Book::query()
             ->when($name !== 'null', function ($query) use ($name) {
@@ -86,9 +85,13 @@ class BookIndexAction
 
                 $query->whereIn('bookshelf_id',$bookshelves);
 
-            })->when($is_available !== 'null', function ($query) use ($loans) {
+            })->when($is_available == 'false', function ($query) use ($loans) {
 
-                $query->whereIn('id',$loans);
+                $query->whereNotIn('id', $loans);
+                
+            })->when($is_available == 'true', function ($query) use ($loans) {
+
+                $query->whereIn('id', $loans);
                 
             })->when($created_at !== 'null', function ($query) use ($created_at) {
 

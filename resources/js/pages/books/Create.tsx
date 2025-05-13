@@ -12,6 +12,7 @@ import { Genre } from "@/hooks/genres/useGenres";
 
 
 interface CreateBookProps extends PageProps{
+    books: any[];
     floors: {
         id:string,
         name:string
@@ -21,7 +22,7 @@ interface CreateBookProps extends PageProps{
     genres: Genre[];
 }
 
-export default function CreateBook({floors, zones,bookshelves, genres}:CreateBookProps) {
+export default function CreateBook({floors, zones,bookshelves, genres, books}:CreateBookProps) {
   const { t } = useTranslations();
   return (
         <BookLayout title={t('ui.books.create')}>
@@ -31,7 +32,7 @@ export default function CreateBook({floors, zones,bookshelves, genres}:CreateBoo
                 
             </h3>
             <p className="text-s text-center mb-2 text-muted-foreground">{t('ui.books.extra_info.create')}</p>
-            <BookForm floors={floors} zones={zones} bookshelves={bookshelves} genres={genres}/>
+            <BookForm floors={floors} zones={zones} bookshelves={bookshelves} genres={genres} books={books}/>
         </BookLayout>
   );
 }

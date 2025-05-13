@@ -446,6 +446,7 @@ return [
         'search'=>'Search genre...',
         'select_all' => 'All genres',
         'close' => 'Close',
+        'clear' => 'Clear',
     ],
 
     'loans' => [

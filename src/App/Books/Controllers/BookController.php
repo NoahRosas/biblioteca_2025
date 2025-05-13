@@ -37,6 +37,7 @@ class BookController extends Controller
      */
     public function create()
     {
+        $books = Book::all()->toArray();
         $floors = Floor::select('id', 'name')->get()->toArray();
         $zones = Zone::all();
         $bookshelves = Bookshelf::withCount('books')->get()->toArray();
@@ -46,7 +47,7 @@ class BookController extends Controller
             ];
         });
         
-        return Inertia::render('books/Create', ['floors' => $floors, 'zones' => $zones, 'bookshelves' => $bookshelves, 'genres' => $genres]);
+        return Inertia::render('books/Create', ['floors' => $floors, 'zones' => $zones, 'bookshelves' => $bookshelves, 'genres' => $genres, 'books' => $books]);
     }
 
     /**

@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { MultiSelect } from '@/components/ui/multi-select';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Book } from '@/hooks/books/useBooks';
 import { Genre } from '@/hooks/genres/useGenres';
 import { useTranslations } from '@/hooks/use-translations';
 import { Zone } from '@/hooks/zones/useZones';
@@ -11,7 +12,7 @@ import { router } from '@inertiajs/react';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
 import { Save, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Tipado de las props
 export interface BookFormProps {
@@ -27,6 +28,7 @@ export interface BookFormProps {
     };
     page?: string;
     perPage?: string;
+    books?: Book[];
     floors: {
         id: string;
         name: string;
@@ -47,7 +49,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function BookForm({ initialData, page, perPage, floors, zones, bookshelves, genres, image_path }: BookFormProps) {
+export function BookForm({ initialData, page, perPage, books, floors, zones, bookshelves, genres, image_path }: BookFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
     let zoneNow: string | undefined = undefined,
@@ -61,6 +63,8 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
     const [selectedFloor, setSelectedFloor] = useState<string | undefined>(floorNow ?? undefined);
     const [selectedGenres, setSelectedGenres] = useState<string[]>(initialData?.genres.split(', ') || []);
     const [selectedImage, setSelectedImage] = useState<File | undefined>(undefined);
+    const [sameISBN, setSameISBN] = useState(false);
+
     const form = useForm({
         defaultValues: {
             name: initialData?.name ?? '',
@@ -149,57 +153,28 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
         form.setFieldValue('genres', selectedGenres.join(', '));
         form.handleSubmit();
     };
+
+    function handleISBN(books: Book[], ISBN: string) {
+        let book = books.filter((book) => book.ISBN === ISBN);
+        if (book.length > 0) {
+            console.log(book);
+            if (confirm('Se ha encontrado un libro con el mismo ISBN, ¿quieres importar los datos?')) {
+                form.setFieldValue('name', book[0].name);
+                form.setFieldValue('author', book[0].author);
+                form.setFieldValue('publisher', book[0].publisher);
+                form.setFieldValue('num_pages', book[0].num_pages);
+                let genres = book[0].genres.split(', ');
+                setSelectedGenres(genres);
+                setSameISBN(true);
+            }
+        }
+    }
+
     return (
         <div className="inset-0 flex items-center justify-center">
             <Card className="w-[600px]">
                 <CardContent>
                     <form onSubmit={form.handleSubmit} noValidate>
-                        {/* name field */}
-                        <div className="space-y-1">
-                            <form.Field
-                                name="name"
-                                validators={{
-                                    onChangeAsync: async ({ value }) => {
-                                        await new Promise((resolve) => setTimeout(resolve, 500));
-                                        return !value
-                                            ? t('ui.validation.required', { attribute: t('ui.books.fields.name').toLowerCase() })
-                                            : value.length < 2
-                                              ? t('ui.validation.min.string', {
-                                                    attribute: t('ui.books.fields.name').toLowerCase(),
-                                                    min: '2',
-                                                })
-                                              : undefined;
-                                    },
-                                }}
-                            >
-                                {(field) => (
-                                    <>
-                                        <div className="mt-3 mb-2 flex">
-                                            <Label htmlFor={field.name} className="mt-0.5 ml-1">
-                                                {t('ui.books.fields.name')}
-                                            </Label>
-                                        </div>
-
-                                        <Input
-                                            id={field.name}
-                                            name={field.name}
-                                            type="text"
-                                            value={field.state.value}
-                                            onChange={(e) => field.handleChange(e.target.value)}
-                                            onBlur={field.handleBlur}
-                                            max={30}
-                                            min={1}
-                                            placeholder={t('ui.books.placeholders.name')}
-                                            disabled={form.state.isSubmitting}
-                                            required={true}
-                                            autoComplete="off"
-                                        />
-                                        <FieldInfo field={field} />
-                                    </>
-                                )}
-                            </form.Field>
-                        </div>
-
                         {/* ISBN field */}
                         <div className="space-y-1">
                             <form.Field
@@ -236,12 +211,63 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                             name={field.name}
                                             type="text"
                                             value={field.state.value}
-                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            onChange={(e) => {
+                                                field.handleChange(e.target.value);
+                                                if (e.target.value.length === 13) {
+                                                    handleISBN(books, e.target.value);
+                                                }
+                                            }}
                                             onBlur={field.handleBlur}
                                             max={13}
                                             min={13}
                                             placeholder={t('ui.books.placeholders.ISBN')}
-                                            disabled={form.state.isSubmitting}
+                                            disabled={form.state.isSubmitting || sameISBN}
+                                            required={true}
+                                            autoComplete="off"
+                                        />
+                                        <FieldInfo field={field} />
+                                    </>
+                                )}
+                            </form.Field>
+                        </div>
+
+                        {/* name field */}
+                        <div className="space-y-1">
+                            <form.Field
+                                name="name"
+                                validators={{
+                                    onChangeAsync: async ({ value }) => {
+                                        await new Promise((resolve) => setTimeout(resolve, 500));
+                                        return !value
+                                            ? t('ui.validation.required', { attribute: t('ui.books.fields.name').toLowerCase() })
+                                            : value.length < 2
+                                              ? t('ui.validation.min.string', {
+                                                    attribute: t('ui.books.fields.name').toLowerCase(),
+                                                    min: '2',
+                                                })
+                                              : undefined;
+                                    },
+                                }}
+                            >
+                                {(field) => (
+                                    <>
+                                        <div className="mt-3 mb-2 flex">
+                                            <Label htmlFor={field.name} className="mt-0.5 ml-1">
+                                                {t('ui.books.fields.name')}
+                                            </Label>
+                                        </div>
+
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            type="text"
+                                            value={field.state.value}
+                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            onBlur={field.handleBlur}
+                                            max={30}
+                                            min={1}
+                                            placeholder={t('ui.books.placeholders.name')}
+                                            disabled={form.state.isSubmitting || sameISBN}
                                             required={true}
                                             autoComplete="off"
                                         />
@@ -287,7 +313,7 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                             max={30}
                                             min={1}
                                             placeholder={t('ui.books.placeholders.author')}
-                                            disabled={form.state.isSubmitting}
+                                            disabled={form.state.isSubmitting || sameISBN}
                                             required={true}
                                             autoComplete="off"
                                         />
@@ -333,7 +359,7 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                             max={30}
                                             min={1}
                                             placeholder={t('ui.books.placeholders.publisher')}
-                                            disabled={form.state.isSubmitting}
+                                            disabled={form.state.isSubmitting || sameISBN}
                                             required={true}
                                             autoComplete="off"
                                         />
@@ -378,7 +404,7 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                             min="1"
                                             step="1"
                                             placeholder={t('ui.books.placeholders.num_pages')}
-                                            disabled={form.state.isSubmitting}
+                                            disabled={form.state.isSubmitting || sameISBN}
                                             required={true}
                                             autoComplete="off"
                                         />
@@ -387,20 +413,28 @@ export function BookForm({ initialData, page, perPage, floors, zones, bookshelve
                                 )}
                             </form.Field>
                         </div>
-
+                        {/* genres field */}
                         <div className="space-y-1">
-                            <div className="mt-3 mb-2 flex">
-                                <Label className="mt-0.5 ml-1">{t('ui.books.fields.genres')}</Label>
-                            </div>
-                            <MultiSelect
-                                options={transformedGenres}
-                                onValueChange={setSelectedGenres}
-                                defaultValue={selectedGenres}
-                                placeholder={t('ui.books.placeholders.genres')}
-                                variant="inverted"
-                                animation={2}
-                                maxCount={5}
-                            />
+                            <form.Field name="genres">
+                                {(field) => (
+                                    <>
+                                        <div className="mt-3 mb-2 flex">
+                                            <Label htmlFor={field.name} className="mt-0.5 ml-1">{t('ui.books.fields.genres')}</Label>
+                                        </div>
+                                        <MultiSelect
+                                            options={transformedGenres}
+                                            onValueChange={setSelectedGenres}
+                                            value={selectedGenres}
+                                            placeholder={t('ui.books.placeholders.genres')}
+                                            variant="inverted"
+                                            animation={2}
+                                            maxCount={5}
+                                            disabled={sameISBN}
+                                        />
+                                        <FieldInfo field={field} />
+                                    </>
+                                )}
+                            </form.Field>
                         </div>
                         {/* Bookshelf id field */}
                         <div className="space-y-1">
