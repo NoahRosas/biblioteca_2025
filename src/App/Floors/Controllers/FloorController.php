@@ -10,6 +10,7 @@ use Domain\Floors\Models\Floor;
 use Domain\Genres\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -21,6 +22,7 @@ class FloorController extends Controller
      */
     public function index()
     {
+         Gate::authorize('reports.view');
         $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
 
         $floors = Floor::with(['zones'])
@@ -49,6 +51,8 @@ class FloorController extends Controller
      */
     public function create()
     {
+         Gate::authorize('reports.view');
+
         $floors = Floor::all()->pluck('name')->toArray();
         
         return Inertia::render('floors/Create', ['floors' => $floors]);
@@ -58,7 +62,7 @@ class FloorController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request, FloorStoreAction $action)
-    {   
+    {  
         // dd(request()->all());
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255',
@@ -90,6 +94,8 @@ class FloorController extends Controller
      */
     public function edit(Request $request, Floor $floor)
     {
+         Gate::authorize('reports.view');
+
         $floors = Floor::all()->pluck('name')->toArray();
         return Inertia::render('floors/Edit', [
             'floors'=> $floors,
@@ -136,6 +142,8 @@ class FloorController extends Controller
      */
     public function destroy(Floor $floor, FloorDestroyAction $action)
     {
+         Gate::authorize('reports.view');
+
         $action($floor);
 
         return redirect()->route('floors.index')

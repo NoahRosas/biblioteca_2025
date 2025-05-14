@@ -8,6 +8,7 @@ use Domain\Reservations\Models\Reservation;
 use Domain\Users\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -18,6 +19,8 @@ class ReservationController
      */
     public function index()
     {
+         Gate::authorize('reports.view');
+
         $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
         return Inertia::render('reservations/Index', ['lang' => $lang]);
     }
@@ -27,6 +30,8 @@ class ReservationController
      */
     public function create()
     {
+         Gate::authorize('reports.view');
+
         $user_emails = User::select('email')->get()->toArray();
         return Inertia::render('reservations/Create', ['user_emails' => $user_emails]);
     }
@@ -66,6 +71,8 @@ class ReservationController
      */
     public function edit(Request $request, Reservation $reservation)
     {
+         Gate::authorize('reports.view');
+
         $user_emails = User::select('email')->get()->toArray();
         $user_email = User::select('email')->where('id', $reservation->user_id)->get();
         return Inertia::render('reservations/Edit', [

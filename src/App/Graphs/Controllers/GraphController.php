@@ -6,6 +6,7 @@ use Domain\Graphs\Actions\GraphBookAction;
 use Domain\Graphs\Actions\GraphUserAction;
 use Domain\Graphs\Actions\GraphZoneAction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class GraphController
@@ -15,6 +16,8 @@ class GraphController
      */
     public function index(GraphBookAction $book_action, GraphUserAction $user_action, GraphZoneAction $zone_action)
     {
+         Gate::authorize('reports.view');
+
         $books = $book_action();
 
         $users = $user_action();

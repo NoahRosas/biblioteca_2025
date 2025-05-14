@@ -2,6 +2,7 @@
 
 namespace App\Core\Middleware;
 
+use Domain\Users\Models\User;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -37,6 +38,8 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
+        $permissions = $request->user() ? $request->user()->permissions->pluck('name')->toArray() : null;
+        
 
         return [
             ...parent::share($request),
@@ -44,7 +47,30 @@ class HandleInertiaRequests extends Middleware
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
                 'user' => $request->user(),
+                'permits' => [
+                    'users' => [
+                        'view' => $request->user() ? in_array('users.view',$permissions) : null,
+                        'create' => $request->user() ? in_array('users.create', $permissions): null,
+                        'edit' => $request->user() ? in_array('users.edit', $permissions) : null,
+                        'delete' => $request->user() ? in_array('users.delete', $permissions) : null,
+                    ],
+                    'products' => [
+                        'view' => $request->user() ? in_array('products.view',$permissions) : null,
+                        'create' => $request->user() ? in_array('products.create', $permissions): null,
+                        'edit' => $request->user() ? in_array('products.edit', $permissions) : null,
+                        'delete' => $request->user() ? in_array('products.delete', $permissions) : null,
+                    ],
+                    'reports' => [
+                        'view' => $request->user() ? in_array('reports.view',$permissions) : null,
+                        'export' => $request->user() ? in_array('reports.export', $permissions): null,
+                        'print' => $request->user() ? in_array('reports.print', $permissions) : null,
+                    ],
+                    'settings' => [
+                        'access' => $request->user() ? in_array('settings.access',$permissions) : null,
+                        'modify' => $request->user() ? in_array('settings.modify', $permissions): null,
+                ],
             ],
+        ],
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
@@ -53,6 +79,7 @@ class HandleInertiaRequests extends Middleware
                 'ui' => trans('ui'),
                 'messages' => trans('messages'),
             ],
+            
         ];
     }
 }

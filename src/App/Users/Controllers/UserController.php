@@ -12,6 +12,7 @@ use Domain\Users\Actions\UserUpdateAction;
 use Domain\Users\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -23,6 +24,7 @@ class UserController extends Controller
 {
     public function index()
     {
+        Gate::authorize('users.view');
         $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
         return Inertia::render('users/Index', ['lang' => $lang]);
     }
@@ -37,6 +39,7 @@ class UserController extends Controller
     }
     public function create()
     {
+        Gate::authorize('users.create');
         $permisos = [];
         $roles = [];
 
@@ -81,6 +84,7 @@ class UserController extends Controller
 
     public function edit(Request $request, User $user)
     {
+        Gate::authorize('users.edit');
         $permisos = [];
         $roles = [];
         $userPermits = [];
@@ -155,6 +159,7 @@ class UserController extends Controller
 
     public function destroy(User $user, UserDestroyAction $action)
     {
+        Gate::authorize('users.destroy');
         $action($user);
 
         return redirect()->route('users.index')

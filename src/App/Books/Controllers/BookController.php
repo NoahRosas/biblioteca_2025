@@ -12,6 +12,7 @@ use Domain\Genres\Models\Genre;
 use Domain\Zones\Models\Zone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -22,6 +23,8 @@ class BookController extends Controller
      */
     public function index()
     {
+         Gate::authorize('products.view');
+
         $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
         $genres = Genre::select('name')->get()->map(function ($genre) {
             return [
@@ -37,6 +40,8 @@ class BookController extends Controller
      */
     public function create()
     {
+         Gate::authorize('products.create');
+
         $books = Book::all()->toArray();
         $floors = Floor::select('id', 'name')->get()->toArray();
         $zones = Zone::all();
@@ -91,6 +96,7 @@ class BookController extends Controller
      */
     public function edit(Request $request, Book $book)
     {
+         Gate::authorize('products.edit');
         
         $floors = Floor::select('id', 'name')->get()->toArray();
         $zones = Zone::all();
@@ -157,6 +163,8 @@ class BookController extends Controller
      */
     public function destroy(Book $book, BookDestroyAction $action)
     {
+         Gate::authorize('products.destroy');
+
         $action($book);
 
         return redirect()->route('books.index')

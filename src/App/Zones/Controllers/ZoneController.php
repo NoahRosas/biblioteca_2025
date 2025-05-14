@@ -11,6 +11,7 @@ use Domain\Zones\Actions\ZoneUpdateAction;
 use Domain\Zones\Models\Zone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -22,6 +23,8 @@ class ZoneController extends Controller
      */
     public function index()
     {
+         Gate::authorize('reports.view');
+
         $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
         $genres = Genre::select('name')->get()->map(function ($genre) {
             return [
@@ -36,6 +39,8 @@ class ZoneController extends Controller
      */
     public function create()
     {
+         Gate::authorize('reports.view');
+
         $genres = Genre::select('id', 'name')->get()->toArray();
         $floors = Floor::withCount('zones')->get()->toArray();
         $zones = Zone::all()->toArray();
@@ -79,6 +84,8 @@ class ZoneController extends Controller
      */
     public function edit(Request $request, Zone $zone)
     { 
+         Gate::authorize('reports.view');
+
         $genres = Genre::select('id', 'name')->get()->toArray();
         $floors = Floor::withCount('zones')->get()->toArray();
         $zones = Zone::all()->toArray();
@@ -133,6 +140,8 @@ class ZoneController extends Controller
      */
     public function destroy(Zone $zone, ZoneDestroyAction $action)
     {
+         Gate::authorize('reports.view');
+
         $action($zone);
 
         return redirect()->route('zones.index')

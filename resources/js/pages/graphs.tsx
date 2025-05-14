@@ -17,8 +17,8 @@ export default function Graphs({ books, users, zones }: GraphDataProps) {
         if (active && payload && payload.length) {
             const data = payload[0].payload;
             return (
-                <div className="custom-tooltip bg-primary text-primary-foreground flex flex-col items-center rounded-md p-2">
-                    <h4 className="text-xl">{data.number ? `${data.number} - ${t(`ui.genres.names.${data.name}`)}` : `${data.name}`}</h4>
+                <div className="custom-tooltip bg-primary text-primary-foreground flex flex-col items-center rounded-md p-2 max-md:shrink-6">
+                    <h4 className="text-xl ">{data.number ? `${data.number} - ${t(`ui.genres.names.${data.name}`)}` : `${data.name}`}</h4>
                     {data.floor_id ? (
                         <p className="label mt-2">{`${t('ui.zones.columns.floor_id')}  ${data.floor_name}`}</p>
                     ) : data.author ? (

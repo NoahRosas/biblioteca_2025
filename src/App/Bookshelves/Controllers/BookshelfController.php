@@ -12,6 +12,7 @@ use Domain\Genres\Models\Genre;
 use Domain\Zones\Models\Zone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -23,6 +24,8 @@ class BookshelfController extends Controller
      */
     public function index()
     {
+         Gate::authorize('reports.view');
+
         $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
         $genres = Genre::select('name')->get()->map(function ($genre) {
             return [
@@ -37,6 +40,8 @@ class BookshelfController extends Controller
      */
     public function create()
     {
+         Gate::authorize('reports.view');
+
         $floors = Floor::select('id', 'name')->get()->toArray();
         $zones = Zone::withCount('bookshelves')->get()->toArray();
         $bookshelves = Bookshelf::all()->toArray();
@@ -79,6 +84,8 @@ class BookshelfController extends Controller
      */
     public function edit(Request $request, Bookshelf $bookshelf)
     {
+         Gate::authorize('reports.view');
+
         $floors = Floor::select('id', 'name')->get()->toArray();
         $zones = Zone::withCount('bookshelves')->get()->toArray(); 
         $bookshelves = Bookshelf::all()->toArray();   
@@ -128,6 +135,8 @@ class BookshelfController extends Controller
      */
     public function destroy(Bookshelf $bookshelf, BookshelfDestroyAction $action)
     {
+         Gate::authorize('reports.view');
+
         $action($bookshelf);
 
         return redirect()->route('bookshelves.index')

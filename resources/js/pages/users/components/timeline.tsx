@@ -7,11 +7,10 @@ export interface TimelineProps{
 }
 export function Timeline ({user_activities}:TimelineProps){
 const { t } = useTranslations();
-console.log(user_activities);
     return (
         
         <VerticalTimeline layout="2-columns" lineColor="rgb(20, 132, 160)">
-                    {user_activities.map((activity) => {
+                    {user_activities.map((activity, index) => {
                         return (
                             <VerticalTimelineElement
                                 className="vertical-timeline-element"

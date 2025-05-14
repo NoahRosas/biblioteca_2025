@@ -14,6 +14,7 @@ use Domain\Reservations\Models\Reservation;
 use Domain\Users\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -21,12 +22,16 @@ class LoanController extends Controller
 {
     public function index()
     {
+         Gate::authorize('reports.view');
+
         $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
         return Inertia::render('loans/Index', ['lang' => $lang]);
     }
 
     public function create()
     {
+         Gate::authorize('reports.view');
+
         $user_emails = User::select('email')->get()->toArray();
         $books = Book::with('activeLoan');
         $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
@@ -64,6 +69,8 @@ class LoanController extends Controller
     }
 
     public function edit(Request $request, Loan $loan){
+         Gate::authorize('reports.view');
+
         $user_email = User::select('email')->where('id', $loan->user_id)->get();
         $user_emails = User::select('email')->get()->toArray();
         $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
