@@ -12,7 +12,7 @@ import { router } from '@inertiajs/react';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
 import { Save, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 // Tipado de las props
 export interface BookFormProps {
@@ -146,7 +146,6 @@ export function BookForm({ initialData, page, perPage, books, floors, zones, boo
     };
 
     const transformedGenres = transformGenres(genres);
-
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         event.stopPropagation();
@@ -214,6 +213,7 @@ export function BookForm({ initialData, page, perPage, books, floors, zones, boo
                                             onChange={(e) => {
                                                 field.handleChange(e.target.value);
                                                 if (e.target.value.length === 13) {
+                                                    console.log(e.target.value.length);
                                                     handleISBN(books, e.target.value);
                                                 }
                                             }}
@@ -537,7 +537,8 @@ export function BookForm({ initialData, page, perPage, books, floors, zones, boo
                                 validators={{
                                     onChangeAsync: async (value) => {
                                         await new Promise((resolve) => setTimeout(resolve, 500));
-                                        return !value && !image_path
+                                        console.log(value.value);
+                                        return value.value == undefined && !image_path
                                             ? t('ui.validation.required', { attribute: t('ui.books.fields.image').toLowerCase() })
                                             : null;
                                     },
@@ -555,7 +556,7 @@ export function BookForm({ initialData, page, perPage, books, floors, zones, boo
                                             id={field.name}
                                             name={field.name}
                                             type="file"
-                                            // value={field.state.value}
+                                            value={field.state.value}
                                             onChange={(e) => {
                                                 const file = e.target.files[0];
                                                 setSelectedImage(file);
@@ -580,7 +581,7 @@ export function BookForm({ initialData, page, perPage, books, floors, zones, boo
                                         {/* Image Preview */}
 
                                         {image_path && !selectedImage && (
-                                            <span>
+                                            <span id='preview'>
                                                 <img src={image_path} alt="Preview" style={{ width: '200px', height: 'auto', marginTop: '10px' }} />
                                             </span>
                                         )}

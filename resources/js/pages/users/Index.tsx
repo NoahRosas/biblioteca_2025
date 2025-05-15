@@ -43,7 +43,6 @@ export default function UsersIndex({ lang }: IndexUserProps) {
         filters.created_at ? filters.created_at : 'null',
     ];
 
-    console.log(auth.permits);
 
     const {
         data: users,
@@ -126,6 +125,7 @@ export default function UsersIndex({ lang }: IndexUserProps) {
                                     id={user.id}
                                     onDelete={handleDeleteUser}
                                     title={t('ui.users.delete.title') || 'Delete user'}
+                                    successMessage={t('messages.users.deleted')}
                                     description={
                                         t('ui.users.delete.description') || 'Are you sure you want to delete this user? This action cannot be undone.'
                                     }

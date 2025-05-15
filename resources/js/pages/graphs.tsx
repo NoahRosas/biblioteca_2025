@@ -1,3 +1,4 @@
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useTranslations } from '@/hooks/use-translations';
 import { GraphLayout } from '@/layouts/graphs/graph-layout';
 import { PageProps } from '@/types';
@@ -13,29 +14,37 @@ interface GraphDataProps extends PageProps {
 export default function Graphs({ books, users, zones }: GraphDataProps) {
     const { t } = useTranslations();
 
-    const CustomTooltip = ({ active, payload}) => {
+    const CustomTooltip = ({ active, payload }) => {
         if (active && payload && payload.length) {
             const data = payload[0].payload;
             return (
-                <div className="custom-tooltip bg-primary text-primary-foreground flex flex-col items-center rounded-md p-2 max-md:shrink-6">
-                    <h4 className="text-xl ">{data.number ? `${data.number} - ${t(`ui.genres.names.${data.name}`)}` : `${data.name}`}</h4>
+                <div className="custom-tooltip bg-primary text-primary-foreground flex w-60 flex-col items-center rounded-md p-1 shadow-md max-sm:max-h-40 max-sm:w-64 max-sm:overflow-auto">
+                    <h4 className="text-center text-[20px] font-semibold max-sm:text-sm">
+                        {data.number ? `${data.number} - ${t(`ui.genres.names.${data.name}`)}` : `${data.name}`}
+                    </h4>
                     {data.floor_id ? (
-                        <p className="label mt-2">{`${t('ui.zones.columns.floor_id')}  ${data.floor_name}`}</p>
+                        <p className="label mt-1 text-[16px] max-sm:text-xs">{`${t('ui.zones.columns.floor_id')}: ${data.floor_name}`}</p>
                     ) : data.author ? (
-                        <p className="label mt-2">{t('ui.books.by')} {data.author}</p>
+                        <p className="label mt-1 text-[16px] max-sm:text-xs">
+                            {t('ui.books.by')} {data.author}
+                        </p>
                     ) : data.email ? (
-                        <p className="label mt-2"> {data.email}</p>
+                        <p className="label mt-1 text-[16px] max-sm:text-xs">{data.email}</p>
                     ) : null}
-                    {data.ISBN ? <p className="label mt-1">{`${t('ui.books.columns.ISBN')} : ${data.ISBN}`}</p> : null}
-                    <p className="label mt-2" style={{ color: payload[1].fill }}>{`${t('ui.reservations.title')} : ${data.reservations_count}`}</p>
-                    <p className="label mt-1" style={{ color: payload[0].fill }}>{`${t('ui.loans.title')} : ${data.loans_count}`}</p>
+                    {data.ISBN ? <p className="label mt-1 text-[16px] max-sm:text-xs">{`${t('ui.books.columns.ISBN')} : ${data.ISBN}`}</p> : null}
+                    <p className="label mt-1 text-[14px] max-sm:text-xs" style={{ color: payload[1].fill }}>
+                        {`${t('ui.reservations.title')} : ${data.reservations_count}`}
+                    </p>
+                    <p className="label mt-1 text-[14px] max-sm:text-xs" style={{ color: payload[0].fill }}>
+                        {`${t('ui.loans.title')} : ${data.loans_count}`}
+                    </p>
                 </div>
             );
         }
 
         return null;
     };
-    
+
     return (
         <GraphLayout title={t('ui.graphs.title')}>
             <div className="flex min-h-screen flex-col items-center">
@@ -45,65 +54,73 @@ export default function Graphs({ books, users, zones }: GraphDataProps) {
                 </h2>
                 <div className="max-w-8xl flex w-full flex-col items-center justify-center px-4">
                     <h3 className="mt-15 mb-4 text-center text-lg font-semibold">{t('ui.graphs.section.books')}</h3>
-                    <div className="max-w-8xl flex w-full items-center justify-center px-4">
-                        <ResponsiveContainer width="100%" height={300}>
-                            <BarChart
-                                width={500}
-                                height={300}
-                                data={books}
-                                margin={{
-                                    top: 5,
-                                    right: 30,
-                                    left: 20,
-                                    bottom: 5,
-                                }}
-                            >
-                                <XAxis dataKey="index" height={100}/>
-                                <YAxis allowDecimals={false} />
-                                <Tooltip
-                                    contentStyle={{
-                                        backgroundColor: 'var(--primary)',
-                                        color: 'var(--primary-foreground)',
-                                        borderRadius: '6px',
+                    <ResponsiveContainer width="100%" height={300}>
+                        <ScrollArea className="mx-auto w-full max-w-[1000px] rounded-md border whitespace-nowrap">
+                            <div className="min-w-[1200px]">
+                                <BarChart
+                                    width={1200}
+                                    height={300}
+                                    data={books}
+                                    margin={{
+                                        top: 5,
+                                        right: 30,
+                                        left: 20,
+                                        bottom: 50,
                                     }}
-                                    content={CustomTooltip}
-                                />
-                                <Legend />
-                                <Bar dataKey="loans_count" barSize={50} stackId="a" fill="#4984d8" name={t('ui.loans.title')} animationDuration={1000} />
-                                <Bar dataKey="reservations_count" barSize={50} fill="#fcba03" stackId="a" name={t('ui.reservations.title')} animationDuration={1000} />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div>
+                                >
+                                    <XAxis dataKey="index" height={100}  />
+                                    <YAxis allowDecimals={false} />
+                                    <Tooltip
+                                        contentStyle={{
+                                            backgroundColor: 'var(--primary)',
+                                            color: 'var(--primary-foreground)',
+                                            borderRadius: '6px',
+                                        }}
+                                        content={CustomTooltip}
+                                    />
+                                    <Legend />
+                                    <Bar dataKey="loans_count" barSize={50} stackId="a" fill="#fc03a5" name={t('ui.loans.title')} />
+                                    <Bar dataKey="reservations_count" barSize={50} fill="#fcba03" stackId="a" name={t('ui.reservations.title')} />
+                                </BarChart>
+                            </div>
+                            <ScrollBar orientation="horizontal" />
+                        </ScrollArea>
+                    </ResponsiveContainer>
                 </div>
                 <div className="max-w-8xl flex w-full flex-col items-center justify-center px-4">
                     <h3 className="mt-15 mb-4 text-center text-lg font-semibold">{t('ui.graphs.section.users')}</h3>
                     <div className="max-w-8xl flex w-full items-center justify-center px-4">
                         <ResponsiveContainer width="100%" height={300}>
-                            <BarChart
-                                width={500}
-                                height={300}
-                                data={users}
-                                margin={{
-                                    top: 5,
-                                    right: 30,
-                                    left: 20,
-                                    bottom: 5,
-                                }}
-                            >
-                                <XAxis dataKey="index" height={100} />
-                                <YAxis allowDecimals={false} />
-                                <Tooltip
-                                    contentStyle={{
-                                        backgroundColor: 'var(--primary)',
-                                        color: 'var(--primary-foreground)',
-                                        borderRadius: '6px',
+                            <ScrollArea className="mx-auto w-full max-w-[1000px] rounded-md border whitespace-nowrap">
+                                <div className="min-w-[1200px]">
+                                    <BarChart
+                                    width={1200}
+                                    height={300}
+                                    data={users}
+                                    margin={{
+                                        top: 5,
+                                        right: 30,
+                                        left: 20,
+                                        bottom: 50,
                                     }}
-                                    content={CustomTooltip}
-                                />
-                                <Legend />
-                                <Bar dataKey="loans_count" barSize={50} stackId="a" fill="#fc03a5" name={t('ui.loans.title')} />
-                                <Bar dataKey="reservations_count" barSize={50} fill="#fcba03" stackId="a" name={t('ui.reservations.title')} />
-                            </BarChart>
+                                >
+                                    <XAxis dataKey="index" height={100}  />
+                                    <YAxis allowDecimals={false} />
+                                    <Tooltip
+                                        contentStyle={{
+                                            backgroundColor: 'var(--primary)',
+                                            color: 'var(--primary-foreground)',
+                                            borderRadius: '6px',
+                                        }}
+                                        content={CustomTooltip}
+                                    />
+                                    <Legend />
+                                    <Bar dataKey="loans_count" barSize={50} stackId="a" fill="#fc03a5" name={t('ui.loans.title')} />
+                                    <Bar dataKey="reservations_count" barSize={50} fill="#fcba03" stackId="a" name={t('ui.reservations.title')} />
+                                </BarChart>
+                                </div>
+                                <ScrollBar orientation="horizontal" />
+                            </ScrollArea>
                         </ResponsiveContainer>
                     </div>
                 </div>
@@ -111,30 +128,36 @@ export default function Graphs({ books, users, zones }: GraphDataProps) {
                     <h3 className="mt-15 mb-4 text-center text-lg font-semibold">{t('ui.graphs.section.zones')}</h3>
                     <div className="max-w-8xl flex w-full items-center justify-center px-4">
                         <ResponsiveContainer width="100%" height={300}>
-                            <BarChart
-                                width={500}
-                                height={300}
-                                data={zones}
-                                margin={{
-                                    top: 5,
-                                    right: 30,
-                                    left: 20,
-                                    bottom: 5,
-                                }}
-                            >
-                                <XAxis dataKey="index" height={100} />
-                                <YAxis allowDecimals={false} />
-                                <Tooltip
-                                    contentStyle={{
-                                        backgroundColor: 'var(--primary)',
-                                        color: 'var(--primary-foreground)',
+                            <ScrollArea className="mx-auto w-full max-w-[1000px] rounded-md border whitespace-nowrap">
+                                <div className="min-w-[1200px]">
+                                    <BarChart
+                                    width={1200}
+                                    height={300}
+                                    data={zones}
+                                    margin={{
+                                        top: 5,
+                                        right: 30,
+                                        left: 20,
+                                        bottom: 50,
                                     }}
-                                    content={CustomTooltip}
-                                />
-                                <Legend />
-                                <Bar dataKey="loans_count" barSize={50} stackId="a" fill="#018f08" name={t('ui.loans.title')} />
-                                <Bar dataKey="reservations_count" barSize={50} fill="#fcba03" stackId="a" name={t('ui.reservations.title')} />
-                            </BarChart>
+                                >
+                                    <XAxis dataKey="index" height={100}  />
+                                    <YAxis allowDecimals={false}/>
+                                    <Tooltip
+                                        contentStyle={{
+                                            backgroundColor: 'var(--primary)',
+                                            color: 'var(--primary-foreground)',
+                                            borderRadius: '6px',
+                                        }}
+                                        content={CustomTooltip}
+                                    />
+                                    <Legend />
+                                    <Bar dataKey="loans_count" barSize={50} stackId="a" fill="#fc03a5" name={t('ui.loans.title')} />
+                                    <Bar dataKey="reservations_count" barSize={50} fill="#fcba03" stackId="a" name={t('ui.reservations.title')} />
+                                </BarChart>
+                                </div>
+                                <ScrollBar orientation="horizontal" />
+                            </ScrollArea>
                         </ResponsiveContainer>
                     </div>
                 </div>

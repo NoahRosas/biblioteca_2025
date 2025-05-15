@@ -26,7 +26,7 @@ interface IndexFloorProps extends PageProps{
 export default function FloorsIndex({lang}:IndexFloorProps) {
     const { t } = useTranslations();
     const { url } = usePage();
-
+const { auth } = usePage().props;
     // Obtener los parámetros de la URL actual
     const urlParams = new URLSearchParams(url.split('?')[1] || '');
     const pageParam = urlParams.get('page');
@@ -108,15 +108,18 @@ export default function FloorsIndex({lang}:IndexFloorProps) {
                     header: t('ui.users.columns.actions') || 'Actions',
                     renderActions: (floor) => (
                         <>
+                        {auth.permits.reports.export && 
+                        <>
                             <Link href={`/floors/${floor.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-                                <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit floor'}>
-                                    <PencilIcon className="h-4 w-4" />
-                                </Button>
+                                    <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit floor'}>
+                                        <PencilIcon className="h-4 w-4" />
+                                    </Button>
                             </Link>
                             <DeleteDialog
                                 id={floor.id}
                                 onDelete={handleDeleteFloor}
                                 title={t('ui.users.delete.title') || 'Delete floor'}
+                                successMessage={t('messages.floors.deleted')}
                                 description={
                                     t('ui.users.delete.description') || 'Are you sure you want to delete this floor? This action cannot be undone.'
                                 }
@@ -132,6 +135,10 @@ export default function FloorsIndex({lang}:IndexFloorProps) {
                                 }
                             />
                         </>
+                        }
+                            
+                            
+                        </>
                     ),
                 }),
             ] as ColumnDef<Floor>[],
@@ -144,12 +151,14 @@ export default function FloorsIndex({lang}:IndexFloorProps) {
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
                         <h1 className="text-3xl font-bold">{t('ui.floors.title')}</h1>
+                        {auth.permits.reports.export && 
                         <Link href="/floors/create">
                             <Button>
                                 <PlusIcon className="mr-2 h-4 w-4" />
                                 {t('ui.floors.buttons.new')}
                             </Button>
                         </Link>
+                        }
                     </div>
 
                     <div className="space-y-4">

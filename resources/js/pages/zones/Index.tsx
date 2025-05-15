@@ -21,15 +21,15 @@ import { PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-interface IndexZoneProps extends PageProps{
+interface IndexZoneProps extends PageProps {
     lang: string;
     genres: Genre[];
 }
 
-export default function ZonesIndex({lang, genres}:IndexZoneProps) {
+export default function ZonesIndex({ lang, genres }: IndexZoneProps) {
     const { t } = useTranslations();
     const { url } = usePage();
-
+    const { auth } = usePage().props;
     // Obtener los parámetros de la URL actual
     const urlParams = new URLSearchParams(url.split('?')[1] || '');
     const pageParam = urlParams.get('page');
@@ -39,7 +39,7 @@ export default function ZonesIndex({lang, genres}:IndexZoneProps) {
     const [currentPage, setCurrentPage] = useState(pageParam ? parseInt(pageParam) : 1);
     const [perPage, setPerPage] = useState(perPageParam ? parseInt(perPageParam) : 10);
     const [filters, setFilters] = useState<Record<string, any>>({});
-    
+
     // Combine name and email filters into a single search string if they exist
     const combinedSearch = [
         filters.name ? filters.name : 'null',
@@ -62,14 +62,14 @@ export default function ZonesIndex({lang, genres}:IndexZoneProps) {
     const deleteZoneMutation = useDeleteZone();
 
     const handleFilterChange = (newFilters: Record<string, any>) => {
-        const filtersChanged = newFilters!==filters;
+        const filtersChanged = newFilters !== filters;
 
         if (filtersChanged) {
             setCurrentPage(1);
         }
         setFilters(newFilters);
     };
-    
+
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
@@ -89,10 +89,12 @@ export default function ZonesIndex({lang, genres}:IndexZoneProps) {
         }
     };
 
-    const genreOptions = genres.map((genre: Genre) => ({
-        label: t(`ui.genres.names.${genre.value}`),
-        value: genre.value,
-    })).sort((a, b) => a.label.localeCompare(b.label));
+    const genreOptions = genres
+        .map((genre: Genre) => ({
+            label: t(`ui.genres.names.${genre.value}`),
+            value: genre.value,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
 
     const columns = useMemo(
         () =>
@@ -101,7 +103,7 @@ export default function ZonesIndex({lang, genres}:IndexZoneProps) {
                     id: 'name',
                     header: t('ui.zones.columns.name') || 'Name',
                     accessorKey: 'name',
-                    format: (value) =>  t(`ui.genres.names.${value}`)
+                    format: (value) => t(`ui.genres.names.${value}`),
                 }),
                 createTextColumn<Zone>({
                     id: 'number',
@@ -123,43 +125,47 @@ export default function ZonesIndex({lang, genres}:IndexZoneProps) {
                     header: t('ui.users.columns.created_at') || 'Created At',
                     accessorKey: 'created_at',
                 }),
-                
-                
+            ] as ColumnDef<Zone>[],
+        [t, handleDeleteZone],
+    );
+    {auth.permits.reports.export &&
+            columns.push(
                 createActionsColumn<Zone>({
                     id: 'actions',
                     header: t('ui.users.columns.actions') || 'Actions',
                     renderActions: (zone) => (
                         <>
-                            <Link href={`/zones/${zone.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-                                <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit zone'}>
-                                    <PencilIcon className="h-4 w-4" />
-                                </Button>
-                            </Link>
-                            <DeleteDialog
-                                id={zone.id}
-                                onDelete={handleDeleteZone}
-                                title={t('ui.users.delete.title') || 'Delete zone'}
-                                description={
-                                    t('ui.users.delete.description') || 'Are you sure you want to delete this zone? This action cannot be undone.'
-                                }
-                                trigger={
-                                    <Button
-                                        variant="outline"
-                                        size="icon"
-                                        className="text-destructive hover:text-destructive"
-                                        title={t('ui.users.buttons.delete') || 'Delete zone'}
-                                    >
-                                        <TrashIcon className="h-4 w-4" />
+                            <>
+                                <Link href={`/zones/${zone.id}/edit?page=${currentPage}&perPage=${perPage}`}>
+                                    <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit zone'}>
+                                        <PencilIcon className="h-4 w-4" />
                                     </Button>
-                                }
-                            />
+                                </Link>
+                                <DeleteDialog
+                                    id={zone.id}
+                                    onDelete={handleDeleteZone}
+                                    title={t('ui.users.delete.title') || 'Delete zone'}
+                                    successMessage={t('messages.zones.deleted')}
+                                    description={
+                                        t('ui.users.delete.description') || 'Are you sure you want to delete this zone? This action cannot be undone.'
+                                    }
+                                    trigger={
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            className="text-destructive hover:text-destructive"
+                                            title={t('ui.users.buttons.delete') || 'Delete zone'}
+                                        >
+                                            <TrashIcon className="h-4 w-4" />
+                                        </Button>
+                                    }
+                                />
+                            </>
                         </>
                     ),
                 }),
-            ] as ColumnDef<Zone>[],
-        [t, handleDeleteZone],
-    );
-
+            );
+    }
     return (
         <ZoneLayout title={t('ui.zones.title')}>
             <div className="p-6">
@@ -176,7 +182,7 @@ export default function ZonesIndex({lang, genres}:IndexZoneProps) {
 
                     <div className="space-y-4">
                         <FiltersTable
-                        lang={lang}
+                            lang={lang}
                             filters={
                                 [
                                     {
@@ -184,14 +190,14 @@ export default function ZonesIndex({lang, genres}:IndexZoneProps) {
                                         label: t('ui.zones.filters.name') || 'Nombre',
                                         type: 'select',
                                         placeholder: t('ui.zones.placeholders.name') || 'Nombre...',
-                                        options: genreOptions
+                                        options: genreOptions,
                                     },
                                     {
                                         id: 'number',
                                         label: t('ui.zones.filters.number') || 'Number',
                                         type: 'number',
                                         min: 1,
-                                        step:1,
+                                        step: 1,
                                         placeholder: t('ui.zones.placeholders.number') || 'Number...',
                                     },
                                     {
@@ -211,8 +217,7 @@ export default function ZonesIndex({lang, genres}:IndexZoneProps) {
                                         label: t('ui.zones.filters.created_at') || 'Creation date',
                                         type: 'date',
                                         placeholder: t('ui.zones.placeholders.created_at') || 'Creation date...',
-                                    }
-
+                                    },
                                 ] as FilterConfig[]
                             }
                             onFilterChange={handleFilterChange}
@@ -221,7 +226,7 @@ export default function ZonesIndex({lang, genres}:IndexZoneProps) {
                     </div>
 
                     <div className="w-full overflow-hidden">
-                    {zones?.meta.total !== undefined && <h2>{t('ui.common.filters.results', {attribute: zones?.meta.total.toString()})}</h2>}
+                        {zones?.meta.total !== undefined && <h2>{t('ui.common.filters.results', { attribute: zones?.meta.total.toString() })}</h2>}
 
                         {isLoading ? (
                             <TableSkeleton columns={4} rows={10} />

@@ -39,7 +39,7 @@ class ZoneController extends Controller
      */
     public function create()
     {
-         Gate::authorize('reports.view');
+         Gate::authorize('reports.export');
 
         $genres = Genre::select('id', 'name')->get()->toArray();
         $floors = Floor::withCount('zones')->get()->toArray();
@@ -84,7 +84,7 @@ class ZoneController extends Controller
      */
     public function edit(Request $request, Zone $zone)
     { 
-         Gate::authorize('reports.view');
+         Gate::authorize('reports.export');
 
         $genres = Genre::select('id', 'name')->get()->toArray();
         $floors = Floor::withCount('zones')->get()->toArray();

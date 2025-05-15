@@ -40,7 +40,7 @@ class BookshelfController extends Controller
      */
     public function create()
     {
-         Gate::authorize('reports.view');
+         Gate::authorize('reports.export');
 
         $floors = Floor::select('id', 'name')->get()->toArray();
         $zones = Zone::withCount('bookshelves')->get()->toArray();
@@ -84,7 +84,7 @@ class BookshelfController extends Controller
      */
     public function edit(Request $request, Bookshelf $bookshelf)
     {
-         Gate::authorize('reports.view');
+         Gate::authorize('reports.export');
 
         $floors = Floor::select('id', 'name')->get()->toArray();
         $zones = Zone::withCount('bookshelves')->get()->toArray(); 

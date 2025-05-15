@@ -226,6 +226,7 @@ export default function BooksIndex({lang}:IndexLoanProps) {
                                 id={loan.id}
                                 onDelete={handleDeleteLoan}
                                 title={t('ui.loans.delete.title') || 'Delete loan'}
+                                successMessage={t('messages.loans.deleted')}
                                 description={
                                     t('ui.loans.delete.description') || 'Are you sure you want to delete this loan? This action cannot be undone.'
                                 }

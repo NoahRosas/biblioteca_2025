@@ -51,7 +51,7 @@ class FloorController extends Controller
      */
     public function create()
     {
-         Gate::authorize('reports.view');
+         Gate::authorize('reports.export');
 
         $floors = Floor::all()->pluck('name')->toArray();
         
@@ -94,7 +94,7 @@ class FloorController extends Controller
      */
     public function edit(Request $request, Floor $floor)
     {
-         Gate::authorize('reports.view');
+         Gate::authorize('reports.export');
 
         $floors = Floor::all()->pluck('name')->toArray();
         return Inertia::render('floors/Edit', [

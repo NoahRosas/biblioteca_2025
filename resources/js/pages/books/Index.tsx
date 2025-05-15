@@ -28,6 +28,7 @@ interface IndexBooksProps extends PageProps{
 export default function BooksIndex({lang, genres}:IndexBooksProps) {
     const { t } = useTranslations();
     const { url } = usePage();
+    const { auth } = usePage().props;
 
     // Obtener los parámetros de la URL actual
     const urlParams = new URLSearchParams(url.split('?')[1] || '');
@@ -212,8 +213,9 @@ export default function BooksIndex({lang, genres}:IndexBooksProps) {
                     header: t('ui.users.columns.actions') || 'Actions',
                     renderActions: (book) => (
                         <>
-                            {book.available ?  
-                            
+                            {auth.permits.products.edit && (
+                                <>
+                                {book.available ?
                                 <Button variant="outline" size="icon" title={t('ui.loans.buttons.create') || 'Loan this book'} onClick={() => {handleLoan(book.id, book.available)}}>
                                     <Handshake className="h-4 w-4 text-green-400"/>
                                 </Button>
@@ -221,17 +223,20 @@ export default function BooksIndex({lang, genres}:IndexBooksProps) {
                                 <Button variant="outline" size="icon" title={t('ui.reservations.buttons.create') || 'Book this book'} onClick={() => {handleLoan(book.id, book.available)}}>
                                     <ScrollText className="h-4 w-4 text-yellow-400"/>
                                 </Button>
-                                
                                 }
+                                
                             <Link href={`/books/${book.id}/edit?page=${currentPage}&perPage=${perPage}`}>
                                 <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit book'}>
                                     <PencilIcon className="h-4 w-4" />
                                 </Button>
                             </Link>
-                           
+                            </>
+                            )}
+                            {auth.permits.products.delete &&
                             <DeleteDialog
                                 id={book.id}
                                 onDelete={handleDeleteBook}
+                                successMessage={t('messages.books.deleted')}
                                 title={t('ui.books.delete.title') || 'Delete book'}
                                 description={
                                     t('ui.books.delete.description') || 'Are you sure you want to delete this book? This action cannot be undone.'
@@ -247,6 +252,8 @@ export default function BooksIndex({lang, genres}:IndexBooksProps) {
                                     </Button>
                                 }
                             />
+                            }
+                            
                         </>
                     ),
                 }),
@@ -260,12 +267,14 @@ export default function BooksIndex({lang, genres}:IndexBooksProps) {
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
                         <h1 className="text-3xl font-bold">{t('ui.books.title')}</h1>
+                        {auth.permits.products.create && (
                         <Link href="/books/create">
                             <Button>
                                 <PlusIcon className="mr-2 h-4 w-4" />
                                 {t('ui.books.buttons.new')}
                             </Button>
                         </Link>
+                        )}
                     </div>
 
                     <div className="space-y-4">

@@ -122,6 +122,7 @@ export default function ReservationsIndex({lang}:IndexReservationsProps) {
                                 id={reservation.id}
                                 onDelete={handleDeleteReservation}
                                 title={t('ui.reservations.delete.title') || 'Delete reservation'}
+                                successMessage={t('messages.reservations.deleted')}
                                 description={
                                     t('ui.reservations.delete.description') || 'Are you sure you want to delete this reservation? This action cannot be undone.'
                                 }

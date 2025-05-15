@@ -147,6 +147,7 @@ export default function BookshelvesIndex({lang, genres}:IndexBookshelvesProps) {
                                 id={bookshelf.id}
                                 onDelete={handleDeleteBookshelf}
                                 title={t('ui.users.delete.title') || 'Delete bookshelf'}
+                                successMessage={t('messages.bookshelves.deleted')}
                                 description={
                                     t('ui.users.delete.description') || 'Are you sure you want to delete this bookshelf? This action cannot be undone.'
                                 }

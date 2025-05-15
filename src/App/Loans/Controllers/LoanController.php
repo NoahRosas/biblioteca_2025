@@ -30,7 +30,7 @@ class LoanController extends Controller
 
     public function create()
     {
-         Gate::authorize('reports.view');
+         Gate::authorize('reports.export');
 
         $user_emails = User::select('email')->get()->toArray();
         $books = Book::with('activeLoan');
@@ -69,7 +69,7 @@ class LoanController extends Controller
     }
 
     public function edit(Request $request, Loan $loan){
-         Gate::authorize('reports.view');
+         Gate::authorize('reports.export');
 
         $user_email = User::select('email')->where('id', $loan->user_id)->get();
         $user_emails = User::select('email')->get()->toArray();

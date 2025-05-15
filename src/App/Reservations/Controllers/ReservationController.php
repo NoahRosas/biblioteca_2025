@@ -30,7 +30,7 @@ class ReservationController
      */
     public function create()
     {
-         Gate::authorize('reports.view');
+         Gate::authorize('reports.export');
 
         $user_emails = User::select('email')->get()->toArray();
         return Inertia::render('reservations/Create', ['user_emails' => $user_emails]);
@@ -71,7 +71,7 @@ class ReservationController
      */
     public function edit(Request $request, Reservation $reservation)
     {
-         Gate::authorize('reports.view');
+         Gate::authorize('reports.export');
 
         $user_emails = User::select('email')->get()->toArray();
         $user_email = User::select('email')->where('id', $reservation->user_id)->get();
