@@ -22,15 +22,15 @@ import { PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-interface IndexBookshelvesProps extends PageProps{
+interface IndexBookshelvesProps extends PageProps {
     lang: string;
-    genres:Genre[];
+    genres: Genre[];
 }
 
-export default function BookshelvesIndex({lang, genres}:IndexBookshelvesProps) {
+export default function BookshelvesIndex({ lang, genres }: IndexBookshelvesProps) {
     const { t } = useTranslations();
     const { url } = usePage();
-
+    const { auth } = usePage().props;
     // Obtener los parámetros de la URL actual
     const urlParams = new URLSearchParams(url.split('?')[1] || '');
     const pageParam = urlParams.get('page');
@@ -40,15 +40,15 @@ export default function BookshelvesIndex({lang, genres}:IndexBookshelvesProps) {
     const [currentPage, setCurrentPage] = useState(pageParam ? parseInt(pageParam) : 1);
     const [perPage, setPerPage] = useState(perPageParam ? parseInt(perPageParam) : 10);
     const [filters, setFilters] = useState<Record<string, any>>({});
-    
+
     // Combine name and email filters into a single search string if they exist
     const combinedSearch = [
         filters.number ? filters.number : 'null',
-        filters.max_books? filters.max_books : 'null',
+        filters.max_books ? filters.max_books : 'null',
         filters.zone_id ? filters.zone_id : 'null',
-        filters.zone_name? filters.zone_name : 'null',
+        filters.zone_name ? filters.zone_name : 'null',
         filters.floor_id ? filters.floor_id : 'null',
-        filters.created_at ? filters.created_at : 'null'
+        filters.created_at ? filters.created_at : 'null',
     ];
 
     const {
@@ -64,14 +64,14 @@ export default function BookshelvesIndex({lang, genres}:IndexBookshelvesProps) {
     const deleteBookshelfMutation = useDeleteBookshelf();
 
     const handleFilterChange = (newFilters: Record<string, any>) => {
-        const filtersChanged = newFilters!==filters;
+        const filtersChanged = newFilters !== filters;
 
         if (filtersChanged) {
             setCurrentPage(1);
         }
         setFilters(newFilters);
     };
-    
+
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
@@ -91,11 +91,13 @@ export default function BookshelvesIndex({lang, genres}:IndexBookshelvesProps) {
         }
     };
 
-    const genreOptions = genres.map((genre: Genre) => ({
+    const genreOptions = genres
+        .map((genre: Genre) => ({
             label: t(`ui.genres.names.${genre.value}`),
             value: genre.value,
-        })).sort((a, b) => a.label.localeCompare(b.label));
-        
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
     const columns = useMemo(
         () =>
             [
@@ -113,13 +115,12 @@ export default function BookshelvesIndex({lang, genres}:IndexBookshelvesProps) {
                     id: 'zone_id',
                     header: t('ui.bookshelves.columns.zone_id') || 'Zone ubication',
                     accessorKey: 'zone_id',
-                    
                 }),
                 createTextColumn<Bookshelf>({
                     id: 'zone_name',
                     header: t('ui.bookshelves.columns.zone_name') || 'Zone ubication',
                     accessorKey: 'zone_name',
-                    format: (value) =>  t(`ui.genres.names.${value}`)
+                    format: (value) => t(`ui.genres.names.${value}`),
                 }),
                 createTextColumn<Bookshelf>({
                     id: 'floor_id',
@@ -131,8 +132,13 @@ export default function BookshelvesIndex({lang, genres}:IndexBookshelvesProps) {
                     header: t('ui.users.columns.created_at') || 'Created At',
                     accessorKey: 'created_at',
                 }),
-                
-                
+            ] as ColumnDef<Bookshelf>[],
+        [t, handleDeleteBookshelf],
+    );
+
+    {
+        auth.permits.reports.export &&
+            columns.push(
                 createActionsColumn<Bookshelf>({
                     id: 'actions',
                     header: t('ui.users.columns.actions') || 'Actions',
@@ -149,7 +155,8 @@ export default function BookshelvesIndex({lang, genres}:IndexBookshelvesProps) {
                                 title={t('ui.users.delete.title') || 'Delete bookshelf'}
                                 successMessage={t('messages.bookshelves.deleted')}
                                 description={
-                                    t('ui.users.delete.description') || 'Are you sure you want to delete this bookshelf? This action cannot be undone.'
+                                    t('ui.users.delete.description') ||
+                                    'Are you sure you want to delete this bookshelf? This action cannot be undone.'
                                 }
                                 trigger={
                                     <Button
@@ -165,9 +172,8 @@ export default function BookshelvesIndex({lang, genres}:IndexBookshelvesProps) {
                         </>
                     ),
                 }),
-            ] as ColumnDef<Bookshelf>[],
-        [t, handleDeleteBookshelf],
-    );
+            );
+    }
 
     return (
         <BookshelfLayout title={t('ui.bookshelves.title')}>
@@ -175,17 +181,19 @@ export default function BookshelvesIndex({lang, genres}:IndexBookshelvesProps) {
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
                         <h1 className="text-3xl font-bold">{t('ui.bookshelves.title')}</h1>
-                        <Link href="/bookshelves/create">
-                            <Button>
-                                <PlusIcon className="mr-2 h-4 w-4" />
-                                {t('ui.bookshelves.buttons.new')}
-                            </Button>
-                        </Link>
+                        {auth.permits.reports.export && (
+                            <Link href="/bookshelves/create">
+                                <Button>
+                                    <PlusIcon className="mr-2 h-4 w-4" />
+                                    {t('ui.bookshelves.buttons.new')}
+                                </Button>
+                            </Link>
+                        )}
                     </div>
 
                     <div className="space-y-4">
                         <FiltersTable
-                        lang={lang}
+                            lang={lang}
                             filters={
                                 [
                                     {
@@ -211,7 +219,7 @@ export default function BookshelvesIndex({lang, genres}:IndexBookshelvesProps) {
                                         label: t('ui.bookshelves.columns.zone_name') || 'Zone number',
                                         type: 'select',
                                         placeholder: t('ui.bookshelves.placeholders.zone_name') || 'Zone number...',
-                                        options:genreOptions
+                                        options: genreOptions,
                                     },
                                     {
                                         id: 'floor_id',
@@ -233,7 +241,9 @@ export default function BookshelvesIndex({lang, genres}:IndexBookshelvesProps) {
                     </div>
 
                     <div className="w-full overflow-hidden">
-                    {bookshelves?.meta.total !== undefined && <h2>{t('ui.common.filters.results', {attribute: bookshelves?.meta.total.toString()})}</h2>}
+                        {bookshelves?.meta.total !== undefined && (
+                            <h2>{t('ui.common.filters.results', { attribute: bookshelves?.meta.total.toString() })}</h2>
+                        )}
 
                         {isLoading ? (
                             <TableSkeleton columns={4} rows={10} />

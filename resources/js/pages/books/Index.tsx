@@ -207,14 +207,17 @@ export default function BooksIndex({lang, genres}:IndexBooksProps) {
                     accessorKey: 'created_at',
                 }),
                 
-                
-                createActionsColumn<Book>({
+            ] as ColumnDef<Book>[],
+        [t, handleDeleteBook],
+    );
+
+    {auth.permits.products.edit &&
+        columns.push(
+            createActionsColumn<Book>({
                     id: 'actions',
                     header: t('ui.users.columns.actions') || 'Actions',
                     renderActions: (book) => (
                         <>
-                            {auth.permits.products.edit && (
-                                <>
                                 {book.available ?
                                 <Button variant="outline" size="icon" title={t('ui.loans.buttons.create') || 'Loan this book'} onClick={() => {handleLoan(book.id, book.available)}}>
                                     <Handshake className="h-4 w-4 text-green-400"/>
@@ -230,8 +233,7 @@ export default function BooksIndex({lang, genres}:IndexBooksProps) {
                                     <PencilIcon className="h-4 w-4" />
                                 </Button>
                             </Link>
-                            </>
-                            )}
+                            
                             {auth.permits.products.delete &&
                             <DeleteDialog
                                 id={book.id}
@@ -257,10 +259,9 @@ export default function BooksIndex({lang, genres}:IndexBooksProps) {
                         </>
                     ),
                 }),
-            ] as ColumnDef<Book>[],
-        [t, handleDeleteBook],
-    );
+        );
 
+    }
     return (
         <BookLayout title={t('ui.books.title')}>
             <div className="p-6">

@@ -4,57 +4,12 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { useTranslations } from '@/hooks/use-translations';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
-import { BookOpen, BookText, Building, ChartColumnIncreasing, Container, Cuboid, Folder, Handshake, LayoutGrid, Library, ScrollText, Users } from 'lucide-react';
+import { Link, usePage } from '@inertiajs/react';
+import { BookOpen, BookText, Building, ChartColumnIncreasing, Cuboid, Folder, Handshake, LayoutGrid, Library, ScrollText, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
-const mainNavItems = (t: (key: string) => string): NavItem[] => [
-    {
-        title: t('ui.navigation.items.dashboard'),
-        url: '/dashboard',
-        icon: LayoutGrid,
-    },
-    {
-        title: t('ui.navigation.items.users'),
-        url: '/users',
-        icon: Users,
-    },
-    {
-        title: t('ui.navigation.items.floors'),
-        url: '/floors',
-        icon: Building
-    },
-    {
-        title: t('ui.navigation.items.zones'),
-        url: '/zones',
-        icon: Cuboid
-    },
-    {
-        title: t('ui.navigation.items.bookshelves'),
-        url: '/bookshelves',
-        icon: Library
-    },
-    {
-        title: t('ui.navigation.items.books'),
-        url: '/books',
-        icon: BookText
-    },
-    {
-        title: t('ui.navigation.items.loans'),
-        url: '/loans',
-        icon: Handshake
-    },
-    {
-        title: t('ui.navigation.items.reservations'),
-        url: '/reservations',
-        icon: ScrollText
-    },
-    {
-        title: t('ui.navigation.items.graphs'),
-        url: '/graphs',
-        icon: ChartColumnIncreasing
-    },
-];
+
+
 
 const footerNavItems = (t: (key: string) => string): NavItem[] => [
     {
@@ -70,7 +25,74 @@ const footerNavItems = (t: (key: string) => string): NavItem[] => [
 ];
 
 export function AppSidebar() {
+    const { auth } = usePage().props;
     const { t } = useTranslations();
+    const mainNavItems = (t: (key: string) => string): NavItem[] => {
+    const items: NavItem[] = [];
+    items.push({
+        title: t('ui.navigation.items.dashboard'),
+        url: '/dashboard',
+        icon: LayoutGrid,
+    });
+
+    /**User view permits */
+    auth.permits.users.view &&
+        items.push({
+            title: t('ui.navigation.items.users'),
+            url: '/users',
+            icon: Users,
+        });
+
+    /**Reports view permits */
+    auth.permits.reports.view &&
+        items.push(
+            {
+                title: t('ui.navigation.items.floors'),
+                url: '/floors',
+                icon: Building,
+            },
+            {
+                title: t('ui.navigation.items.zones'),
+                url: '/zones',
+                icon: Cuboid,
+            },
+            {
+                title: t('ui.navigation.items.bookshelves'),
+                url: '/bookshelves',
+                icon: Library,
+            },
+        );
+
+    /**Products view permits */
+    auth.permits.products.view &&
+        items.push({
+            title: t('ui.navigation.items.books'),
+            url: '/books',
+            icon: BookText,
+        });
+
+    /**Reports view permits */
+    auth.permits.reports.view &&
+        items.push(
+            {
+                title: t('ui.navigation.items.loans'),
+                url: '/loans',
+                icon: Handshake,
+            },
+            {
+                title: t('ui.navigation.items.reservations'),
+                url: '/reservations',
+                icon: ScrollText,
+            },
+            {
+                title: t('ui.navigation.items.graphs'),
+                url: '/graphs',
+                icon: ChartColumnIncreasing,
+            },
+        );
+    return items;
+};
+    
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>

@@ -19,14 +19,14 @@ import { PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-interface IndexFloorProps extends PageProps{
+interface IndexFloorProps extends PageProps {
     lang: string;
 }
 
-export default function FloorsIndex({lang}:IndexFloorProps) {
+export default function FloorsIndex({ lang }: IndexFloorProps) {
     const { t } = useTranslations();
     const { url } = usePage();
-const { auth } = usePage().props;
+    const { auth } = usePage().props;
     // Obtener los parámetros de la URL actual
     const urlParams = new URLSearchParams(url.split('?')[1] || '');
     const pageParam = urlParams.get('page');
@@ -42,7 +42,6 @@ const { auth } = usePage().props;
         filters.max_zones ? filters.max_zones : 'null',
         filters.created_at ? filters.created_at : 'null',
     ];
-    
 
     const {
         data: floors,
@@ -57,7 +56,7 @@ const { auth } = usePage().props;
     const deleteFloorMutation = useDeleteFloor();
 
     const handleFilterChange = (newFilters: Record<string, any>) => {
-        const filtersChanged = newFilters!==filters;
+        const filtersChanged = newFilters !== filters;
 
         if (filtersChanged) {
             setCurrentPage(1);
@@ -91,7 +90,7 @@ const { auth } = usePage().props;
                     id: 'name',
                     header: t('ui.floors.title') || 'Name',
                     accessorKey: 'name',
-                    format: (value)=>t(`ui.floors.titles.floor`)+' '+value
+                    format: (value) => t(`ui.floors.titles.floor`) + ' ' + value,
                 }),
                 createTextColumn<Floor>({
                     id: 'max_zones',
@@ -103,17 +102,22 @@ const { auth } = usePage().props;
                     header: t('ui.users.columns.created_at') || 'Created At',
                     accessorKey: 'created_at',
                 }),
+            ] as ColumnDef<Floor>[],
+        [t, handleDeleteFloor],
+    );
+
+    {
+        auth.permits.reports.export &&
+            columns.push(
                 createActionsColumn<Floor>({
                     id: 'actions',
                     header: t('ui.users.columns.actions') || 'Actions',
                     renderActions: (floor) => (
                         <>
-                        {auth.permits.reports.export && 
-                        <>
                             <Link href={`/floors/${floor.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-                                    <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit floor'}>
-                                        <PencilIcon className="h-4 w-4" />
-                                    </Button>
+                                <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit floor'}>
+                                    <PencilIcon className="h-4 w-4" />
+                                </Button>
                             </Link>
                             <DeleteDialog
                                 id={floor.id}
@@ -135,35 +139,29 @@ const { auth } = usePage().props;
                                 }
                             />
                         </>
-                        }
-                            
-                            
-                        </>
                     ),
                 }),
-            ] as ColumnDef<Floor>[],
-        [t, handleDeleteFloor],
-    );
-
+            );
+    }
     return (
         <FloorLayout title={t('ui.floors.title')}>
             <div className="p-6">
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
                         <h1 className="text-3xl font-bold">{t('ui.floors.title')}</h1>
-                        {auth.permits.reports.export && 
-                        <Link href="/floors/create">
-                            <Button>
-                                <PlusIcon className="mr-2 h-4 w-4" />
-                                {t('ui.floors.buttons.new')}
-                            </Button>
-                        </Link>
-                        }
+                        {auth.permits.reports.export && (
+                            <Link href="/floors/create">
+                                <Button>
+                                    <PlusIcon className="mr-2 h-4 w-4" />
+                                    {t('ui.floors.buttons.new')}
+                                </Button>
+                            </Link>
+                        )}
                     </div>
 
                     <div className="space-y-4">
                         <FiltersTable
-                        lang={lang}
+                            lang={lang}
                             filters={
                                 [
                                     {
@@ -183,7 +181,7 @@ const { auth } = usePage().props;
                                         label: t('ui.floors.filters.created_at') || 'Creation date',
                                         type: 'date',
                                         placeholder: t('ui.floors.placeholders.created_at') || 'Creation date...',
-                                    }
+                                    },
                                 ] as FilterConfig[]
                             }
                             onFilterChange={handleFilterChange}
@@ -192,7 +190,7 @@ const { auth } = usePage().props;
                     </div>
 
                     <div className="w-full overflow-hidden">
-                    {floors?.meta.total !== undefined && <h2>{t('ui.common.filters.results', {attribute: floors?.meta.total.toString()})}</h2>}
+                        {floors?.meta.total !== undefined && <h2>{t('ui.common.filters.results', { attribute: floors?.meta.total.toString() })}</h2>}
 
                         {isLoading ? (
                             <TableSkeleton columns={4} rows={10} />

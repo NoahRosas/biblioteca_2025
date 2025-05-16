@@ -128,7 +128,8 @@ export default function ZonesIndex({ lang, genres }: IndexZoneProps) {
             ] as ColumnDef<Zone>[],
         [t, handleDeleteZone],
     );
-    {auth.permits.reports.export &&
+    {
+        auth.permits.reports.export &&
             columns.push(
                 createActionsColumn<Zone>({
                     id: 'actions',
@@ -172,12 +173,16 @@ export default function ZonesIndex({ lang, genres }: IndexZoneProps) {
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
                         <h1 className="text-3xl font-bold">{t('ui.zones.title')}</h1>
-                        <Link href="/zones/create">
+                        {auth.permits.reports.export &&
+                         <Link href="/zones/create">
                             <Button>
                                 <PlusIcon className="mr-2 h-4 w-4" />
                                 {t('ui.zones.buttons.new')}
                             </Button>
                         </Link>
+
+                        }
+                       
                     </div>
 
                     <div className="space-y-4">

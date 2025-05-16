@@ -13,12 +13,13 @@ import { HandHelping, PencilIcon, PlusIcon, TrashIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-interface IndexLoanProps extends PageProps{
+interface IndexLoanProps extends PageProps {
     lang: string;
 }
-export default function BooksIndex({lang}:IndexLoanProps) {
+export default function BooksIndex({ lang }: IndexLoanProps) {
     const { t } = useTranslations();
     const { url } = usePage();
+    const { auth } = usePage().props;
 
     // Obtener los parámetros de la URL actual
     const urlParams = new URLSearchParams(url.split('?')[1] || '');
@@ -41,7 +42,6 @@ export default function BooksIndex({lang}:IndexLoanProps) {
         filters.is_overdue ? filters.is_overdue : 'null',
     ];
 
-   
     const {
         data: loans,
         isLoading,
@@ -55,13 +55,13 @@ export default function BooksIndex({lang}:IndexLoanProps) {
     const deleteLoanMutation = useDeleteLoan();
 
     const handleFilterChange = (newFilters: Record<string, any>) => {
-        const filtersChanged = newFilters!==filters;
+        const filtersChanged = newFilters !== filters;
 
         if (filtersChanged) {
             setCurrentPage(1);
         }
         setFilters(newFilters);
-        };
+    };
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -158,7 +158,7 @@ export default function BooksIndex({lang}:IndexLoanProps) {
                             } else {
                                 response = t('ui.loans.overdue.false');
                             }
-                        }else{
+                        } else {
                             if (loan.is_overdue) {
                                 if (days_overdued_returned > 1) {
                                     response = t('ui.loans.overdue.more') + ' ' + days_overdued_returned;
@@ -169,7 +169,6 @@ export default function BooksIndex({lang}:IndexLoanProps) {
                                 response = t('ui.loans.overdue.false');
                             }
                         }
-                        
 
                         return (
                             <>
@@ -178,7 +177,13 @@ export default function BooksIndex({lang}:IndexLoanProps) {
                         );
                     },
                 }),
+            ] as ColumnDef<Loan>[],
+        [t, handleDeleteLoan],
+    );
 
+    {
+        auth.permits.reports.export &&
+            columns.push(
                 createActionsColumn<Loan>({
                     id: 'actions',
                     header: t('ui.users.columns.actions') || 'Actions',
@@ -244,27 +249,27 @@ export default function BooksIndex({lang}:IndexLoanProps) {
                         </>
                     ),
                 }),
-            ] as ColumnDef<Loan>[],
-        [t, handleDeleteLoan],
-    );
-
+            );
+    }
     return (
         <LoanLayout title={t('ui.loans.title')}>
             <div className="p-6">
                 <div className="space-y-6">
                     <div className="flex items-center justify-between">
                         <h1 className="text-3xl font-bold">{t('ui.loans.title')}</h1>
-                        <Link href="/loans/create">
-                            <Button>
-                                <PlusIcon className="mr-2 h-4 w-4" />
-                                {t('ui.loans.buttons.new')}
-                            </Button>
-                        </Link>
+                        {auth.permits.reports.export && (
+                            <Link href="/loans/create">
+                                <Button>
+                                    <PlusIcon className="mr-2 h-4 w-4" />
+                                    {t('ui.loans.buttons.new')}
+                                </Button>
+                            </Link>
+                        )}
                     </div>
 
                     <div className="space-y-4">
                         <FiltersTable
-                        lang={lang}
+                            lang={lang}
                             filters={
                                 [
                                     {
@@ -325,7 +330,7 @@ export default function BooksIndex({lang}:IndexLoanProps) {
                     </div>
 
                     <div className="w-full overflow-hidden">
-                    {loans?.meta.total !== undefined && <h2>{t('ui.common.filters.results', {attribute: loans?.meta.total.toString()})}</h2>}
+                        {loans?.meta.total !== undefined && <h2>{t('ui.common.filters.results', { attribute: loans?.meta.total.toString() })}</h2>}
                         {isLoading ? (
                             <TableSkeleton columns={4} rows={10} />
                         ) : isError ? (
