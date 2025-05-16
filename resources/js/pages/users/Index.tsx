@@ -43,7 +43,6 @@ export default function UsersIndex({ lang }: IndexUserProps) {
         filters.created_at ? filters.created_at : 'null',
     ];
 
-
     const {
         data: users,
         isLoading,
@@ -102,6 +101,13 @@ export default function UsersIndex({ lang }: IndexUserProps) {
                     header: t('ui.users.columns.created_at') || 'Created At',
                     accessorKey: 'created_at',
                 }),
+            ] as ColumnDef<User>[],
+        [t, handleDeleteUser],
+    );
+
+    {
+        auth.permits.users.edit &&
+            columns.push(
                 createActionsColumn<User>({
                     id: 'actions',
                     header: t('ui.users.columns.actions') || 'Actions',
@@ -112,13 +118,12 @@ export default function UsersIndex({ lang }: IndexUserProps) {
                                     <History className="h-4 w-4" />
                                 </Button>
                             </Link>
-                            {auth.permits.users.edit && (
-                                <Link href={`/users/${user.id}/edit?page=${currentPage}&perPage=${perPage}`}>
-                                    <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit user'}>
-                                        <PencilIcon className="h-4 w-4" />
-                                    </Button>
-                                </Link>
-                            )}
+
+                            <Link href={`/users/${user.id}/edit?page=${currentPage}&perPage=${perPage}`}>
+                                <Button variant="outline" size="icon" title={t('ui.users.buttons.edit') || 'Edit user'}>
+                                    <PencilIcon className="h-4 w-4" />
+                                </Button>
+                            </Link>
 
                             {auth.permits.users.delete && (
                                 <DeleteDialog
@@ -144,10 +149,8 @@ export default function UsersIndex({ lang }: IndexUserProps) {
                         </>
                     ),
                 }),
-            ] as ColumnDef<User>[],
-        [t, handleDeleteUser],
-    );
-
+            );
+    }
     return (
         <UserLayout title={t('ui.users.title')}>
             <div className="p-6">
