@@ -50,7 +50,7 @@ class Book extends Model implements HasMedia
 
     ];
 
-    public function floor(): BelongsTo
+    public function bookshelf(): BelongsTo
     {
         return $this->belongsTo(Bookshelf::class);
     }
