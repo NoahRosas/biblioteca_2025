@@ -1,11 +1,9 @@
 import { Head } from '@inertiajs/react';
 import { useTranslations } from '@/hooks/use-translations';
-
 import HeadingSmall from '@/components/heading-small';
 import LanguageTabs from '@/components/language-tabs';
 import { type BreadcrumbItem } from '@/types';
 import { Language } from '@/hooks/use-language';
-
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 
