@@ -6,7 +6,6 @@ import { Transition } from '@headlessui/react';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler, useRef } from 'react';
 import { useTranslations } from '@/hooks/use-translations';
-
 import HeadingSmall from '@/components/heading-small';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -55,7 +54,7 @@ export default function Password() {
             <Head title={t('ui.settings.password.title')} />
 
             <SettingsLayout>
-                <div className="space-y-6">
+                <div className="space-y-6 w-[600px]">
                     <HeadingSmall
                         title={t('ui.settings.password.update_title')}
                         description={t('ui.settings.password.update_description')}

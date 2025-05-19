@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useTranslations } from '@/hooks/use-translations';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { useTranslations } from '@/hooks/use-translations';
 import { router } from '@inertiajs/react';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
@@ -17,9 +17,9 @@ export interface LoanFormProps {
         id: string;
         book_id: string;
     };
-    user_email?:string;
-    user_emails:{
-        email:string;
+    user_email?: string;
+    user_emails: {
+        email: string;
     }[];
     page?: string;
     perPage?: string;
@@ -35,9 +35,9 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function ReservationForm({ initialData, page, perPage, user_email, user_emails}: LoanFormProps) {
+export function ReservationForm({ initialData, page, perPage, user_email, user_emails }: LoanFormProps) {
     const { t } = useTranslations();
-    const [selectedEmail, setSelectedEmail] = useState<string>(user_email || '' );
+    const [selectedEmail, setSelectedEmail] = useState<string>(user_email || '');
     const [open, setOpen] = useState(false);
     const queryClient = useQueryClient();
     let params = window.location.search;
@@ -74,18 +74,20 @@ export function ReservationForm({ initialData, page, perPage, user_email, user_e
     };
     return (
         <div className="inset-0 flex items-center justify-center">
-            <Card className="w-[600px]">
+            <Card className="w-full max-w-[600px]">
                 <CardContent>
                     <form onSubmit={form.handleSubmit} noValidate>
-                        {/* user email field */}
-                        <div className="space-y-1">
+                        <div className="flex w-full flex-col items-center gap-4 px-4">
+                            {/* user email field */}
                             <form.Field
                                 name="user_email"
                                 validators={{
                                     onChangeAsync: async ({ value }) => {
                                         await new Promise((resolve) => setTimeout(resolve, 500));
                                         return !value
-                                            ? t('ui.validation.required', { attribute: t('ui.reservations.fields.user_email').toLowerCase() })
+                                            ? t('ui.validation.required', {
+                                                  attribute: t('ui.reservations.fields.user_email').toLowerCase(),
+                                              })
                                             : value.length < 1
                                               ? t('ui.validation.min.string', {
                                                     attribute: t('ui.reservations.fields.user_email').toLowerCase(),
@@ -97,32 +99,20 @@ export function ReservationForm({ initialData, page, perPage, user_email, user_e
                             >
                                 {(field) => (
                                     <>
-                                        <div className="mb-2 flex">
-                                            <Label htmlFor="name" className="mt-1 ml-1">
-                                                {t('ui.reservations.fields.user_email')}
-                                            </Label>
-                                        </div>
-
-                                        {/* <Input
-                                            id={field.name}
-                                            name={field.name}
-                                            value={field.state.value}
-                                            onChange={(e) => field.handleChange(e.target.value)}
-                                            onBlur={field.handleBlur}
-                                            placeholder={t('ui.reservations.placeholders.user_email')}
-                                            disabled={form.state.isSubmitting}
-                                            required={false}
-                                            autoComplete="off"
-                                        /> */}
-
+                                        <Label className="ml-1 self-start">{t('ui.reservations.fields.user_email')}</Label>
                                         <Popover open={open} onOpenChange={setOpen}>
                                             <PopoverTrigger asChild>
-                                                <Button variant="outline" role="combobox" aria-expanded={open} className="w-[550px] justify-between">
+                                                <Button
+                                                    variant="outline"
+                                                    role="combobox"
+                                                    aria-expanded={open}
+                                                    className="w-full max-w-[550px] justify-between"
+                                                >
                                                     {selectedEmail ? selectedEmail : t('ui.loans.placeholders.user_email')}
                                                     <ChevronsUpDown className="opacity-50" />
                                                 </Button>
                                             </PopoverTrigger>
-                                            <PopoverContent className="w-[550px] p-0">
+                                            <PopoverContent className="w-full max-w-[550px] p-0">
                                                 <Command>
                                                     <CommandInput placeholder={t('ui.loans.placeholders.search')} className="h-9" />
                                                     <CommandList>
@@ -146,22 +136,21 @@ export function ReservationForm({ initialData, page, perPage, user_email, user_e
                                                 </Command>
                                             </PopoverContent>
                                         </Popover>
-
                                         <FieldInfo field={field} />
                                     </>
                                 )}
                             </form.Field>
-                        </div>
 
-                        {/* book id field */}
-                        <div className="space-y-1">
+                            {/* book id field */}
                             <form.Field
                                 name="book_id"
                                 validators={{
                                     onChangeAsync: async ({ value }) => {
                                         await new Promise((resolve) => setTimeout(resolve, 500));
                                         return !value
-                                            ? t('ui.validation.required', { attribute: t('ui.reservations.fields.book_id').toLowerCase() })
+                                            ? t('ui.validation.required', {
+                                                  attribute: t('ui.reservations.fields.book_id').toLowerCase(),
+                                              })
                                             : value.length < 1
                                               ? t('ui.validation.min.string', {
                                                     attribute: t('ui.reservations.fields.book_id').toLowerCase(),
@@ -173,12 +162,9 @@ export function ReservationForm({ initialData, page, perPage, user_email, user_e
                             >
                                 {(field) => (
                                     <>
-                                        <div className="mt-3 mb-2 flex">
-                                            <Label htmlFor={field.name} className="mt-0.5 ml-1">
-                                                {t('ui.reservations.fields.book_id')}
-                                            </Label>
-                                        </div>
-
+                                        <Label htmlFor={field.name} className="ml-1 self-start">
+                                            {t('ui.reservations.fields.book_id')}
+                                        </Label>
                                         <Input
                                             id={field.name}
                                             name={field.name}
@@ -190,42 +176,42 @@ export function ReservationForm({ initialData, page, perPage, user_email, user_e
                                             min={1}
                                             placeholder={t('ui.reservations.placeholders.book_id')}
                                             disabled={form.state.isSubmitting || url.get('book_id') !== null || initialData !== undefined}
-                                            required={true}
+                                            required
                                             autoComplete="off"
+                                            className="w-full max-w-[550px]"
                                         />
                                         <FieldInfo field={field} />
                                     </>
                                 )}
                             </form.Field>
                         </div>
-
                     </form>
                 </CardContent>
-                <CardFooter className="flex justify-between">
-                    {/* Form buttons */}
 
+                <CardFooter className="px-4 pt-4">
+                     <div className="mx-auto flex w-full max-w-[550px] justify-between">
                     <Button
-                        // className='flex'
                         type="button"
                         onClick={() => {
-                            let url = '/reservations';
+                            let redirectUrl = '/reservations';
                             if (page) {
-                                url += `?page=${page}`;
+                                redirectUrl += `?page=${page}`;
                                 if (perPage) {
-                                    url += `&per_page=${perPage}`;
+                                    redirectUrl += `&per_page=${perPage}`;
                                 }
                             }
-                            router.visit(url);
+                            router.visit(redirectUrl);
                         }}
                     >
-                        <X size={'20px'} className="mr-1" />
+                        <X size="20px" className="mr-1" />
                         {t('ui.users.buttons.cancel')}
                     </Button>
 
                     <Button type="submit" className="bg-blue-500 hover:bg-blue-700" onClick={handleSubmit}>
-                        <Save size={'20px'} className="mr-1" />
+                        <Save size="20px" className="mr-1" />
                         {initialData ? t('ui.users.buttons.update') : t('ui.users.buttons.save')}
                     </Button>
+                    </div>
                 </CardFooter>
             </Card>
         </div>

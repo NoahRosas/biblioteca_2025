@@ -11,7 +11,7 @@ import { router } from '@inertiajs/react';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
 import { format, isSunday } from 'date-fns';
-import { CalendarIcon, Check, ChevronsUpDown, Save, X } from 'lucide-react';
+import { CalendarIcon, ChevronsUpDown, Save, X } from 'lucide-react';
 import { useState } from 'react';
 
 import { enUS, es } from 'date-fns/locale';
@@ -28,8 +28,8 @@ export interface LoanFormProps {
     user_email?: string;
     page?: string;
     perPage?: string;
-    user_emails:{
-        email:string;
+    user_emails: {
+        email: string;
     }[];
 }
 
@@ -47,7 +47,7 @@ export function LoanForm({ initialData, page, perPage, user_email, lang, user_em
     const { t } = useTranslations();
     const queryClient = useQueryClient();
     const [selectedEndLoan, setSelectEndLoan] = useState(initialData?.end_loan || undefined);
-    const [selectedEmail, setSelectedEmail] = useState<string>(user_email || '' );
+    const [selectedEmail, setSelectedEmail] = useState<string>(user_email || '');
     const [open, setOpen] = useState(false);
     let params = window.location.search;
     let url = new URLSearchParams(params);
@@ -89,9 +89,9 @@ export function LoanForm({ initialData, page, perPage, user_email, lang, user_em
         form.handleSubmit();
     };
     return (
-        <div className="inset-0 flex items-center justify-center">
-            <Card className="w-[600px]">
-                <CardContent>
+        <div className="inset-0 flex items-center justify-center px-4">
+            <Card className="w-full max-w-[600px]">
+                <CardContent className="px-4">
                     <form onSubmit={form.handleSubmit} noValidate>
                         {/* user email field */}
                         <div className="space-y-1">
@@ -118,15 +118,20 @@ export function LoanForm({ initialData, page, perPage, user_email, lang, user_em
                                                 {t('ui.loans.fields.user_email')}
                                             </Label>
                                         </div>
-                                        
+
                                         <Popover open={open} onOpenChange={setOpen}>
                                             <PopoverTrigger asChild disabled={user_email ? true : false}>
-                                                <Button variant="outline" role="combobox" aria-expanded={open} className="w-[550px] justify-between">
+                                                <Button
+                                                    variant="outline"
+                                                    role="combobox"
+                                                    aria-expanded={open}
+                                                    className="w-full max-w-[550px] justify-between"
+                                                >
                                                     {selectedEmail ? selectedEmail : t('ui.loans.placeholders.user_email')}
                                                     <ChevronsUpDown className="opacity-50" />
                                                 </Button>
                                             </PopoverTrigger>
-                                            <PopoverContent className="w-[550px] p-0">
+                                            <PopoverContent className="w-full max-w-[550px] p-0">
                                                 <Command>
                                                     <CommandInput placeholder={t('ui.loans.placeholders.search')} className="h-9" />
                                                     <CommandList>
@@ -150,6 +155,7 @@ export function LoanForm({ initialData, page, perPage, user_email, lang, user_em
                                                 </Command>
                                             </PopoverContent>
                                         </Popover>
+
                                         <FieldInfo field={field} />
                                     </>
                                 )}
@@ -195,6 +201,7 @@ export function LoanForm({ initialData, page, perPage, user_email, lang, user_em
                                             disabled={form.state.isSubmitting || url.get('book_id') !== null || initialData !== undefined}
                                             required={true}
                                             autoComplete="off"
+                                            className="w-full max-w-[550px]"
                                         />
                                         <FieldInfo field={field} />
                                     </>
@@ -217,7 +224,7 @@ export function LoanForm({ initialData, page, perPage, user_email, lang, user_em
                                                 <Button
                                                     variant={'outline'}
                                                     className={cn(
-                                                        'w-[550px] pl-3 text-left font-normal',
+                                                        'w-full max-w-[550px] pl-3 text-left font-normal',
                                                         !field.state.value && 'text-muted-foreground',
                                                     )}
                                                 >
@@ -251,31 +258,30 @@ export function LoanForm({ initialData, page, perPage, user_email, lang, user_em
                         </div>
                     </form>
                 </CardContent>
-                <CardFooter className="flex justify-between">
-                    {/* Form buttons */}
-
-                    <Button
-                        // className='flex'
-                        type="button"
-                        onClick={() => {
-                            let url = '/loans';
-                            if (page) {
-                                url += `?page=${page}`;
-                                if (perPage) {
-                                    url += `&per_page=${perPage}`;
+                <CardFooter className="px-4 pt-4">
+                    <div className="mx-auto flex w-full max-w-[550px] justify-between">
+                        <Button
+                            type="button"
+                            onClick={() => {
+                                let url = '/loans';
+                                if (page) {
+                                    url += `?page=${page}`;
+                                    if (perPage) {
+                                        url += `&per_page=${perPage}`;
+                                    }
                                 }
-                            }
-                            router.visit(url);
-                        }}
-                    >
-                        <X size={'20px'} className="mr-1" />
-                        {t('ui.users.buttons.cancel')}
-                    </Button>
+                                router.visit(url);
+                            }}
+                        >
+                            <X size={'20px'} className="mr-1" />
+                            {t('ui.users.buttons.cancel')}
+                        </Button>
 
-                    <Button type="submit" className="bg-blue-500 hover:bg-blue-700" onClick={handleSubmit}>
-                        <Save size={'20px'} className="mr-1" />
-                        {initialData ? t('ui.users.buttons.update') : t('ui.users.buttons.save')}
-                    </Button>
+                        <Button type="submit" className="bg-blue-500 hover:bg-blue-700" onClick={handleSubmit}>
+                            <Save size={'20px'} className="mr-1" />
+                            {initialData ? t('ui.users.buttons.update') : t('ui.users.buttons.save')}
+                        </Button>
+                    </div>
                 </CardFooter>
             </Card>
         </div>

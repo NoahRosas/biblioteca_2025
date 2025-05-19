@@ -6,7 +6,6 @@ use App\Core\Controllers\Controller;
 use Domain\Roles\Models\Role as ModelsRole;
 use Domain\Users\Actions\ActivityShowAction;
 use Domain\Users\Actions\UserDestroyAction;
-use Domain\Users\Actions\UserIndexAction;
 use Domain\Users\Actions\UserStoreAction;
 use Domain\Users\Actions\UserUpdateAction;
 use Domain\Users\Models\User;
@@ -16,9 +15,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
-use Inertia\Response;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {

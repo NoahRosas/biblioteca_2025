@@ -176,7 +176,7 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
     return (
         <div className="inset-0 flex items-center justify-center">
         
-            <Tabs defaultValue="create_account" className='w-[600px]'>
+            <Tabs defaultValue="create_account" className="w-full max-w-[600px] px-4">
                 <TabsList className="grid h-[50px] w-full grid-cols-2 ">
                     <TabsTrigger value="create_user" autoFocus={true}>
                         {t('ui.users.tabs.basic_information')}

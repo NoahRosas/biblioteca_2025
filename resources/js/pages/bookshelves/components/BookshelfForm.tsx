@@ -94,7 +94,7 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones, books
     };
     return (
         <div className="inset-0 flex items-center justify-center">
-            <Card className="w-[600px]">
+            <Card className="w-full max-w-[600px]">
                 <CardContent>
                     <form onSubmit={form.handleSubmit} noValidate>
                         
