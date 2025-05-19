@@ -121,7 +121,7 @@ return [
         'edit' => 'Edit User',
         'history' => [
             'title' => 'User history',
-            'no_results' => 'Nothing to see here, read a book or something',
+            'no_results' => "You haven't borrowed or booked any books yet.",
         ],
         'description' => 'Manage users in the system',
         'fields' => [

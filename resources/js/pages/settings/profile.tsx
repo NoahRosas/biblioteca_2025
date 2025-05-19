@@ -20,6 +20,14 @@ export default function Profile({ user_activities }: UserSettingsProps) {
             href: '/settings/profile',
         },
     ];
+
+    function NoHistory() {
+        return (
+            <div className="text-center">
+                <p>{t('ui.users.history.no_results')}</p>
+            </div>
+        );
+    }
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={t('ui.settings.profile.title')} />
@@ -28,8 +36,8 @@ export default function Profile({ user_activities }: UserSettingsProps) {
                 <div className="space-y-2 text-center">
                     <Heading title={t('ui.settings.profile.history')} description={t('ui.settings.profile.history_description')} />
                 </div>
-
-                <Timeline user_activities={user_activities}/>
+                {user_activities.length > 0 ? <Timeline user_activities={user_activities} /> : <NoHistory />}
+               
             </SettingsLayout>
         </AppLayout>
     );

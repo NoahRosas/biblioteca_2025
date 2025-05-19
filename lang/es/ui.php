@@ -122,7 +122,7 @@ return [
         'edit' => 'Editar Usuario',
         'history' => [
             'title' => 'Historial de usuario',
-            'no_results' => 'Nada por aquí, ve a leer algún libro o algo',
+            'no_results' => 'Todavía no has tomado prestado ni reservado ningún libro.',
         ],
         'description' => 'Gestiona los usuarios del sistema',
         'fields' => [
