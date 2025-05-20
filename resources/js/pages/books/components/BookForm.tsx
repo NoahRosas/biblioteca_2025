@@ -537,7 +537,6 @@ export function BookForm({ initialData, page, perPage, books, floors, zones, boo
                                 validators={{
                                     onChangeAsync: async (value) => {
                                         await new Promise((resolve) => setTimeout(resolve, 500));
-                                        console.log(value.value);
                                         return value.value == undefined && !image_path
                                             ? t('ui.validation.required', { attribute: t('ui.books.fields.image').toLowerCase() })
                                             : null;
@@ -556,7 +555,6 @@ export function BookForm({ initialData, page, perPage, books, floors, zones, boo
                                             id={field.name}
                                             name={field.name}
                                             type="file"
-                                            value={field.state.value}
                                             onChange={(e) => {
                                                 const file = e.target.files[0];
                                                 setSelectedImage(file);

@@ -27,7 +27,7 @@ class UserApiController extends Controller
 
     public function store(Request $request, UserStoreAction $action)
     {
-        
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -39,8 +39,8 @@ class UserApiController extends Controller
         }
 
         $user = $action($validator->validated());
-        
-        
+
+
 
         return response()->json([
             'message' => __('messages.users.created'),
@@ -80,6 +80,28 @@ class UserApiController extends Controller
 
         return response()->json([
             'message' => __('messages.users.deleted')
+        ]);
+    }
+
+    public function user_search(Request $request)
+    {
+        $id = $request['id'];
+        $username = $request['name'];
+        $email = $request['email'];
+        $created_at = $request['created_at'];
+        $users = User::query()
+            ->when($username !== null, function ($query) use ($username) {
+                $query->where('name', 'ILIKE', "%{$username}%");
+            })->when($id !== null, function ($query) use ($id) {
+                $query->where('id', 'ILIKE', "%{$id}%");
+            })->when($email !== null, function ($query) use ($email) {
+                $query->where('email', 'ILIKE', "%{$email}%");
+            })->when($created_at !== null, function ($query) use ($created_at) {
+                $query->whereDate('created_at', '=', $created_at);
+            });
+
+        return response()->json([
+            'users' => $users->get()
         ]);
     }
 }

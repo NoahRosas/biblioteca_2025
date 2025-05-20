@@ -61,7 +61,6 @@ class UserController extends Controller
 
     public function store(Request $request, UserStoreAction $action)
     {
-        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -101,9 +100,6 @@ class UserController extends Controller
                 array_push($roles, [$rol->name, $value->name]);
             }
         }
-
-
-
         foreach ($userPermits as $permit) {
             $category = explode('.', $permit)[0];
             $action = explode('.', $permit)[1];

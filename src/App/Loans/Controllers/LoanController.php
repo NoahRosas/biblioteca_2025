@@ -35,7 +35,6 @@ class LoanController extends Controller
         $user_emails = User::select('email')->get()->toArray();
         $books = Book::with('activeLoan');
         $lang = Auth::user()->settings ? Auth::user()->settings->preferences['locale'] : 'en';
-        // dd($user_emails);
         return Inertia::render('loans/Create', ['user_emails'=> $user_emails,'books' => $books, 'lang' => $lang]);
     }
 

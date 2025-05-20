@@ -7,7 +7,12 @@ use App\Loans\Controllers\Api\LoanApiController;
 use App\Reservations\Controllers\Api\ReservationApiController;
 use App\Users\Controllers\Api\UserApiController;
 use App\Zones\Controllers\Api\ZoneApiController;
+use Domain\Users\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/user_search', [UserApiController::class, 'user_search']);
+Route::get('/book_search', [BookApiController::class, 'book_search']);
 
 Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/users', [UserApiController::class, 'index']);

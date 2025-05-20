@@ -108,7 +108,6 @@ class BookController extends Controller
         });
         
         $image_path = $book->getFirstMediaUrl('images');
-        // dd($image, $image_path);
         
         return Inertia::render('books/Edit', [
             'book' => $book,
