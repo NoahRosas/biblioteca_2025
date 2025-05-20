@@ -6,7 +6,6 @@ use App\Core\Controllers\Controller;
 use Domain\Floors\Actions\FloorDestroyAction;
 use Domain\Floors\Actions\FloorIndexAction;
 use Domain\Floors\Actions\FloorStoreAction;
-use Domain\Floors\Actions\FloorUpdateAction;
 use Domain\Floors\Models\Floor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
