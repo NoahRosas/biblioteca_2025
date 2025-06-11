@@ -11,18 +11,7 @@ import AppLogo from './app-logo';
 
 
 
-const footerNavItems = (t: (key: string) => string): NavItem[] => [
-    {
-        title: t('ui.navigation.items.repository'),
-        url: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: t('ui.navigation.items.documentation'),
-        url: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
-    },
-];
+
 
 export function AppSidebar() {
     const { auth } = usePage().props;
@@ -112,7 +101,7 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems(t)} className="mt-auto" />
+                
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

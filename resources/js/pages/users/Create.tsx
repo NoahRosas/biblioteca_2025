@@ -19,7 +19,7 @@ export default function CreateUser({ permisos, roles}: CreateUserProps) {
                 <User className="mr-1 " />
                 {t('ui.users.create')}
             </h3>
-            <p className="text-s text-center mb-2 text-muted-foreground">{t('ui.users.extra_info.create_user')}</p>
+            <p className="text-s text-center mb-2 text-muted-foreground">{t('ui.users.extra_info.create')}</p>
             <UserForm permisos={permisos} roles={roles} />
         </UserLayout>
   );
