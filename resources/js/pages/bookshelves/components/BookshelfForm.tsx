@@ -39,7 +39,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function BookshelfForm({ initialData, page, perPage, floors, zones, bookshelves}: BookshelfFormProps) {
+export function BookshelfForm({ initialData, page, perPage, floors, zones, bookshelves }: BookshelfFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
     let floorNow = undefined;
@@ -48,7 +48,6 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones, books
         floorNow = zones.filter((zone) => zone.id === initialData?.zone_id)[0].floor_id;
     }
 
-   
     const [selectedFloor, setSelectedFloor] = useState<string | undefined>(floorNow ?? undefined);
     const [selectedZone, setSelectedZone] = useState<string | undefined>(initialData?.zone_id ?? undefined);
     const form = useForm({
@@ -97,8 +96,6 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones, books
             <Card className="w-full max-w-[600px]">
                 <CardContent>
                     <form onSubmit={form.handleSubmit} noValidate>
-                        
-
                         {/* Floor id field */}
                         <div className="space-y-1">
                             <div className="mt-3 mb-2 flex">
@@ -109,7 +106,6 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones, books
                                 value={selectedFloor}
                                 onValueChange={(value) => {
                                     setSelectedFloor(value);
-                                    
                                 }}
                             >
                                 <SelectTrigger>
@@ -144,7 +140,6 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones, books
                                         onValueChange={(value) => {
                                             field.handleChange(value);
                                             setSelectedZone(value);
-                                            
                                         }}
                                         required={true}
                                         disabled={checkFloor()}
@@ -156,8 +151,13 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones, books
                                             {zones
                                                 .filter((zone) => zone.floor_id === selectedFloor)
                                                 .map((zone) => (
-                                                    <SelectItem key={zone.id} value={zone.id} disabled={zone.bookshelves_count>=zone.max_bookshelves}>
-                                                        {zone.number} - {t(`ui.genres.names.${zone.name}`)} ({zone.bookshelves_count}/{zone.max_bookshelves})
+                                                    <SelectItem
+                                                        key={zone.id}
+                                                        value={zone.id}
+                                                        disabled={zone.bookshelves_count >= zone.max_bookshelves}
+                                                    >
+                                                        {zone.number} - {t(`ui.genres.names.${zone.name}`)} ({zone.bookshelves_count}/
+                                                        {zone.max_bookshelves})
                                                     </SelectItem>
                                                 ))}
                                         </SelectContent>
@@ -165,7 +165,7 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones, books
                                 )}
                             </form.Field>
                         </div>
-                        
+
                         {/* number field */}
                         <div className="space-y-1">
                             <form.Field
@@ -173,14 +173,25 @@ export function BookshelfForm({ initialData, page, perPage, floors, zones, books
                                 validators={{
                                     onChangeAsync: async ({ value }) => {
                                         await new Promise((resolve) => setTimeout(resolve, 500));
+
+                                        const attributeName = t('ui.bookshelves.fields.number').toLowerCase();
                                         const numValue = Number(value);
+
                                         return !numValue
-                                            ? t('ui.validation.required', { attribute: t('ui.bookshelves.fields.number').toLowerCase() })
+                                            ? t('ui.validation.required', { attribute: attributeName })
                                             : numValue < 0
-                                              ? t('ui.validation.required', { attribute: t('ui.bookshelves.fields.number').toLowerCase() })
-                                              : bookshelves.filter(bookshelf => bookshelf.zone_id === selectedZone).find(bookshelf => bookshelf.number === numValue)
-                                              ? t('ui.validation.distinct', { attribute: t('ui.bookshelves.fields.number').toLowerCase() })
-                                              : undefined;
+                                              ? t('ui.validation.required', { attribute: attributeName })
+                                              : initialData
+                                                ? bookshelves
+                                                      .filter((bookshelf) => bookshelf.zone_id === selectedZone && bookshelf.id !== initialData.id)
+                                                      .find((bookshelf) => bookshelf.number === numValue)
+                                                    ? t('ui.validation.distinct', { attribute: attributeName })
+                                                    : undefined
+                                                : bookshelves
+                                                        .filter((bookshelf) => bookshelf.zone_id === selectedZone)
+                                                        .find((bookshelf) => bookshelf.number === numValue)
+                                                  ? t('ui.validation.distinct', { attribute: attributeName })
+                                                  : undefined;
                                     },
                                 }}
                             >

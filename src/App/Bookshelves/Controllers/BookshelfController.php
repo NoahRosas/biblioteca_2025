@@ -104,7 +104,7 @@ class BookshelfController extends Controller
     public function update(Request $request, Bookshelf $bookshelf, BookshelfUpdateAction $action)
     {
         $validator = Validator::make($request->all(), [
-            'number' => ['required', Rule::unique('bookshelves', 'number')->where(fn($query) => $query->where('zone_id', $request->zone_id))->ignore($request->id)],
+            'number' => ['required', Rule::unique('bookshelves', 'number')->where(fn($query) => $query->where('zone_id', $request->zone_id))->ignore($bookshelf->id)],
             'max_books' => ['required', 'integer', 'min:1', 'max:100'],
             'zone_id' => ['required', 'string', 'max:255'],
         ]);

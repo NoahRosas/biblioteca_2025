@@ -112,11 +112,11 @@ class FloorController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255',
-            Rule::unique('floors', 'name')->ignore($request->id)],
+            Rule::unique('floors', 'name')->ignore($floor->id)],
             'max_zones' => ['required']
             
         ]);
-
+        
         if ($validator->fails()) {
             return back()->withErrors($validator);
         }

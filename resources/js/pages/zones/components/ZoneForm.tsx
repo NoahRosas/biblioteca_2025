@@ -22,18 +22,18 @@ export interface ZoneFormProps {
     page?: string;
     perPage?: string;
     floors: {
-        id:string,
-        name:string,
-        zones_count:number,
-        max_zones:number,
+        id: string;
+        name: string;
+        zones_count: number;
+        max_zones: number;
     }[];
     genres: {
-        id:string,
-        name:string
+        id: string;
+        name: string;
     }[];
     zones: any[];
 }
- 
+
 function FieldInfo({ field }: { field: AnyFieldApi }) {
     return (
         <>
@@ -44,14 +44,14 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     );
 }
 
-export function ZoneForm({ initialData, page, perPage, floors, genres, zones}: ZoneFormProps) {
+export function ZoneForm({ initialData, page, perPage, floors, genres, zones }: ZoneFormProps) {
     const { t } = useTranslations();
     const queryClient = useQueryClient();
     const [selectedFloor, setSelectedFloor] = useState<string>(initialData?.floor_id || '');
     const form = useForm({
         defaultValues: {
             name: initialData?.name ?? '',
-            number:initialData?.number ?? '',
+            number: initialData?.number ?? '',
             max_bookshelves: initialData?.max_bookshelves ?? '',
             floor_id: initialData?.floor_id ?? '',
         },
@@ -92,9 +92,7 @@ export function ZoneForm({ initialData, page, perPage, floors, genres, zones}: Z
                                 validators={{
                                     onChangeAsync: async ({ value }) => {
                                         await new Promise((resolve) => setTimeout(resolve, 500));
-                                        return !value
-                                            ? t('ui.validation.required', { attribute: t('ui.zones.fields.name').toLowerCase() })
-                                            : null;
+                                        return !value ? t('ui.validation.required', { attribute: t('ui.zones.fields.name').toLowerCase() }) : null;
                                     },
                                 }}
                             >
@@ -106,10 +104,15 @@ export function ZoneForm({ initialData, page, perPage, floors, genres, zones}: Z
                                             </Label>
                                         </div>
 
-                                        <Select name={field.name} required={true} value={field.state.value} onValueChange={(value) => {
-                                            field.handleChange(value);
-                                            console.log(value);
-                                            }}>
+                                        <Select
+                                            name={field.name}
+                                            required={true}
+                                            value={field.state.value}
+                                            onValueChange={(value) => {
+                                                field.handleChange(value);
+                                                console.log(value);
+                                            }}
+                                        >
                                             <SelectTrigger>
                                                 <SelectValue placeholder={t('ui.zones.placeholders.name')} />
                                             </SelectTrigger>
@@ -117,7 +120,6 @@ export function ZoneForm({ initialData, page, perPage, floors, genres, zones}: Z
                                                 {genres?.map((genre) => (
                                                     <SelectItem key={genre.id} value={genre.name}>
                                                         {t(`ui.genres.names.${genre.name}`)}
-                                                        
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>
@@ -127,8 +129,6 @@ export function ZoneForm({ initialData, page, perPage, floors, genres, zones}: Z
                                 )}
                             </form.Field>
                         </div>
-                        
-                       
 
                         {/* Floor name field */}
                         <div className="space-y-1">
@@ -151,17 +151,21 @@ export function ZoneForm({ initialData, page, perPage, floors, genres, zones}: Z
                                             </Label>
                                         </div>
 
-                                        <Select name={field.name} value={field.state.value} onValueChange={(value) => {
-                                            field.handleChange(value);
-                                            setSelectedFloor(value);
-                                            console.log(value);
-                                            }}>
+                                        <Select
+                                            name={field.name}
+                                            value={field.state.value}
+                                            onValueChange={(value) => {
+                                                field.handleChange(value);
+                                                setSelectedFloor(value);
+                                                console.log(value);
+                                            }}
+                                        >
                                             <SelectTrigger>
                                                 <SelectValue placeholder={t('ui.zones.placeholders.floor_id')} />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {floors?.map((floor) => (
-                                                    <SelectItem key={floor.id} value={floor.id} disabled={floor.zones_count>=floor.max_zones}>
+                                                    <SelectItem key={floor.id} value={floor.id} disabled={floor.zones_count >= floor.max_zones}>
                                                         {t(`ui.floors.titles.floor`)} {floor.name} - {floor.zones_count}/{floor.max_zones}
                                                     </SelectItem>
                                                 ))}
@@ -172,25 +176,33 @@ export function ZoneForm({ initialData, page, perPage, floors, genres, zones}: Z
                                 )}
                             </form.Field>
                         </div>
-                        
-                         {/* Number field */}
-                         <div className="space-y-1">
+
+                        {/* Number field */}
+                        <div className="space-y-1">
                             <form.Field
                                 name="number"
                                 validators={{
                                     onChangeAsync: async ({ value }) => {
                                         await new Promise((resolve) => setTimeout(resolve, 500));
+
+                                        const attributeName = t('ui.zones.fields.number').toLowerCase();
                                         const numValue = Number(value);
+
                                         return !numValue
-                                            ? t('ui.validation.required', { attribute: t('ui.zones.fields.number').toLowerCase() })
+                                            ? t('ui.validation.required', { attribute: attributeName })
                                             : numValue < 0
-                                              ? t('ui.validation.required', { attribute: t('ui.zones.fields.number').toLowerCase() })
-                                              : zones.filter(zone => zone.floor_id === selectedFloor).find(zone => zone.number === numValue)
-                                              ? t('ui.validation.distinct', { attribute: t('ui.zones.fields.number').toLowerCase() })
-                                              : undefined;
+                                              ? t('ui.validation.required', { attribute: attributeName })
+                                              : initialData
+                                                ? zones
+                                                      .filter((zone) => zone.floor_id === selectedFloor && zone.id !== initialData.id)
+                                                      .find((zone) => zone.number === numValue)
+                                                    ? t('ui.validation.distinct', { attribute: attributeName })
+                                                    : undefined
+                                                : zones.filter((zone) => zone.floor_id === selectedFloor).find((zone) => zone.number === numValue)
+                                                  ? t('ui.validation.distinct', { attribute: attributeName })
+                                                  : undefined;
                                     },
                                 }}
-                                  
                             >
                                 {(field) => (
                                     <>
@@ -210,7 +222,7 @@ export function ZoneForm({ initialData, page, perPage, floors, genres, zones}: Z
                                             max={30}
                                             min={1}
                                             placeholder={t('ui.zones.placeholders.number')}
-                                            disabled={selectedFloor==='' || form.state.isSubmitting}
+                                            disabled={selectedFloor === '' || form.state.isSubmitting}
                                             required={true}
                                             autoComplete="off"
                                         />

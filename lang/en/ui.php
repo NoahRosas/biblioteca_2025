@@ -135,6 +135,9 @@ return [
             'role' => 'Main Role',
             'sp_permissions' => 'Specific Permissions',
         ],
+        'validation'=>[
+            'regex'=> 'The :attribute field format is invalid.',
+        ],
         'tabs' => [
             'basic_information' => 'Basic information',
             'roles' => 'Roles and permissions',

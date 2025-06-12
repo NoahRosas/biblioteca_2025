@@ -77,17 +77,24 @@ export function FloorForm({ initialData, page, perPage, floors}: FloorFormProps)
                                 validators={{
                                     onChangeAsync: async ({ value }) => {
                                         await new Promise((resolve) => setTimeout(resolve, 500));
+                                        const attributeName = t('ui.floors.fields.name').toLowerCase();
+
                                         return !value
-                                            ? t('ui.validation.required', { attribute: t('ui.floors.fields.name').toLowerCase() })
-                                            : value.length < 1
-                                              ? t('ui.validation.min.string', {
-                                                    attribute: t('ui.floors.fields.name').toLowerCase(),
-                                                    min: '1',
-                                                })
-                                              : floors.includes(value)
-                                              ? t('ui.validation.distinct', { attribute: t('ui.floors.fields.name').toLowerCase() })
-                                              : undefined;
-                                    },
+                                        ? t('ui.validation.required', { attribute: attributeName })
+                                        : value.length < 1
+                                        ? t('ui.validation.min.string', {
+                                            attribute: attributeName,
+                                            min: '1',
+                                            })
+                                        : initialData
+                                        ? floors.filter((name) => name !== initialData.name).includes(value)
+                                            ? t('ui.validation.distinct', { attribute: attributeName })
+                                            : undefined
+                                        : floors.includes(value)
+                                        ? t('ui.validation.distinct', { attribute: attributeName })
+                                        : undefined;
+                                    }
+
                                 }}
                             >
                                 {(field) => (

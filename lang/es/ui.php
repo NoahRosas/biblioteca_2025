@@ -136,12 +136,15 @@ return [
             'role' => 'Rol principal',
             'sp_permissions' => 'Permisos Específicos',
         ],
+        'validation'=>[
+            'regex' => 'El formato del campo :attribute es inválido.',
+        ],
         'tabs' => [
             'basic_information' => 'Información básica',
             'roles' => 'Roles y permisos',
         ],
         'extra_info' => [
-            'create_user' => 'Ingresa la información para crear un nuevo usuario en el sistema',
+            'create' => 'Ingresa la información para crear un nuevo usuario en el sistema',
             'role' => 'El rol determina el nivel del acceso del usuario',
         ],
         'roles' => [

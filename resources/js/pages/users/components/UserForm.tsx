@@ -1,26 +1,16 @@
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTranslations } from '@/hooks/use-translations';
 import { router } from '@inertiajs/react';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { useQueryClient } from '@tanstack/react-query';
 import { Eye, EyeClosed, FileText, Lock, Mail, PackageOpen, Save, Settings, Shield, User, Users, X } from 'lucide-react';
 import { ReactNode, useState } from 'react';
-import { Button } from "@/components/ui/button"
-import {
-    Card,
-    CardContent,
-    CardFooter,
-  } from "@/components/ui/card"
-  import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-  } from "@/components/ui/tabs"
-
 
 // Tipado de las props
 export interface UserFormProps {
@@ -32,11 +22,10 @@ export interface UserFormProps {
     };
     roles?: string[];
     permisos?: string[];
-    userPermits?:string[];
+    userPermits?: string[];
     page?: string;
     perPage?: string;
 }
-
 
 let selectRole: string;
 selectRole = '';
@@ -53,23 +42,23 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 function getCategoryIcon(category: string): ReactNode {
     switch (category) {
         case 'users':
-            return <Users size="19px" className="text-blue-700 mr-2" />;
+            return <Users size="19px" className="mr-2 text-blue-700" />;
 
         case 'products':
-            return <PackageOpen size="19px" className="text-blue-700 mr-2" />;
+            return <PackageOpen size="19px" className="mr-2 text-blue-700" />;
 
         case 'reports':
-            return <FileText size="19px" className="text-blue-700 mr-2" />;
+            return <FileText size="19px" className="mr-2 text-blue-700" />;
 
         case 'settings':
-            return <Settings size="19px" className="text-blue-700 mr-2" />;
+            return <Settings size="19px" className="mr-2 text-blue-700" />;
 
         default:
             return 0;
     }
 }
 
-export function UserForm({ initialData, page, perPage, permisos, roles, userPermits}: UserFormProps) {
+export function UserForm({ initialData, page, perPage, permisos, roles, userPermits }: UserFormProps) {
     let permisosUsuario: string[];
     permisosUsuario = userPermits ? userPermits : [];
     const { t } = useTranslations();
@@ -77,11 +66,11 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
     const [selectedRole, setSelectRole] = useState<string>(initialData?.role ?? '');
     const [listaPermisosUsuario, setLista] = useState(permisosUsuario);
     const [showPassword, setShowPassword] = useState(false);
-    
-    let arrayRoles : string[];
+
+    let arrayRoles: string[];
     arrayRoles = [];
-    
-    roles?.forEach(element => {
+
+    roles?.forEach((element) => {
         if (!arrayRoles.includes(element[0])) {
             arrayRoles.push(element[0]);
         }
@@ -98,7 +87,6 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
         console.log(permit);
         console.log(listaPermisosUsuario);
     }
-
 
     function fSelectRole(valor: string) {
         selectRole = valor;
@@ -118,8 +106,8 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
         });
 
         setLista(newPermissions);
-        
-        console.log("Permisos del usuario", listaPermisosUsuario);
+
+        console.log('Permisos del usuario', listaPermisosUsuario);
     }
     // console.log('Estos son los permisos', userPermits);
     const permissionsByCategory = permisos?.reduce(
@@ -130,20 +118,19 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
             if (!acc[categoria].includes(accion)) {
                 acc[categoria].push(accion);
             }
-            
+
             return acc;
         },
         {} as Record<string, string[]>,
     );
 
-    
     const form = useForm({
         defaultValues: {
             name: initialData?.name ?? '',
             email: initialData?.email ?? '',
             password: '',
             role: initialData?.role ?? '',
-            permits: [""],
+            permits: [''],
         },
         onSubmit: async ({ value }) => {
             const options = {
@@ -168,29 +155,26 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         event.stopPropagation();
-        
-        form.setFieldValue("permits", listaPermisosUsuario);
+
+        form.setFieldValue('permits', listaPermisosUsuario);
         form.handleSubmit();
     };
 
     return (
         <div className="inset-0 flex items-center justify-center">
-        
             <Tabs defaultValue="create_account" className="w-full max-w-[600px] px-4">
-                <TabsList className="grid h-[50px] w-full grid-cols-2 ">
+                <TabsList className="grid h-[50px] w-full grid-cols-2">
                     <TabsTrigger value="create_user" autoFocus={true}>
                         {t('ui.users.tabs.basic_information')}
-                        </TabsTrigger>
-                    <TabsTrigger  value="create_role">
-                        {t('ui.users.tabs.roles')}
                     </TabsTrigger>
+                    <TabsTrigger value="create_role">{t('ui.users.tabs.roles')}</TabsTrigger>
                 </TabsList>
                 <TabsContent value="create_user">
                     <Card>
-                        <CardContent >
+                        <CardContent>
                             <form onSubmit={form.handleSubmit} noValidate>
                                 {/* Name field */}
-                                <div className='space-y-1'>
+                                <div className="space-y-1">
                                     <form.Field
                                         name="name"
                                         validators={{
@@ -209,14 +193,13 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                     >
                                         {(field) => (
                                             <>
-                                                <div className='flex mb-2'>
+                                                <div className="mb-2 flex">
                                                     <User size={'17px'} />
-                                                    <Label htmlFor="name" className="ml-1 mt-1">
+                                                    <Label htmlFor="name" className="mt-1 ml-1">
                                                         {t('ui.users.fields.name')}
                                                     </Label>
                                                 </div>
-                                                    
-                                                
+
                                                 <Input
                                                     id={field.name}
                                                     name={field.name}
@@ -235,7 +218,7 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                 </div>
 
                                 {/* Email field */}
-                                <div className='space-y-1'>
+                                <div className="space-y-1">
                                     <form.Field
                                         name="email"
                                         validators={{
@@ -251,14 +234,13 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                     >
                                         {(field) => (
                                             <>
-                                                <div className='flex mb-2 mt-3'>
+                                                <div className="mt-3 mb-2 flex">
                                                     <Mail size={'17px'} />
-                                                    <Label htmlFor={field.name} className="ml-1 mt-0.5">
+                                                    <Label htmlFor={field.name} className="mt-0.5 ml-1">
                                                         {t('ui.users.fields.email')}
                                                     </Label>
                                                 </div>
-                                                    
-                                                
+
                                                 <Input
                                                     id={field.name}
                                                     name={field.name}
@@ -278,53 +260,55 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                 </div>
 
                                 {/* Password field */}
-                                <div className='space-y-1'>
+                                <div className="space-y-1">
                                     <form.Field
                                         name="password"
                                         validators={{
                                             onChangeAsync: async ({ value }) => {
                                                 await new Promise((resolve) => setTimeout(resolve, 500));
-                                                if (!initialData && (!value || value.length === 0)) {
-                                                    return t('ui.validation.required', { attribute: t('ui.users.fields.password').toLowerCase() });
-                                                }
-                                                if (value && value.length > 0 && value.length < 8) {
-                                                    return t('ui.validation.min.string', {
-                                                        attribute: t('ui.users.fields.password').toLowerCase(),
-                                                        min: '8',
-                                                    });
-                                                }
-                                                return undefined;
+
+                                                const attribute = t('ui.users.fields.password').toLowerCase();
+
+                                                return !initialData && (!value || value.length === 0)
+                                                    ? t('ui.validation.required', { attribute })
+                                                    : value && value.length > 0 && value.length < 8
+                                                      ? t('ui.validation.min.string', { attribute, min: '8' })
+                                                      : value && !/(?=.*[A-Za-z])(?=.*\d)/.test(value)
+                                                        ? t('ui.users.validation.regex', { attribute })
+                                                        : undefined;
                                             },
                                         }}
                                     >
                                         {(field) => (
                                             <>
-                                                <div className='flex mb-2 mt-3'>
+                                                <div className="mt-3 mb-2 flex">
                                                     <Lock size={'17px'} />
-                                                    <Label htmlFor={field.name} className="ml-1 mt-1">
+                                                    <Label htmlFor={field.name} className="mt-1 ml-1">
                                                         {initialData ? t('ui.users.fields.password_optional') : t('ui.users.fields.password')}
-
                                                     </Label>
-                                                </div>                                                                                               
-                                            <div className='relative w-full '>
-                                                <Input
-                                                    id={field.name}
-                                                    name={field.name}
-                                                    type={showPassword ? 'text' : 'password'}
-                                                    value={field.state.value}
-                                                    onChange={(e) => field.handleChange(e.target.value)}
-                                                    onBlur={field.handleBlur}
-                                                    placeholder={t('ui.users.placeholders.password')}
-                                                    disabled={form.state.isSubmitting}
-                                                    autoComplete="off"
-                                                    required={false}
-                                                    className='flex'
-                                                    
-                                                />
-                                                <button type='button' className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700" onClick={() => setShowPassword(!showPassword)}>
-                                                    { !showPassword ? <EyeClosed className='flex'/> : <Eye/> }
-                                                </button>
-                                            </div>
+                                                </div>
+                                                <div className="relative w-full">
+                                                    <Input
+                                                        id={field.name}
+                                                        name={field.name}
+                                                        type={showPassword ? 'text' : 'password'}
+                                                        value={field.state.value}
+                                                        onChange={(e) => field.handleChange(e.target.value)}
+                                                        onBlur={field.handleBlur}
+                                                        placeholder={t('ui.users.placeholders.password')}
+                                                        disabled={form.state.isSubmitting}
+                                                        autoComplete="off"
+                                                        required={false}
+                                                        className="flex"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+                                                        onClick={() => setShowPassword(!showPassword)}
+                                                    >
+                                                        {!showPassword ? <EyeClosed className="flex" /> : <Eye />}
+                                                    </button>
+                                                </div>
                                                 <FieldInfo field={field} />
                                             </>
                                         )}
@@ -333,35 +317,31 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                 </div>
                             </form>
                         </CardContent>
-                        <CardFooter className='flex justify-between'>
+                        <CardFooter className="flex justify-between">
                             {/* Form buttons */}
-                            
-                                
-                                    <Button
-                                    // className='flex'
-                                        type="button"
-                                        onClick={() => {
-                                            let url = '/users';
-                                            if (page) {
-                                                url += `?page=${page}`;
-                                                if (perPage) {
-                                                    url += `&per_page=${perPage}`;
-                                                }
-                                            }
-                                            router.visit(url);
-                                        }}
-                                    >
-                                        <X size={'20px'} className='mr-1 '/>
-                                        {t('ui.users.buttons.cancel')}
-                                    </Button>
-                                
-                                
-                                    <Button type="submit" className='bg-blue-500 hover:bg-blue-700' onClick={handleSubmit}>
-                                        <Save size={'20px'} className=' mr-1'/>
-                                        {initialData ? t('ui.users.buttons.update') : t('ui.users.buttons.save')}
-                                    </Button>
-                                
-                           
+
+                            <Button
+                                // className='flex'
+                                type="button"
+                                onClick={() => {
+                                    let url = '/users';
+                                    if (page) {
+                                        url += `?page=${page}`;
+                                        if (perPage) {
+                                            url += `&per_page=${perPage}`;
+                                        }
+                                    }
+                                    router.visit(url);
+                                }}
+                            >
+                                <X size={'20px'} className="mr-1" />
+                                {t('ui.users.buttons.cancel')}
+                            </Button>
+
+                            <Button type="submit" className="bg-blue-500 hover:bg-blue-700" onClick={handleSubmit}>
+                                <Save size={'20px'} className="mr-1" />
+                                {initialData ? t('ui.users.buttons.update') : t('ui.users.buttons.save')}
+                            </Button>
                         </CardFooter>
                     </Card>
                 </TabsContent>
@@ -369,12 +349,12 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                     <Card>
                         <CardContent className="space-y-2">
                             <form onSubmit={form.handleSubmit} noValidate>
-                                <div className='space-y-1'>
+                                <div className="space-y-1">
                                     <form.Field name="role">
                                         {(field) => (
                                             <>
                                                 <div className="flex">
-                                                    <Shield className="text-blue-700 mb-2" />
+                                                    <Shield className="mb-2 text-blue-700" />
                                                     <Label htmlFor="role" className="mt-1 ml-2">
                                                         {t('ui.users.fields.role')}
                                                     </Label>
@@ -399,26 +379,24 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                 </div>
                                 <div className="mt-4 grid grid-cols-2 gap-4">
                                     {Object.entries(permissionsByCategory ?? {}).map(([category, actions]) => (
-                                        
-                                        <div key={category} className="rounded-lg p-4 border bg-gray-100 dark:bg-gray-900">
-                                            <div className='flex mb-4'>
-                                                    {getCategoryIcon(category)}
-                                                <Label className="mt-1 ">{t(`ui.users.permissions.${category}.title`)}</Label>
+                                        <div key={category} className="rounded-lg border bg-gray-100 p-4 dark:bg-gray-900">
+                                            <div className="mb-4 flex">
+                                                {getCategoryIcon(category)}
+                                                <Label className="mt-1">{t(`ui.users.permissions.${category}.title`)}</Label>
                                             </div>
-      
+
                                             {Object.keys(actions).map((action) => (
                                                 <form.Field key={action} name="permits">
                                                     {(field) => (
-                                                        <>                                                  
+                                                        <>
                                                             <div className="mt-2 flex items-center">
-                                                                
                                                                 <Checkbox
                                                                     id={`${category}.${actions[action]}`}
                                                                     name={`${field.name}.${category}.${actions[action]}`}
                                                                     checked={listaPermisosUsuario.includes(`${category}.${actions[action]}`)}
                                                                     value={`${category}.${actions[action]}`}
                                                                     onClick={(e) => handleOnClickPermits(e.currentTarget.value)}
-                                                                    className='border-blue-700'
+                                                                    className="border-blue-700"
                                                                 />
                                                                 <br />
                                                                 <Label htmlFor={field.name} className="ml-2">
@@ -426,7 +404,6 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                                                 </Label>
                                                                 <FieldInfo field={field} />
                                                             </div>
-                                                            
                                                         </>
                                                     )}
                                                 </form.Field>
@@ -436,32 +413,31 @@ export function UserForm({ initialData, page, perPage, permisos, roles, userPerm
                                 </div>
                             </form>
                         </CardContent>
-                        <CardFooter className='flex justify-between'>
+                        <CardFooter className="flex justify-between">
                             {/* Form buttons */}
-                                                    
-                                    <Button
-                                    className='flex'
-                                        type="button"
-                                        onClick={() => {
-                                            let url = '/users';
-                                            if (page) {
-                                                url += `?page=${page}`;
-                                                if (perPage) {
-                                                    url += `&per_page=${perPage}`;
-                                                }
-                                            }
-                                            router.visit(url);
-                                        }}
-                                    >
-                                        <X size={'20px'} className='mr-1 '/>
-                                        {t('ui.users.buttons.cancel')}
-                                    </Button>
-                                
-                                
-                                    <Button type="submit" className='bg-blue-500 hover:bg-blue-700' onClick={handleSubmit}>
-                                        <Save size={'20px'} className=' mr-1 '/>
-                                        {initialData ? t('ui.users.buttons.update') : t('ui.users.buttons.save')}
-                                    </Button>
+
+                            <Button
+                                className="flex"
+                                type="button"
+                                onClick={() => {
+                                    let url = '/users';
+                                    if (page) {
+                                        url += `?page=${page}`;
+                                        if (perPage) {
+                                            url += `&per_page=${perPage}`;
+                                        }
+                                    }
+                                    router.visit(url);
+                                }}
+                            >
+                                <X size={'20px'} className="mr-1" />
+                                {t('ui.users.buttons.cancel')}
+                            </Button>
+
+                            <Button type="submit" className="bg-blue-500 hover:bg-blue-700" onClick={handleSubmit}>
+                                <Save size={'20px'} className="mr-1" />
+                                {initialData ? t('ui.users.buttons.update') : t('ui.users.buttons.save')}
+                            </Button>
                         </CardFooter>
                     </Card>
                 </TabsContent>
